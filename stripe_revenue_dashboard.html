@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visit Cozumel Mexico — Stripe Revenue Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f1117;--surface:#1a1d27;--border:#2a2d3a;--text:#e4e4e7;--dim:#9ca3af;--accent:#3b82f6;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;--purple:#a855f7;--cyan:#06b6d4;--font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--mono:'JetBrains Mono','SF Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);padding:24px;min-height:100vh}
+.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.header .sub{color:var(--dim);font-size:13px;margin-top:4px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:8px;font-size:12px;color:var(--dim)}
+.badge.live{border-color:var(--green);color:var(--green)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.kpi .label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi .value{font-size:26px;font-weight:700;font-family:var(--mono);letter-spacing:-1px}
+.kpi .sub{font-size:11px;color:var(--dim);margin-top:4px}
+.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}.blue{color:var(--accent)}.purple{color:var(--purple)}.cyan{color:var(--cyan)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.panel h3{font-size:13px;font-weight:600;margin-bottom:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+.panel canvas{max-height:270px}
+.full{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);color:var(--dim);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+th.r,td.r{text-align:right}
+td{padding:8px 10px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px}
+tr:hover{background:rgba(59,130,246,.05)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.status-pill.succeeded{background:rgba(34,197,94,.15);color:var(--green)}
+.status-pill.pending{background:rgba(245,158,11,.15);color:var(--amber)}
+.status-pill.canceled{background:rgba(239,68,68,.15);color:var(--red)}
+.footer{margin-top:24px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--dim);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Stripe Revenue Dashboard</h1>
+    <div class="sub">Visit Cozumel Mexico — Vacation Rentals & Services</div>
+  </div>
+  <div class="badges">
+    <div class="badge live">LIVE DATA</div>
+    <div class="badge">Currency: MXN</div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+// --- STRIPE DATA (embedded from live pull 2026-03-28) ---
+const balance = { available: 4430345, pending: 1099254 }; // centavos
+
+const payments = [
+  {id:"pi_3TFaMV",amt:277936,s:"succeeded",cust:"Anna Trocewicz #1C"},
+  {id:"pi_3TFDX9",amt:88344,s:"succeeded",cust:"Stephane Camirand #10A"},
+  {id:"pi_3TFDTQ",amt:165720,s:"succeeded",cust:"Stephane Camirand #9A"},
+  {id:"pi_3TFDMq",amt:277936,s:"succeeded",cust:"Chloe Cutler #2C"},
+  {id:"pi_3TFD95",amt:196400,s:"succeeded",cust:"Alain Belliot #3"},
+  {id:"pi_3TEwVL",amt:150000,s:"succeeded",cust:"Elizabeth Silleck #2B"},
+  {id:"pi_3TEUbW",amt:133429,s:"succeeded",cust:"Carla Oliver Triay #4A"},
+  {id:"pi_3TE994",amt:407715,s:"succeeded",cust:"Louis-Philippe Laroche #9A"},
+  {id:"pi_3TE8M9",amt:217200,s:"succeeded",cust:"Katherine Shaffer #1C"},
+  {id:"pi_3TE84T",amt:396080,s:"succeeded",cust:"Vijay Raghavan #3C"},
+  {id:"pi_3TE7k0",amt:309551,s:"succeeded",cust:"Manuel Elias Baumann #1B"},
+  {id:"pi_3TDsrj",amt:158960,s:"succeeded",cust:"Tim Plotzner #1C"},
+  {id:"pi_3TDbVr",amt:80000,s:"succeeded",cust:"Pablo #1B"},
+  {id:"pi_3TDVpC",amt:102800,s:"succeeded",cust:"Barbora Uhelova #2B"},
+  {id:"pi_3TDQMx",amt:455000,s:"succeeded",cust:"Bobby #1"},
+  {id:"pi_3TD4Nd",amt:321200,s:"succeeded",cust:"Gary Perrenoud #9A"},
+  {id:"pi_3TD3Ib",amt:215329,s:"succeeded",cust:"Yelena Zylko #7A"},
+  {id:"pi_3TCiIM",amt:81714,s:"succeeded",cust:"Guillermo Velasco #7A"},
+  {id:"pi_3TChx1",amt:130000,s:"succeeded",cust:"Jonathan #9A"},
+  {id:"pi_3TCgcC",amt:203265,s:"succeeded",cust:"Diego Pasquale #1B"},
+  {id:"pi_3TCgSU",amt:267619,s:"succeeded",cust:"Salome Morales #1"},
+  {id:"pi_3TCgPA",amt:406061,s:"succeeded",cust:"Lucie Leroy #3C"},
+  {id:"pi_3TCg2i",amt:144660,s:"succeeded",cust:"Alex Dijk #1A"},
+  {id:"pi_3TCJzg",amt:212209,s:"succeeded",cust:"Lauren Eby #3C"},
+  {id:"pi_3TBxnt",amt:126532,s:"succeeded",cust:"Riccardo Rossato #9A"},
+  {id:"pi_3TBxWs",amt:129009,s:"succeeded",cust:"soumaya mokaddem #9A"},
+  {id:"pi_3TAuHv",amt:310800,s:"succeeded",cust:"stephen clarke #8A"},
+  {id:"pi_3TAtPm",amt:141030,s:"succeeded",cust:"Aisar Chemas #1C"},
+  {id:"pi_3TAYuT",amt:149809,s:"succeeded",cust:"Petr Vasicek #7A"},
+  {id:"pi_3TAFJG",amt:151576,s:"succeeded",cust:"Irantzu Salaberri #5"},
+  {id:"pi_3TA8V3",amt:83773,s:"succeeded",cust:"Ann Bekker #9A"},
+  {id:"pi_3TA8PU",amt:144296,s:"succeeded",cust:"Marylou BURGAUD #10A"},
+  {id:"pi_3T9o8i",amt:255420,s:"succeeded",cust:"You Zhou #8A"},
+  {id:"pi_3T9n9X",amt:1120000,s:"succeeded",cust:"Betsy #1"},
+  {id:"pi_3T9mnr",amt:370142,s:"succeeded",cust:"Andrew Vonruden #5A"},
+  {id:"pi_3T96Mb",amt:91151,s:"succeeded",cust:"Stan Kupish #3B"},
+  {id:"pi_3T96AT",amt:324905,s:"succeeded",cust:"Ana Lia Bermejo #2C"},
+  {id:"pi_3T8PUc",amt:90111,s:"succeeded",cust:"Mickael Bouvier #3C"},
+  {id:"pi_3T8Niv",amt:202224,s:"succeeded",cust:"Jessica Meier #5A"},
+  {id:"pi_3T841c",amt:158856,s:"succeeded",cust:"Qiming Ma #1B"},
+  {id:"pi_3T83pd",amt:338163,s:"succeeded",cust:"Elvia Vera Soriano #4A"},
+  {id:"pi_3T83mQ",amt:252061,s:"succeeded",cust:"Jasmin Gonzalez #1C"},
+  {id:"pi_3T7IxW",amt:211377,s:"succeeded",cust:"Ulas Yuce #1C"},
+  {id:"pi_3T7FQL",amt:216370,s:"succeeded",cust:"Carina Markert #3A"},
+  {id:"pi_3T6szW",amt:479519,s:"succeeded",cust:"Sarah BRUCKMANN #6A"},
+  {id:"pi_3T6W9a",amt:487911,s:"succeeded",cust:"Meghan Ray #4A"},
+  {id:"pi_3T6DUP",amt:173104,s:"succeeded",cust:"Lara Brosseau #10A"},
+  {id:"pi_3T5Bgl",amt:83040,s:"succeeded",cust:"Andreas Dymek #10A"},
+  {id:"pi_3T5Bdk",amt:155944,s:"succeeded",cust:"Oz Zeitak #6A"},
+  {id:"pi_3T4hwD",amt:150849,s:"succeeded",cust:"Emilie Berthet #4A"},
+  {id:"pi_3T4hsc",amt:267770,s:"succeeded",cust:"Elizabeth Meyer #4A"},
+  {id:"pi_3T3zKB",amt:213300,s:"succeeded",cust:"Andreas Von Hippel #1A"},
+  {id:"pi_3T3zAR",amt:150640,s:"succeeded",cust:"Emilius Snijders #3A"},
+  {id:"pi_3T3L8e",amt:298425,s:"succeeded",cust:"Charles Balaton #3B"},
+  {id:"pi_3T3H9O",amt:80742,s:"succeeded",cust:"Contreras Bermejo Bertha #5"},
+  {id:"pi_3T2zaz",amt:342000,s:"succeeded",cust:"Steve Rayner #2B"},
+  {id:"pi_3T2wRR",amt:91526,s:"succeeded",cust:"Jose Antonio Venegas #10A"},
+  {id:"pi_3T2vdi",amt:133429,s:"succeeded",cust:"Steve Rayner #4A"},
+  {id:"pi_3T2vHK",amt:142320,s:"succeeded",cust:"Alessia Perna #9A"},
+  {id:"pi_3T2d5i",amt:142320,s:"succeeded",cust:"Cecilia Gustavsson #6A"},
+  {id:"pi_3T2HNJ",amt:312880,s:"succeeded",cust:"Leonardo Lopez #1C"},
+  {id:"pi_3T1pNf",amt:78266,s:"succeeded",cust:"Susana Ramos #5"},
+  // Pending / requires_payment_method
+  {id:"pi_3TFxyf",amt:222657,s:"pending",cust:"Lucia La spisa #3C"},
+  {id:"pi_3TFxnE",amt:253857,s:"pending",cust:"Jukka Saarelainen #3C"},
+  {id:"pi_3TFxd9",amt:159584,s:"pending",cust:"Gongora Elda #1B"},
+  {id:"pi_3TFffJ",amt:443711,s:"pending",cust:"Victoria Africano #7A"},
+  {id:"pi_3TFbUn",amt:167280,s:"pending",cust:"Luis Adrian Lopez #7A"},
+  {id:"pi_3TFFVo",amt:133429,s:"pending",cust:"Delfina Contreras #7A"},
+  {id:"pi_3TEANP",amt:159480,s:"pending",cust:"Johanna Wittig #8A"},
+  {id:"pi_3TEa5v",amt:247817,s:"pending",cust:"Unknown"},
+  {id:"pi_3TDvHT",amt:102800,s:"pending",cust:"Caleb Hack #2B"},
+  {id:"pi_3TD3Em",amt:186360,s:"pending",cust:"Unknown"},
+  {id:"pi_3TCqej",amt:102800,s:"pending",cust:"Joanna Brzezinska #2B"},
+  {id:"pi_3TCgWy",amt:187131,s:"pending",cust:"Unknown"},
+  {id:"pi_3TBxlC",amt:223701,s:"pending",cust:"Unknown"},
+  {id:"pi_3TBxiD",amt:133429,s:"pending",cust:"Juan Carlos Cruz #1A"},
+  {id:"pi_3TBHTA",amt:129008,s:"pending",cust:"Unknown"},
+  {id:"pi_3TBHQo",amt:211256,s:"pending",cust:"Unknown"},
+  {id:"pi_3TAtTF",amt:184081,s:"pending",cust:"Unknown"},
+  {id:"pi_3T9mHo",amt:578585,s:"pending",cust:"Unknown"},
+  {id:"pi_3T9T3c",amt:85869,s:"pending",cust:"Unknown"},
+  {id:"pi_3T9SwV",amt:132721,s:"pending",cust:"Unknown"},
+  {id:"pi_3T96Jy",amt:87511,s:"pending",cust:"Unknown"},
+  {id:"pi_3T95x4",amt:323311,s:"pending",cust:"Unknown"},
+  {id:"pi_3T8NmQ",amt:133429,s:"pending",cust:"Unknown"},
+  {id:"pi_3T8Mav",amt:159584,s:"pending",cust:"Unknown"},
+  {id:"pi_3T7h32",amt:99889,s:"pending",cust:"Unknown"},
+  {id:"pi_3T6cXo",amt:259086,s:"pending",cust:"Unknown"},
+  {id:"pi_3T6YQp",amt:30000,s:"pending",cust:"Unknown"},
+  {id:"pi_3T6Wqo",amt:81051,s:"pending",cust:"Unknown"},
+  {id:"pi_3T6WO5",amt:145024,s:"pending",cust:"Unknown"},
+  {id:"pi_3T5BjA",amt:149809,s:"pending",cust:"Unknown"},
+  {id:"pi_3T2wjv",amt:140000,s:"pending",cust:"Unknown"},
+  {id:"pi_3T2vYq",amt:81714,s:"pending",cust:"Unknown"},
+  {id:"pi_3T2HKX",amt:160260,s:"pending",cust:"Unknown"},
+  {id:"pi_3T3HgJ",amt:39032,s:"pending",cust:"Unknown"},
+  // Canceled
+  {id:"pi_3TFDDR",amt:319536,s:"canceled",cust:"Unknown"},
+  {id:"pi_3TEtAi",amt:88344,s:"canceled",cust:"Stephane Camirand #10A"},
+  {id:"pi_3TEt6o",amt:167280,s:"canceled",cust:"Stephane Camirand #9A"},
+  {id:"pi_3T9T1K",amt:421038,s:"canceled",cust:"Unknown"},
+];
+
+// --- HELPERS ---
+const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+const fmtK = n => n >= 1000000 ? '$' + (n/1000000).toFixed(2) + 'M' : '$' + Math.round(n/1000).toLocaleString('en-US') + 'K';
+const centsToPesos = c => c / 100;
+
+function extractUnit(cust) {
+  const m = cust.match(/#(\d+\w?)/);
+  return m ? '#' + m[1] : 'Other';
+}
+
+// --- COMPUTE ---
+const succeeded = payments.filter(p => p.s === 'succeeded');
+const pending = payments.filter(p => p.s === 'pending');
+const canceled = payments.filter(p => p.s === 'canceled');
+
+const totalRevenue = succeeded.reduce((a,p) => a + centsToPesos(p.amt), 0);
+const totalPending = pending.reduce((a,p) => a + centsToPesos(p.amt), 0);
+const totalCanceled = canceled.reduce((a,p) => a + centsToPesos(p.amt), 0);
+const avgBooking = totalRevenue / succeeded.length;
+const largestBooking = Math.max(...succeeded.map(p => centsToPesos(p.amt)));
+const conversionRate = (succeeded.length / payments.length * 100).toFixed(1);
+
+// Revenue by unit
+const unitRevenue = {};
+succeeded.forEach(p => {
+  const u = extractUnit(p.cust);
+  unitRevenue[u] = (unitRevenue[u] || 0) + centsToPesos(p.amt);
+});
+const unitsSorted = Object.entries(unitRevenue).sort((a,b) => b[1] - a[1]);
+
+// Booking count by unit
+const unitCount = {};
+succeeded.forEach(p => {
+  const u = extractUnit(p.cust);
+  unitCount[u] = (unitCount[u] || 0) + 1;
+});
+
+// Status breakdown
+const statusData = {
+  'Succeeded': succeeded.length,
+  'Pending': pending.length,
+  'Canceled': canceled.length
+};
+
+// --- RENDER ---
+document.getElementById('app').innerHTML = `
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">Total Revenue (Succeeded)</div>
+      <div class="value green">${fmtK(totalRevenue)}</div>
+      <div class="sub">${succeeded.length} payments · ~${fmtK(totalRevenue/20)} USD</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Pending Payments</div>
+      <div class="value amber">${fmtK(totalPending)}</div>
+      <div class="sub">${pending.length} awaiting payment method</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Stripe Balance</div>
+      <div class="value blue">${fmt(centsToPesos(balance.available))}</div>
+      <div class="sub">+ ${fmt(centsToPesos(balance.pending))} pending payout</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Avg Booking Value</div>
+      <div class="value cyan">${fmt(avgBooking)}</div>
+      <div class="sub">~$${Math.round(avgBooking/20).toLocaleString()} USD</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Largest Booking</div>
+      <div class="value purple">${fmt(largestBooking)}</div>
+      <div class="sub">Betsy #1 — 1 month stay</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Conversion Rate</div>
+      <div class="value ${parseFloat(conversionRate) > 60 ? 'green' : 'amber'}">${conversionRate}%</div>
+      <div class="sub">${succeeded.length} of ${payments.length} total intents</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Revenue by Unit</h3>
+      <canvas id="unitChart"></canvas>
+    </div>
+    <div class="panel">
+      <h3>Bookings by Unit</h3>
+      <canvas id="unitCountChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Payment Status Breakdown</h3>
+      <canvas id="statusChart"></canvas>
+    </div>
+    <div class="panel">
+      <h3>Booking Value Distribution</h3>
+      <canvas id="histChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Top Performing Units</h3>
+      <table>
+        <thead><tr><th>Unit</th><th class="r">Revenue (MXN)</th><th class="r">Bookings</th><th class="r">Avg/Booking</th><th class="r">Revenue USD</th></tr></thead>
+        <tbody>
+          ${unitsSorted.map(([u,rev]) => {
+            const cnt = unitCount[u] || 0;
+            const avg = cnt > 0 ? rev / cnt : 0;
+            return `<tr>
+              <td style="font-family:var(--font);font-weight:600">${u}</td>
+              <td class="r green">${fmt(rev)}</td>
+              <td class="r">${cnt}</td>
+              <td class="r">${fmt(avg)}</td>
+              <td class="r" style="color:var(--dim)">${fmt(rev/20)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h3>Recent Succeeded Payments</h3>
+      <table>
+        <thead><tr><th>Guest</th><th>Unit</th><th class="r">Amount</th></tr></thead>
+        <tbody>
+          ${succeeded.slice(0, 15).map(p => {
+            const unit = extractUnit(p.cust);
+            const name = p.cust.replace(/#\d+\w?/, '').trim();
+            return `<tr>
+              <td style="font-family:var(--font)">${name}</td>
+              <td>${unit}</td>
+              <td class="r green">${fmt(centsToPesos(p.amt))}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Built by Sable — Visit Cozumel Mexico PKA</span>
+    <span>Data: Stripe live pull · ${new Date().toLocaleDateString()}</span>
+  </div>
+`;
+
+// --- CHARTS ---
+Chart.defaults.color = '#9ca3af';
+Chart.defaults.borderColor = '#2a2d3a';
+Chart.defaults.font.family = "'Inter', sans-serif";
+
+const unitColors = ['#3b82f6','#22c55e','#a855f7','#f59e0b','#06b6d4','#ef4444','#ec4899','#84cc16','#f97316','#6366f1','#14b8a6','#e879f9','#fbbf24','#64748b','#fb923c','#4ade80'];
+
+// Revenue by unit bar
+new Chart(document.getElementById('unitChart'), {
+  type: 'bar',
+  data: {
+    labels: unitsSorted.map(u => u[0]),
+    datasets: [{
+      data: unitsSorted.map(u => u[1]),
+      backgroundColor: unitsSorted.map((_,i) => unitColors[i % unitColors.length]),
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' $' + Math.round(c.parsed.x).toLocaleString() + ' MXN' } } },
+    scales: { x: { ticks: { callback: v => '$' + (v/1000) + 'K' }, grid: { color: '#1e2130' } }, y: { grid: { display: false } } }
+  }
+});
+
+// Bookings count by unit
+const countSorted = Object.entries(unitCount).sort((a,b) => b[1] - a[1]);
+new Chart(document.getElementById('unitCountChart'), {
+  type: 'bar',
+  data: {
+    labels: countSorted.map(u => u[0]),
+    datasets: [{
+      data: countSorted.map(u => u[1]),
+      backgroundColor: countSorted.map((_,i) => unitColors[i % unitColors.length]),
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.x + ' bookings' } } },
+    scales: { x: { ticks: { stepSize: 1 }, grid: { color: '#1e2130' } }, y: { grid: { display: false } } }
+  }
+});
+
+// Status doughnut
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Succeeded','Pending','Canceled'],
+    datasets: [{
+      data: [succeeded.length, pending.length, canceled.length],
+      backgroundColor: ['#22c55e','#f59e0b','#ef4444'],
+      borderWidth: 0, spacing: 2
+    }]
+  },
+  options: {
+    responsive: true, cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 } },
+      tooltip: { callbacks: { label: c => {
+        const total = succeeded.length + pending.length + canceled.length;
+        return ' ' + c.label + ': ' + c.parsed + ' (' + (c.parsed/total*100).toFixed(1) + '%)';
+      }}}
+    }
+  }
+});
+
+// Value distribution histogram
+const brackets = ['<$1K','$1-2K','$2-3K','$3-4K','$4-5K','$5-8K','$8K+'];
+const buckets = [0,0,0,0,0,0,0];
+succeeded.forEach(p => {
+  const v = centsToPesos(p.amt);
+  if (v < 1000) buckets[0]++;
+  else if (v < 2000) buckets[1]++;
+  else if (v < 3000) buckets[2]++;
+  else if (v < 4000) buckets[3]++;
+  else if (v < 5000) buckets[4]++;
+  else if (v < 8000) buckets[5]++;
+  else buckets[6]++;
+});
+new Chart(document.getElementById('histChart'), {
+  type: 'bar',
+  data: {
+    labels: brackets,
+    datasets: [{
+      data: buckets,
+      backgroundColor: '#3b82f6',
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.y + ' bookings' } } },
+    scales: { y: { ticks: { stepSize: 1 }, grid: { color: '#1e2130' } }, x: { grid: { display: false } } }
+  }
+});
+</script>
+</body>
+</html>

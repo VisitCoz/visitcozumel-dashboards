@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celebrity Cruises Revenue Dashboard — Visit Cozumel Mexico</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --surface2: #1c2330;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #58a6ff;
+
+      /* Ship colors */
+      --constellation: #3b82f6;
+      --xcel:          #a855f7;
+      --silhouette:    #14b8a6;
+      --eclipse:       #f97316;
+      --beyond:        #22c55e;
+      --apex:          #ec4899;
+      --summit:        #eab308;
+      --reflection:    #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 24px 20px 48px;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-left h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .header-left p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+    .header-badge {
+      background: #1d3052;
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* ─── Section headers ─── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* ─── KPI Cards ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+    .kpi-card.green::before  { background: #22c55e; }
+    .kpi-card.orange::before { background: #f97316; }
+    .kpi-card.purple::before { background: #a855f7; }
+    .kpi-card.teal::before   { background: #14b8a6; }
+    .kpi-card.yellow::before { background: #eab308; }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* ─── Charts Row ─── */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 768px) {
+      .charts-row { grid-template-columns: 1fr; }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .chart-wrap {
+      position: relative;
+    }
+
+    /* ─── Tour Bar ─── */
+    .tour-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+
+    /* ─── Table ─── */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+    .table-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .table-controls input {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      width: 200px;
+    }
+    .table-controls input:focus { border-color: var(--accent); }
+    .table-controls select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+    .table-controls select:focus { border-color: var(--accent); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--surface2);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      padding: 10px 12px;
+      text-align: left;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:hover { color: var(--text); }
+    thead th .sort-arrow { margin-left: 4px; opacity: 0.4; }
+    thead th.active .sort-arrow { opacity: 1; color: var(--accent); }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 9px 12px; white-space: nowrap; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-new        { background: #21262d; color: #8b949e; border: 1px solid #30363d; }
+    .status-inprogress { background: #2d1f0d; color: #f97316; border: 1px solid #7c3a12; }
+    .status-approved   { background: #0d2b1a; color: #22c55e; border: 1px solid #155c2f; }
+
+    .pax-warning { color: #ef4444; font-weight: 600; }
+    .row-warning { background: rgba(239,68,68,0.05) !important; }
+
+    /* ─── Year Comparison ─── */
+    .compare-section {
+      margin-bottom: 28px;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+    .year-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .year-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+    .year-card h3 span {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row .stat-name { color: var(--muted); }
+    .stat-row .stat-val  { font-weight: 600; color: var(--text); }
+    .pace-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      border-left: 3px solid var(--accent);
+    }
+
+    /* ─── Ship dot legend ─── */
+    .ship-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Celebrity Cruises Revenue Dashboard</h1>
+    <p>Visit Cozumel Mexico &mdash; Sep 2025 &ndash; Mar 2026 &mdash; All amounts USD</p>
+  </div>
+  <div class="header-badge">57 Invoices Processed</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ KPI ROW -->
+<div class="section-label">Key Performance Indicators</div>
+<div class="kpi-grid" id="kpiGrid"></div>
+
+<!-- ═══════════════════════════════════════════════════════ CHARTS ROW -->
+<div class="section-label">Revenue Breakdown</div>
+<div class="charts-row">
+  <div class="chart-card">
+    <div class="chart-title">Revenue by Ship (USD)</div>
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="shipChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Revenue by Month &amp; Passengers</div>
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="monthChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TOUR BREAKDOWN -->
+<div class="section-label">Tour Breakdown</div>
+<div class="tour-card">
+  <div class="chart-title">Revenue by Tour</div>
+  <div class="chart-wrap" style="height:130px;">
+    <canvas id="tourChart"></canvas>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ INVOICE TABLE -->
+<div class="section-label">Invoice Register</div>
+<div class="table-card">
+  <div class="table-controls">
+    <input type="text" id="searchInput" placeholder="Search ship, invoice, status…" oninput="renderTable()" />
+    <select id="shipFilter" onchange="renderTable()">
+      <option value="">All Ships</option>
+    </select>
+    <select id="statusFilter" onchange="renderTable()">
+      <option value="">All Statuses</option>
+      <option value="New">New</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Approved">Approved</option>
+    </select>
+    <span id="rowCount" style="color:var(--muted);font-size:12px;margin-left:auto;"></span>
+  </div>
+  <table id="invoiceTable">
+    <thead>
+      <tr>
+        <th onclick="sortBy('sail_date')"   data-col="sail_date">Sail Date <span class="sort-arrow">↕</span></th>
+        <th onclick="sortBy('invoice_number')" data-col="invoice_number">Invoice # <span class="sort-arrow">↕</span></th>
+        <th onclick="sortBy('ship')"         data-col="ship">Ship <span class="sort-arrow">↕</span></th>
+        <th onclick="sortBy('total_pax')"    data-col="total_pax">Pax <span class="sort-arrow">↕</span></th>
+        <th onclick="sortBy('invoice_total_usd')" data-col="invoice_total_usd">Total USD <span class="sort-arrow">↕</span></th>
+        <th onclick="sortBy('status')"       data-col="status">Status <span class="sort-arrow">↕</span></th>
+        <th>Min Qty</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ YEAR COMPARISON -->
+<div class="section-label">2025 vs 2026 Comparison</div>
+<div class="compare-section">
+  <div class="compare-grid" id="compareGrid"></div>
+</div>
+
+<div class="footer">
+  Built by Sable &bull; Visit Cozumel Mexico Command Center &bull; Data: <span id="dataDate"></span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// EMBEDDED DATA — sourced from /Data/celebrity_invoices.json
+// ═══════════════════════════════════════════════════════════════════
+const RAW_INVOICES = [
+  {"year":2025,"ship":"Beyond","invoice_number":"BY091225SB09","sail_date":"2025-09-07","invoice_date":"2025-09-12","status":"New","tours":[{"tour_code":"Y9Z5- BY20250907-A","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2025,"ship":"Beyond","invoice_number":"BY092625SB13","sail_date":"2025-09-21","invoice_date":"2025-09-26","status":"New","tours":[{"tour_code":"Y9Z5- BY20250921-A","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":14,"adult_rate":74.0,"child_pax":1,"child_rate":66.0,"infant_pax":0,"total_pax":15,"total_usd":1102.0}],"invoice_total_usd":1102.0,"total_pax":15},
+  {"year":2025,"ship":"Beyond","invoice_number":"BY101025SB10","sail_date":"2025-10-05","invoice_date":"2025-10-10","status":"New","tours":[{"tour_code":"Y9Z5- BY20251005-A","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":16,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":16,"total_usd":1184.0}],"invoice_total_usd":1184.0,"total_pax":16},
+  {"year":2025,"ship":"Beyond","invoice_number":"BY102425SB11","sail_date":"2025-10-19","invoice_date":"2025-10-24","status":"New","tours":[{"tour_code":"Y9Z5- BY20251019-B","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":11,"adult_rate":74.0,"child_pax":1,"child_rate":66.0,"infant_pax":0,"total_pax":12,"total_usd":880.0}],"invoice_total_usd":880.0,"total_pax":12},
+  {"year":2025,"ship":"Constellation","invoice_number":"CS111825SB10","sail_date":"2025-11-16","invoice_date":"2025-11-18","status":"New","tours":[{"tour_code":"Y9Z5- CS20251116-A","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":18,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":18,"total_usd":1332.0}],"invoice_total_usd":1332.0,"total_pax":18},
+  {"year":2025,"ship":"Constellation","invoice_number":"CS112525SB10","sail_date":"2025-11-23","invoice_date":"2025-11-25","status":"New","tours":[{"tour_code":"Y9Z5- CS20251123-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":13,"adult_rate":74.0,"child_pax":1,"child_rate":66.0,"infant_pax":0,"total_pax":14,"total_usd":1028.0}],"invoice_total_usd":1028.0,"total_pax":14},
+  {"year":2025,"ship":"Constellation","invoice_number":"CS120225SB10","sail_date":"2025-11-30","invoice_date":"2025-12-02","status":"New","tours":[{"tour_code":"Y9Z5- CS20251130-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":5,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":5,"total_usd":370.0}],"invoice_total_usd":481.0,"total_pax":5},
+  {"year":2025,"ship":"Constellation","invoice_number":"CS121625SB11","sail_date":"2025-12-14","invoice_date":"2025-12-16","status":"New","tours":[{"tour_code":"Y9Z5- CS20251214-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2025,"ship":"Constellation","invoice_number":"CS122325SB08","sail_date":"2025-12-21","invoice_date":"2025-12-23","status":"New","tours":[{"tour_code":"Y9Z5- CS20251221-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":7,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":7,"total_usd":518.0}],"invoice_total_usd":555.0,"total_pax":7},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI102325SB09","sail_date":"2025-10-20","invoice_date":"2025-10-23","status":"New","tours":[{"tour_code":"Y9Z5- SI20251020-A","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":16,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":16,"total_usd":1184.0}],"invoice_total_usd":1184.0,"total_pax":16},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI102925SB09","sail_date":"2025-10-26","invoice_date":"2025-10-29","status":"New","tours":[{"tour_code":"Y9Z5- SI20251026-B","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":6,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":6,"total_usd":444.0}],"invoice_total_usd":518.0,"total_pax":6},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI111225SB06","sail_date":"2025-11-09","invoice_date":"2025-11-12","status":"New","tours":[{"tour_code":"Y9Z5- SI20251109-B","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":9,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":9,"total_usd":666.0}],"invoice_total_usd":666.0,"total_pax":9},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI112725SB06","sail_date":"2025-11-23","invoice_date":"2025-11-27","status":"New","tours":[{"tour_code":"Y9Z5- SI20251123-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":7,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":7,"total_usd":518.0}],"invoice_total_usd":555.0,"total_pax":7},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI121125SB08","sail_date":"2025-12-07","invoice_date":"2025-12-11","status":"New","tours":[{"tour_code":"Y9Z5- SI20251207-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":11,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":11,"total_usd":814.0}],"invoice_total_usd":814.0,"total_pax":11},
+  {"year":2025,"ship":"Silhouette","invoice_number":"SI122525SB08","sail_date":"2025-12-21","invoice_date":"2025-12-25","status":"New","tours":[{"tour_code":"Y9Z5- SI20251221-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2025,"ship":"Reflection","invoice_number":"RF111825SB109","sail_date":"2025-11-15","invoice_date":"2025-11-18","status":"New","tours":[{"tour_code":"Y9Z5- RF20251115-B","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2025,"ship":"Eclipse","invoice_number":"EC111925SB11","sail_date":"2025-11-16","invoice_date":"2025-11-19","status":"New","tours":[{"tour_code":"Y9Z5- EC20251116-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2025,"ship":"Eclipse","invoice_number":"EC120325SB11","sail_date":"2025-11-30","invoice_date":"2025-12-03","status":"New","tours":[{"tour_code":"Y9Z5- EC20251130-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":11,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":11,"total_usd":814.0}],"invoice_total_usd":814.0,"total_pax":11},
+  {"year":2025,"ship":"Eclipse","invoice_number":"EC121725SB10","sail_date":"2025-12-14","invoice_date":"2025-12-17","status":"New","tours":[{"tour_code":"Y9Z5- EC20251214-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":2,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":2,"total_usd":148.0}],"invoice_total_usd":370.0,"total_pax":2},
+  {"year":2025,"ship":"Xcel","invoice_number":"XC111125SB04","sail_date":"2025-11-09","invoice_date":"2025-11-11","status":"New","tours":[{"tour_code":"Y9Z5- XC20251109-B","tour_name":"Destination Highlight: Bee & Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":12,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":12,"total_usd":888.0}],"invoice_total_usd":888.0,"total_pax":12},
+  {"year":2025,"ship":"Xcel","invoice_number":"XC112125SB10","sail_date":"2025-11-18","invoice_date":"2025-11-21","status":"New","tours":[{"tour_code":"Y9Z5- XC20251118-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":18,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":18,"total_usd":1332.0}],"invoice_total_usd":1332.0,"total_pax":18},
+  {"year":2025,"ship":"Xcel","invoice_number":"XC112625SB10","sail_date":"2025-11-23","invoice_date":"2025-11-26","status":"New","tours":[{"tour_code":"Y9Z5- XC20251123-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":11,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":11,"total_usd":814.0}],"invoice_total_usd":814.0,"total_pax":11},
+  {"year":2025,"ship":"Xcel","invoice_number":"XC121025SB11","sail_date":"2025-12-07","invoice_date":"2025-12-10","status":"In Progress","tours":[{"tour_code":"Y9Z5- XC20251207-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":6,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":6,"total_usd":444.0}],"invoice_total_usd":568.0,"total_pax":6},
+  {"year":2025,"ship":"Xcel","invoice_number":"XC122425SB12","sail_date":"2025-12-21","invoice_date":"2025-12-24","status":"New","tours":[{"tour_code":"Y9Z5- XC20251221-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":19,"adult_rate":74.0,"child_pax":3,"child_rate":66.0,"infant_pax":0,"total_pax":22,"total_usd":1604.0}],"invoice_total_usd":1604.0,"total_pax":22},
+  {"year":2026,"ship":"Apex","invoice_number":"AX011526SB07","sail_date":"2026-01-10","invoice_date":"2026-01-15","status":"New","tours":[{"tour_code":"Y9Z5- AX20260110-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":9,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":9,"total_usd":666.0}],"invoice_total_usd":666.0,"total_pax":9},
+  {"year":2026,"ship":"Apex","invoice_number":"AX012926SB07","sail_date":"2026-01-24","invoice_date":"2026-01-29","status":"New","tours":[{"tour_code":"Y9Z5- AX20260124-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":14,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":14,"total_usd":1036.0}],"invoice_total_usd":1036.0,"total_pax":14},
+  {"year":2026,"ship":"Apex","invoice_number":"AX021226SB12","sail_date":"2026-02-07","invoice_date":"2026-02-12","status":"New","tours":[{"tour_code":"Y9Z5- AX20260207-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0},{"tour_code":"Y9Z5- AX20260207-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":1184.0,"total_pax":16},
+  {"year":2026,"ship":"Apex","invoice_number":"AX031226SB11","sail_date":"2026-03-07","invoice_date":"2026-03-12","status":"New","tours":[{"tour_code":"Y9Z5- AX20260307-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":9,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":9,"total_usd":666.0}],"invoice_total_usd":666.0,"total_pax":9},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS010126SB08","sail_date":"2025-12-28","invoice_date":"2026-01-01","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":5,"adult_rate":74.0,"child_pax":2,"child_rate":66.0,"infant_pax":0,"total_pax":7,"total_usd":502.0}],"invoice_total_usd":539.0,"total_pax":7},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS010626SB08","sail_date":"2026-01-04","invoice_date":"2026-01-06","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":12,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":12,"total_usd":888.0}],"invoice_total_usd":888.0,"total_pax":12},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS011326SB07","sail_date":"2026-01-11","invoice_date":"2026-01-13","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0},{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":1332.0,"total_pax":18},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS020126SB02","sail_date":"2026-01-30","invoice_date":"2026-02-01","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":20,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":20,"total_usd":1480.0}],"invoice_total_usd":1480.0,"total_pax":20},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS021026SB10","sail_date":"2026-02-08","invoice_date":"2026-02-10","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":12,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":12,"total_usd":888.0}],"invoice_total_usd":888.0,"total_pax":12},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS022426SB05","sail_date":"2026-02-22","invoice_date":"2026-02-24","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS031026SB08","sail_date":"2026-03-08","invoice_date":"2026-03-10","status":"New","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":20,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":20,"total_usd":1480.0}],"invoice_total_usd":1480.0,"total_pax":20},
+  {"year":2026,"ship":"Constellation","invoice_number":"CS032526SB10","sail_date":"2026-03-22","invoice_date":"2026-03-25","status":"New","tours":[{"tour_code":"Y9Z5- CS20260322-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":12,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":12,"total_usd":888.0}],"invoice_total_usd":888.0,"total_pax":12},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI010826SB07","sail_date":"2026-01-04","invoice_date":"2026-01-08","status":"New","tours":[{"tour_code":"Y9Z5- SI20260104-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":9,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":9,"total_usd":666.0}],"invoice_total_usd":666.0,"total_pax":9},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI012226SB07","sail_date":"2026-01-18","invoice_date":"2026-01-22","status":"New","tours":[{"tour_code":"Y9Z5- SI20260118-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":9,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":9,"total_usd":666.0}],"invoice_total_usd":666.0,"total_pax":9},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI020526SB05","sail_date":"2026-02-01","invoice_date":"2026-02-05","status":"New","tours":[{"tour_code":"Y9Z5- SI20260201-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":7,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":7,"total_usd":518.0}],"invoice_total_usd":555.0,"total_pax":7},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI021926SB13","sail_date":"2026-02-15","invoice_date":"2026-02-19","status":"New","tours":[{"tour_code":"Y9Z5- SI20260215-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":14,"adult_rate":74.0,"child_pax":0,"child_rate":66.0,"infant_pax":0,"total_pax":14,"total_usd":1036.0}],"invoice_total_usd":1036.0,"total_pax":14},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI021926SB13","sail_date":"2026-02-15","invoice_date":"2026-02-19","status":"In Progress","tours":[{"tour_code":"Y9Z5- SI20260215-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":14,"adult_rate":74.0,"child_pax":2,"child_rate":66.0,"infant_pax":0,"total_pax":16,"total_usd":1168.0}],"invoice_total_usd":1168.0,"total_pax":16},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI030526SB11","sail_date":"2026-03-01","invoice_date":"2026-03-05","status":"New","tours":[{"tour_code":"Y9Z5- SI20260301-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2026,"ship":"Silhouette","invoice_number":"SI031926SB07","sail_date":"2026-03-15","invoice_date":"2026-03-19","status":"New","tours":[{"tour_code":"Y9Z5- SI20260315-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":7,"adult_rate":74.0,"child_pax":3,"child_rate":66.0,"infant_pax":0,"total_pax":10,"total_usd":716.0}],"invoice_total_usd":716.0,"total_pax":10},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC011426SB08","sail_date":"2026-01-11","invoice_date":"2026-01-14","status":"In Progress","tours":[{"tour_code":"Y9Z5- EC20260111-B","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":11,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":11,"total_usd":814.0}],"invoice_total_usd":814.0,"total_pax":11},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC012826SB06","sail_date":"2026-01-25","invoice_date":"2026-01-28","status":"In Progress","tours":[{"tour_code":"Y9Z5- EC20260125-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC021126SB10","sail_date":"2026-02-08","invoice_date":"2026-02-11","status":"In Progress","tours":[{"tour_code":"Y9Z5- EC20260208-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Summit","invoice_number":"SM021426SB08","sail_date":"2026-02-10","invoice_date":"2026-02-14","status":"New","tours":[{"tour_code":"Y9Z5- SM20260210-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":8,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":8,"total_usd":592.0}],"invoice_total_usd":592.0,"total_pax":8},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC022526SB08","sail_date":"2026-02-22","invoice_date":"2026-02-25","status":"In Progress","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":7,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":7,"total_usd":518.0},{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":4,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":4,"total_usd":296.0}],"invoice_total_usd":999.0,"total_pax":11},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC031126SB10","sail_date":"2026-03-08","invoice_date":"2026-03-11","status":"In Progress","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":16,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":16,"total_usd":1184.0}],"invoice_total_usd":1184.0,"total_pax":16},
+  {"year":2026,"ship":"Eclipse","invoice_number":"EC032526SB09","sail_date":"2026-03-22","invoice_date":"2026-03-25","status":"In Progress","tours":[{"tour_code":"","tour_name":"Y9Z5- Honey Traditions Of","min_quantity":8,"adult_pax":14,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":14,"total_usd":1036.0}],"invoice_total_usd":1036.0,"total_pax":14},
+  {"year":2026,"ship":"Summit","invoice_number":"SM032626SB09","sail_date":"2026-03-21","invoice_date":"2026-03-26","status":"New","tours":[{"tour_code":"Y9Z5- SM20260321-A","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC010726SB08","sail_date":"2026-01-04","invoice_date":"2026-01-07","status":"New","tours":[{"tour_code":"Y9Z5- XC20260104-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC012126SB09","sail_date":"2026-01-18","invoice_date":"2026-01-21","status":"In Progress","tours":[{"tour_code":"Y9Z5- XC20260118-A","tour_name":"Honey Traditions Of Cozumel With Hands-On Chocolate & Salsa","min_quantity":8,"adult_pax":5,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":5,"total_usd":370.0}],"invoice_total_usd":481.0,"total_pax":5},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC020426SB10","sail_date":"2026-02-01","invoice_date":"2026-02-04","status":"New","tours":[{"tour_code":"Y9Z5- XC20260201-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":12,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":12,"total_usd":888.0}],"invoice_total_usd":888.0,"total_pax":12},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC021826SB11","sail_date":"2026-02-15","invoice_date":"2026-02-18","status":"New","tours":[{"tour_code":"Y9Z5- XC20260215-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC030426SB08","sail_date":"2026-03-01","invoice_date":"2026-03-04","status":"New","tours":[{"tour_code":"Y9Z5- XC20260301-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":10,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":10,"total_usd":740.0}],"invoice_total_usd":740.0,"total_pax":10},
+  {"year":2026,"ship":"Xcel","invoice_number":"XC031826SB06","sail_date":"2026-03-15","invoice_date":"2026-03-18","status":"New","tours":[{"tour_code":"PJ-HUB-CZM- 175253- XC20260315-XC-A","tour_name":"Private Journey Cozumel SR10205","min_quantity":1,"adult_pax":1,"adult_rate":500.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":1,"total_usd":500.0},{"tour_code":"Y9Z5- XC20260315-B","tour_name":"Honey Traditions Of Cozumel With Hands- On Chocolate & Salsa","min_quantity":8,"adult_pax":13,"adult_rate":74.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":13,"total_usd":962.0},{"tour_code":"YO13-XC20260315- A","tour_name":"The Native Kitchen: Market-To-Jungle Workshop","min_quantity":8,"adult_pax":6,"adult_rate":75.0,"child_pax":0,"child_rate":0.0,"infant_pax":0,"total_pax":6,"total_usd":450.0}],"invoice_total_usd":1987.0,"total_pax":20}
+];
+
+// ─── Ship color map ───────────────────────────────────────────────
+const SHIP_COLORS = {
+  Constellation: '#3b82f6',
+  Xcel:          '#a855f7',
+  Silhouette:    '#14b8a6',
+  Eclipse:       '#f97316',
+  Beyond:        '#22c55e',
+  Apex:          '#ec4899',
+  Summit:        '#eab308',
+  Reflection:    '#ef4444'
+};
+function shipColor(name) { return SHIP_COLORS[name] || '#8b949e'; }
+
+// ─── Tour name normalizer ────────────────────────────────────────
+function normalizeTour(name) {
+  const n = (name || '').toLowerCase();
+  if (n.includes('native kitchen')) return 'The Native Kitchen: Market-To-Jungle Workshop';
+  if (n.includes('private journey')) return 'Private Journey';
+  if (n.includes('honey') || n.includes('bee') || n.includes('y9z5')) return 'Honey Traditions (Bee Experience)';
+  return name;
+}
+
+// ─── Month key helper ────────────────────────────────────────────
+const MONTH_LABELS = ['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'];
+function monthKey(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const y = d.getFullYear(); const m = d.getMonth() + 1;
+  if (y === 2025 && m === 9)  return 'Sep 25';
+  if (y === 2025 && m === 10) return 'Oct 25';
+  if (y === 2025 && m === 11) return 'Nov 25';
+  if (y === 2025 && m === 12) return 'Dec 25';
+  if (y === 2026 && m === 1)  return 'Jan 26';
+  if (y === 2026 && m === 2)  return 'Feb 26';
+  if (y === 2026 && m === 3)  return 'Mar 26';
+  return null;
+}
+
+// ─── Compute aggregates ──────────────────────────────────────────
+const totalRevenue = RAW_INVOICES.reduce((s,i) => s + i.invoice_total_usd, 0);
+const totalInvoices = RAW_INVOICES.length;
+const totalPax = RAW_INVOICES.reduce((s,i) => s + i.total_pax, 0);
+const avgPerCall = totalRevenue / totalInvoices;
+const outstandingRev = RAW_INVOICES
+  .filter(i => i.status === 'New' || i.status === 'In Progress')
+  .reduce((s,i) => s + i.invoice_total_usd, 0);
+const outstandingCount = RAW_INVOICES.filter(i => i.status === 'New' || i.status === 'In Progress').length;
+
+// Best month
+const monthRevMap = {};
+RAW_INVOICES.forEach(inv => {
+  const mk = monthKey(inv.sail_date);
+  if (!mk) return;
+  monthRevMap[mk] = (monthRevMap[mk] || 0) + inv.invoice_total_usd;
+});
+let bestMonth = '', bestMonthRev = 0;
+Object.entries(monthRevMap).forEach(([k,v]) => { if (v > bestMonthRev) { bestMonthRev = v; bestMonth = k; } });
+
+// Revenue & pax by month
+const monthPaxMap = {};
+RAW_INVOICES.forEach(inv => {
+  const mk = monthKey(inv.sail_date);
+  if (!mk) return;
+  monthPaxMap[mk] = (monthPaxMap[mk] || 0) + inv.total_pax;
+});
+
+// Revenue by ship
+const shipRevMap = {};
+RAW_INVOICES.forEach(inv => {
+  shipRevMap[inv.ship] = (shipRevMap[inv.ship] || 0) + inv.invoice_total_usd;
+});
+const shipsSorted = Object.entries(shipRevMap).sort((a,b) => b[1]-a[1]);
+
+// Revenue by tour
+const tourRevMap = {};
+RAW_INVOICES.forEach(inv => {
+  inv.tours.forEach(t => {
+    const tn = normalizeTour(t.tour_name);
+    tourRevMap[tn] = (tourRevMap[tn] || 0) + t.total_usd;
+  });
+});
+
+// Year comparison
+const inv2025 = RAW_INVOICES.filter(i => i.year === 2025);
+const inv2026 = RAW_INVOICES.filter(i => i.year === 2026);
+const rev2025 = inv2025.reduce((s,i) => s + i.invoice_total_usd, 0);
+const rev2026 = inv2026.reduce((s,i) => s + i.invoice_total_usd, 0);
+const pax2025 = inv2025.reduce((s,i) => s + i.total_pax, 0);
+const pax2026 = inv2026.reduce((s,i) => s + i.total_pax, 0);
+const months2025 = [...new Set(inv2025.map(i => monthKey(i.sail_date)).filter(Boolean))].length;
+const months2026 = [...new Set(inv2026.map(i => monthKey(i.sail_date)).filter(Boolean))].length;
+const avgPerCall2025 = rev2025 / inv2025.length;
+const avgPerCall2026 = rev2026 / inv2026.length;
+// Monthly run rate
+const monthRate2025 = rev2025 / months2025;
+const monthRate2026 = rev2026 / months2026;
+
+// ─── Format helpers ─────────────────────────────────────────────
+function fmt$(n) { return '$' + n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+
+// ─── KPI Cards ───────────────────────────────────────────────────
+document.getElementById('kpiGrid').innerHTML = [
+  { label:'Total Revenue (USD)', value: fmt$(totalRevenue), sub:'Sep 2025 – Mar 2026', cls:'' },
+  { label:'Total Invoices',      value: totalInvoices,     sub:'All time', cls:'purple' },
+  { label:'Total Passengers',    value: totalPax.toLocaleString(), sub:'Across all ships', cls:'teal' },
+  { label:'Avg Revenue / Call',  value: fmt$(avgPerCall),  sub:'Per invoice', cls:'green' },
+  { label:'Outstanding / In Progress', value: fmt$(outstandingRev), sub: outstandingCount + ' invoices not confirmed paid', cls:'orange' },
+  { label:'Best Month',          value: bestMonth,         sub: fmt$(bestMonthRev), cls:'yellow' },
+].map(c => `
+  <div class="kpi-card ${c.cls}">
+    <div class="kpi-label">${c.label}</div>
+    <div class="kpi-value">${c.value}</div>
+    <div class="kpi-sub">${c.sub}</div>
+  </div>
+`).join('');
+
+// ─── Ship Chart ──────────────────────────────────────────────────
+new Chart(document.getElementById('shipChart'), {
+  type: 'bar',
+  data: {
+    labels: shipsSorted.map(([s]) => s),
+    datasets: [{
+      label: 'Revenue (USD)',
+      data:  shipsSorted.map(([,v]) => v),
+      backgroundColor: shipsSorted.map(([s]) => shipColor(s)),
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + fmt$(ctx.raw)
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.05)' },
+        ticks: { color: '#8b949e', callback: v => '$'+v.toLocaleString() }
+      },
+      y: { grid: { display: false }, ticks: { color: '#e6edf3' } }
+    }
+  }
+});
+
+// ─── Month Chart ─────────────────────────────────────────────────
+new Chart(document.getElementById('monthChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTH_LABELS,
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Revenue (USD)',
+        data: MONTH_LABELS.map(m => monthRevMap[m] || 0),
+        backgroundColor: 'rgba(88,166,255,0.75)',
+        borderRadius: 4,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: 'Passengers',
+        data: MONTH_LABELS.map(m => monthPaxMap[m] || 0),
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.15)',
+        pointBackgroundColor: '#22c55e',
+        pointRadius: 4,
+        tension: 0.35,
+        yAxisID: 'y2',
+        fill: true,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        labels: { color: '#8b949e', boxWidth: 12, font: { size: 12 } }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.dataset.label === 'Revenue (USD)'
+            ? ' ' + fmt$(ctx.raw)
+            : ' ' + ctx.raw + ' pax'
+        }
+      }
+    },
+    scales: {
+      x:  { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } },
+      y:  { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e', callback: v => '$'+v.toLocaleString() }, position: 'left' },
+      y2: { grid: { display: false }, ticks: { color: '#22c55e' }, position: 'right' }
+    }
+  }
+});
+
+// ─── Tour Chart ──────────────────────────────────────────────────
+const tourEntries = Object.entries(tourRevMap).sort((a,b) => b[1]-a[1]);
+new Chart(document.getElementById('tourChart'), {
+  type: 'bar',
+  data: {
+    labels: tourEntries.map(([n]) => n),
+    datasets: [{
+      label: 'Revenue (USD)',
+      data:  tourEntries.map(([,v]) => v),
+      backgroundColor: ['#58a6ff','#a855f7','#22c55e','#eab308'],
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + fmt$(ctx.raw) } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e', callback: v => '$'+v.toLocaleString() } },
+      y: { grid: { display: false }, ticks: { color: '#e6edf3', font: { size: 11 } } }
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// INVOICE TABLE
+// ═══════════════════════════════════════════════════════════════════
+let sortCol = 'sail_date';
+let sortDir = -1; // -1 = desc, 1 = asc
+
+// Populate ship filter
+const ships = [...new Set(RAW_INVOICES.map(i => i.ship))].sort();
+const sf = document.getElementById('shipFilter');
+ships.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; sf.appendChild(o); });
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = -1; }
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('active');
+    if (th.dataset.col === col) th.classList.add('active');
+  });
+  renderTable();
+}
+
+function getMinQty(inv) {
+  if (!inv.tours || !inv.tours.length) return null;
+  return Math.min(...inv.tours.map(t => t.min_quantity || 8));
+}
+
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const shipF  = document.getElementById('shipFilter').value;
+  const statF  = document.getElementById('statusFilter').value;
+
+  let rows = RAW_INVOICES.filter(i => {
+    if (shipF && i.ship !== shipF) return false;
+    if (statF && i.status !== statF) return false;
+    if (search && !JSON.stringify([i.ship, i.invoice_number, i.status, i.sail_date]).toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  rows.sort((a,b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return  1 * sortDir;
+    return 0;
+  });
+
+  document.getElementById('rowCount').textContent = rows.length + ' invoices';
+
+  const tb = document.getElementById('tableBody');
+  tb.innerHTML = rows.map(inv => {
+    const minQ = getMinQty(inv);
+    const belowMin = minQ && inv.total_pax < minQ;
+    const statusClass = { 'New':'status-new', 'In Progress':'status-inprogress', 'Approved':'status-approved' }[inv.status] || 'status-new';
+    const dot = `<span class="ship-dot" style="background:${shipColor(inv.ship)}"></span>`;
+    return `<tr class="${belowMin ? 'row-warning' : ''}">
+      <td>${inv.sail_date}</td>
+      <td style="font-family:monospace;font-size:12px;">${inv.invoice_number}</td>
+      <td>${dot}${inv.ship}</td>
+      <td class="${belowMin ? 'pax-warning' : ''}">${inv.total_pax}${belowMin ? ' ⚠' : ''}</td>
+      <td style="font-weight:600;">${fmt$(inv.invoice_total_usd)}</td>
+      <td><span class="status-badge ${statusClass}">${inv.status}</span></td>
+      <td style="color:var(--muted);">${minQ || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+renderTable();
+document.querySelectorAll('thead th[data-col="sail_date"]').forEach(th => th.classList.add('active'));
+
+// ═══════════════════════════════════════════════════════════════════
+// YEAR COMPARISON
+// ═══════════════════════════════════════════════════════════════════
+const compareGrid = document.getElementById('compareGrid');
+compareGrid.innerHTML = `
+  <div class="year-card">
+    <h3>2025 Season <span>Sep – Dec (4 months)</span></h3>
+    <div class="stat-row"><span class="stat-name">Total Revenue</span><span class="stat-val">${fmt$(rev2025)}</span></div>
+    <div class="stat-row"><span class="stat-name">Total Invoices</span><span class="stat-val">${inv2025.length}</span></div>
+    <div class="stat-row"><span class="stat-name">Total Passengers</span><span class="stat-val">${pax2025.toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-name">Avg Rev / Invoice</span><span class="stat-val">${fmt$(avgPerCall2025)}</span></div>
+    <div class="stat-row"><span class="stat-name">Monthly Run Rate</span><span class="stat-val">${fmt$(monthRate2025)}</span></div>
+    <div class="stat-row"><span class="stat-name">Ships Active</span><span class="stat-val">${[...new Set(inv2025.map(i=>i.ship))].length}</span></div>
+  </div>
+  <div class="year-card">
+    <h3>2026 Season <span>Jan – Mar (partial, 3 months)</span></h3>
+    <div class="stat-row"><span class="stat-name">Total Revenue</span><span class="stat-val">${fmt$(rev2026)}</span></div>
+    <div class="stat-row"><span class="stat-name">Total Invoices</span><span class="stat-val">${inv2026.length}</span></div>
+    <div class="stat-row"><span class="stat-name">Total Passengers</span><span class="stat-val">${pax2026.toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-name">Avg Rev / Invoice</span><span class="stat-val">${fmt$(avgPerCall2026)}</span></div>
+    <div class="stat-row"><span class="stat-name">Monthly Run Rate</span><span class="stat-val">${fmt$(monthRate2026)}</span></div>
+    <div class="stat-row"><span class="stat-name">Ships Active</span><span class="stat-val">${[...new Set(inv2026.map(i=>i.ship))].length}</span></div>
+    <div class="pace-note">
+      2026 run rate is ${fmt$(monthRate2026)}/mo vs ${fmt$(monthRate2025)}/mo in 2025 &mdash;
+      <strong style="color:${monthRate2026 >= monthRate2025 ? '#22c55e':'#f97316'}">
+        ${monthRate2026 >= monthRate2025 ? '+' : ''}${Math.round(((monthRate2026/monthRate2025)-1)*100)}% pace
+      </strong>.
+      Note: 2026 data is Jan–Mar only.
+    </div>
+  </div>
+`;
+
+// Footer date
+document.getElementById('dataDate').textContent = new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+</script>
+</body>
+</html>

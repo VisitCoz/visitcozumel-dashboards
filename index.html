@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Visit Cozumel Mexico — Dashboards</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+    }
+    .logo {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 960px;
+    }
+    .card {
+      background: #1e2330;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card:hover {
+      border-color: #4f8ef7;
+      transform: translateY(-2px);
+    }
+    .card-icon { font-size: 32px; }
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: #1a2540;
+      color: #4f8ef7;
+      border: 1px solid #2d3f6e;
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin-top: 4px;
+      width: fit-content;
+    }
+    .footer {
+      margin-top: 48px;
+      font-size: 12px;
+      color: #334155;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">Visit Cozumel Mexico</div>
+  <h1>Operations Dashboards</h1>
+  <p class="subtitle">Internal reporting — updated weekly</p>
+
+  <div class="grid">
+
+    <a class="card" href="celebrity_dashboard.html">
+      <div class="card-icon">🚢</div>
+      <div class="card-title">Celebrity Cruises Revenue</div>
+      <div class="card-desc">Invoice tracking by ship, monthly trends, tour breakdown, and outstanding payments.</div>
+      <span class="card-tag">Sep 2025 – Present</span>
+    </a>
+
+    <a class="card" href="stripe_revenue_dashboard.html">
+      <div class="card-icon">🏠</div>
+      <div class="card-title">Vacation Rentals (Stripe)</div>
+      <div class="card-desc">Booking.com revenue by unit, payment status, guest data, and monthly performance.</div>
+      <span class="card-tag">2025 – Present</span>
+    </a>
+
+    <a class="card" href="cash_flow_dashboard.html">
+      <div class="card-icon">💰</div>
+      <div class="card-title">Cash Flow — Bancomer</div>
+      <div class="card-desc">Cuenta 1 income analysis, balance trends, loan activity, and seasonal patterns.</div>
+      <span class="card-tag">Oct 2024 – Feb 2026</span>
+    </a>
+
+  </div>
+
+  <div class="footer">
+    Internal use only · Visit Cozumel Mexico, S. de R.L. de C.V. · Cozumel, Q. Roo
+  </div>
+
+</body>
+</html>

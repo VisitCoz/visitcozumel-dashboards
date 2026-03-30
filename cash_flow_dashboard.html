@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visit Cozumel Mexico — Cash Flow Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-dim: #9ca3af;
+    --accent: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .header .badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .kpi-card .label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-card .value {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: -1px;
+  }
+
+  .kpi-card .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  .kpi-card .value.green { color: var(--green); }
+  .kpi-card .value.red { color: var(--red); }
+  .kpi-card .value.amber { color: var(--amber); }
+  .kpi-card .value.blue { color: var(--accent); }
+
+  /* Chart panels */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .chart-grid { grid-template-columns: 1fr; }
+  }
+
+  .chart-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .chart-panel h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-dim);
+  }
+
+  .chart-panel canvas {
+    max-height: 280px;
+  }
+
+  .chart-panel.full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* Table */
+  .table-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .table-panel h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-dim);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  th.right, td.right { text-align: right; }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  tr:hover { background: rgba(59, 130, 246, 0.05); }
+
+  td.positive { color: var(--green); }
+  td.negative { color: var(--red); }
+  td.warning { color: var(--amber); }
+
+  .alert-row { background: rgba(239, 68, 68, 0.08); }
+
+  .footer {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .status-dot.green { background: var(--green); }
+  .status-dot.red { background: var(--red); }
+  .status-dot.amber { background: var(--amber); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Visit Cozumel Mexico</h1>
+    <div class="subtitle">Cash Flow Dashboard — Cuenta 1 Bancomer (MXN)</div>
+  </div>
+  <div class="badge">Account: 0117438990 &nbsp;|&nbsp; Cuenta 1 of 4</div>
+</div>
+
+<div id="app">
+  <div class="loading">Loading database...</div>
+</div>
+
+<script>
+async function init() {
+  // Load sql.js
+  const SQL = await initSqlJs({
+    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
+  });
+
+  // Try to load the SQLite database
+  let db;
+  try {
+    const response = await fetch('./Data/visit_cozumel.db');
+    if (!response.ok) throw new Error('DB not found via relative path');
+    const buf = await response.arrayBuffer();
+    db = new SQL.Database(new Uint8Array(buf));
+  } catch (e) {
+    // Fallback: embed data directly
+    console.log('Using embedded data (DB fetch failed:', e.message, ')');
+    db = new SQL.Database();
+    db.run(`CREATE TABLE monthly_financials (
+      month TEXT PRIMARY KEY, gross_deposits REAL, loan_in REAL, transfers_in_est REAL,
+      est_true_income REAL, opening_balance REAL, closing_balance REAL,
+      loan_payment REAL, bank_fees REAL, account TEXT
+    )`);
+    const rows = [
+      ['2024-10',248078,0,460000,248078,1163650,265514,14694.45,227,'Cuenta1'],
+      ['2024-11',355731,0,0,355731,265514,135596,14694.45,350,'Cuenta1'],
+      ['2024-12',540640,0,0,540640,135596,248099,14694.45,640,'Cuenta1'],
+      ['2025-01',1123501,0,2105,1121397,248099,271544,14694.45,776,'Cuenta1'],
+      ['2025-02',623817,0,0,623817,271544,197192,14694.45,838,'Cuenta1'],
+      ['2025-03',661927,0,3500,658427,197192,6003,15637.92,852,'Cuenta1'],
+      ['2025-04',754441,0,118754,635687,6003,274963,15637.92,847,'Cuenta1'],
+      ['2025-05',5669198,5200000,92619,376580,274969,114333,1901183.99,836,'Cuenta1'],
+      ['2025-06',369578,0,0,369578,114333,103220,15637.92,648,'Cuenta1'],
+      ['2025-07',557403,0,0,557403,103220,104636,15637.92,1012,'Cuenta1']
+    ];
+    rows.forEach(r => {
+      db.run(`INSERT INTO monthly_financials VALUES (?,?,?,?,?,?,?,?,?,?)`, r);
+    });
+  }
+
+  // Query data
+  const data = db.exec(`SELECT * FROM monthly_financials ORDER BY month`)[0];
+  const cols = data.columns;
+  const rows = data.values;
+
+  // Parse into arrays
+  const months = rows.map(r => {
+    const [y, m] = r[0].split('-');
+    const names = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return names[parseInt(m)] + ' ' + y.slice(2);
+  });
+  const income = rows.map(r => r[4]); // est_true_income
+  const grossDeposits = rows.map(r => r[1]);
+  const closingBalance = rows.map(r => r[6]);
+  const openingBalance = rows.map(r => r[5]);
+  const loanPayments = rows.map(r => r[7]);
+
+  // Calculate KPIs
+  const totalIncome = income.reduce((a, b) => a + b, 0);
+  const avgMonthly = totalIncome / income.length;
+  const peakMonth = months[income.indexOf(Math.max(...income))];
+  const peakValue = Math.max(...income);
+  const lastBalance = closingBalance[closingBalance.length - 1];
+  const minBalance = Math.min(...closingBalance);
+  const minBalMonth = months[closingBalance.indexOf(minBalance)];
+
+  const fmt = (n) => '$' + Math.round(n).toLocaleString('en-US');
+  const fmtK = (n) => n >= 1000000 ? '$' + (n/1000000).toFixed(1) + 'M' : '$' + Math.round(n/1000).toLocaleString('en-US') + 'K';
+
+  // Render
+  document.getElementById('app').innerHTML = `
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="label">Total Est. Income (10 mo)</div>
+        <div class="value blue">${fmtK(totalIncome)}</div>
+        <div class="sub">Cuenta 1 only — excl. loan & transfers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Avg Monthly Income</div>
+        <div class="value green">${fmtK(avgMonthly)}</div>
+        <div class="sub">~${fmtK(avgMonthly / 20)} USD at 20:1</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Peak Month</div>
+        <div class="value green">${fmtK(peakValue)}</div>
+        <div class="sub">${peakMonth} — cruise high season</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Last Closing Balance</div>
+        <div class="value ${lastBalance < 150000 ? 'amber' : 'green'}">${fmtK(lastBalance)}</div>
+        <div class="sub">Jul 2025 — ${lastBalance < 150000 ? '⚠ low runway' : 'healthy'}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Lowest Balance</div>
+        <div class="value red">${fmtK(minBalance)}</div>
+        <div class="sub"><span class="status-dot red"></span>${minBalMonth} — cash crunch</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-panel">
+        <h3>Monthly Estimated Income (MXN)</h3>
+        <canvas id="incomeChart"></canvas>
+      </div>
+      <div class="chart-panel">
+        <h3>Closing Balance Trend (MXN)</h3>
+        <canvas id="balanceChart"></canvas>
+      </div>
+      <div class="chart-panel full-width">
+        <h3>Gross Deposits vs. True Income (MXN)</h3>
+        <canvas id="compareChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <h3>Monthly Detail — Cuenta 1 Bancomer</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="right">Opening</th>
+            <th class="right">Gross Deposits</th>
+            <th class="right">Est. Income</th>
+            <th class="right">Loan Payment</th>
+            <th class="right">Closing</th>
+            <th class="right">Net Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r, i) => {
+            const netChange = closingBalance[i] - openingBalance[i];
+            const isAlert = closingBalance[i] < 50000;
+            return `<tr class="${isAlert ? 'alert-row' : ''}">
+              <td style="font-family:var(--font);font-weight:600">${months[i]}</td>
+              <td class="right">${fmt(openingBalance[i])}</td>
+              <td class="right">${fmt(grossDeposits[i])}</td>
+              <td class="right positive">${fmt(income[i])}</td>
+              <td class="right negative">${fmt(loanPayments[i])}</td>
+              <td class="right ${closingBalance[i] < 50000 ? 'warning' : ''}">${fmt(closingBalance[i])}</td>
+              <td class="right ${netChange >= 0 ? 'positive' : 'negative'}">${netChange >= 0 ? '+' : ''}${fmt(netChange)}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <span>Built by Sable — Visit Cozumel Mexico PKA</span>
+      <span>Data: Cuenta 1 only (1 of 4 accounts) | Generated: ${new Date().toLocaleDateString()}</span>
+    </div>
+  `;
+
+  // Chart defaults
+  Chart.defaults.color = '#9ca3af';
+  Chart.defaults.borderColor = '#2a2d3a';
+  Chart.defaults.font.family = "'Inter', sans-serif";
+
+  // Income bar chart
+  new Chart(document.getElementById('incomeChart'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Est. Income',
+        data: income,
+        backgroundColor: income.map(v => v > avgMonthly ? '#22c55e' : '#3b82f6'),
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' $' + Math.round(ctx.parsed.y).toLocaleString('en-US') + ' MXN'
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => '$' + (v/1000) + 'K' },
+          grid: { color: '#1e2130' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Balance line chart
+  new Chart(document.getElementById('balanceChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Closing Balance',
+        data: closingBalance,
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: closingBalance.map(v => v < 50000 ? '#ef4444' : '#f59e0b'),
+        pointBorderColor: closingBalance.map(v => v < 50000 ? '#ef4444' : '#f59e0b'),
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' $' + Math.round(ctx.parsed.y).toLocaleString('en-US') + ' MXN'
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => '$' + (v/1000) + 'K' },
+          grid: { color: '#1e2130' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // Comparison chart
+  new Chart(document.getElementById('compareChart'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Gross Deposits',
+          data: grossDeposits,
+          backgroundColor: 'rgba(59, 130, 246, 0.3)',
+          borderColor: '#3b82f6',
+          borderWidth: 1,
+          borderRadius: 6,
+          borderSkipped: false,
+        },
+        {
+          label: 'Est. True Income',
+          data: income,
+          backgroundColor: 'rgba(34, 197, 94, 0.7)',
+          borderColor: '#22c55e',
+          borderWidth: 1,
+          borderRadius: 6,
+          borderSkipped: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'rectRounded' } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ' ' + ctx.dataset.label + ': $' + Math.round(ctx.parsed.y).toLocaleString('en-US') + ' MXN'
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v >= 1000000 ? '$' + (v/1000000).toFixed(1) + 'M' : '$' + (v/1000) + 'K' },
+          grid: { color: '#1e2130' }
+        },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+init().catch(err => {
+  document.getElementById('app').innerHTML = `
+    <div class="loading" style="color:#ef4444">
+      Error loading dashboard: ${err.message}<br>
+      <small style="color:#9ca3af">Make sure visit_cozumel.db is in the Data/ folder</small>
+    </div>`;
+});
+</script>
+</body>
+</html>
