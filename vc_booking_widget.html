@@ -652,30 +652,30 @@
           <span class="vc-tier-card-badge sellout">Likely to Sell Out</span>
           <div class="vc-tier-name">Private Jeep</div>
           <div class="vc-tier-info">Up to 4 guests</div>
-          <div class="vc-tier-price" id="vcCardPrice_jeep">$10</div>
-          <div class="vc-tier-per">USD / vehicle (TEST)</div>
+          <div class="vc-tier-price" id="vcCardPrice_jeep">$180</div>
+          <div class="vc-tier-per">USD / vehicle</div>
         </div>
 
         <div class="vc-tier-card" id="vcTierCard_minivan" onclick="vcSelectTier('minivan')">
           <span class="vc-tier-card-badge popular">Most Popular</span>
           <div class="vc-tier-name">Minivan</div>
           <div class="vc-tier-info">Up to 6 guests</div>
-          <div class="vc-tier-price" id="vcCardPrice_minivan">$20</div>
-          <div class="vc-tier-per">USD / vehicle (TEST)</div>
+          <div class="vc-tier-price" id="vcCardPrice_minivan">$250</div>
+          <div class="vc-tier-per">USD / vehicle</div>
         </div>
 
         <div class="vc-tier-card" id="vcTierCard_largevan" onclick="vcSelectTier('largevan')">
           <div class="vc-tier-name">Large Van</div>
           <div class="vc-tier-info">Up to 14 guests</div>
-          <div class="vc-tier-price" id="vcCardPrice_largevan">$30</div>
-          <div class="vc-tier-per">USD / vehicle (TEST)</div>
+          <div class="vc-tier-price" id="vcCardPrice_largevan">$350</div>
+          <div class="vc-tier-per">USD / vehicle</div>
         </div>
 
         <div class="vc-tier-card" id="vcTierCard_xlvan" onclick="vcSelectTier('xlvan')">
           <div class="vc-tier-name">Extra Large Van</div>
           <div class="vc-tier-info">Up to 19 guests</div>
-          <div class="vc-tier-price" id="vcCardPrice_xlvan">$40</div>
-          <div class="vc-tier-per">USD / vehicle (TEST)</div>
+          <div class="vc-tier-price" id="vcCardPrice_xlvan">$500</div>
+          <div class="vc-tier-per">USD / vehicle</div>
         </div>
       </div>
 
@@ -688,8 +688,8 @@
             <div class="vc-tier-info">All 4 stations &middot; 2 hrs + island &middot; Up to 4</div>
           </div>
           <div class="vc-tier-compact-price">
-            <div class="vc-tier-price" id="vcCardPrice_tierramaya">$25</div>
-            <div class="vc-tier-per">USD / vehicle (TEST)</div>
+            <div class="vc-tier-price" id="vcCardPrice_tierramaya">$249</div>
+            <div class="vc-tier-per">USD / vehicle</div>
           </div>
         </div>
 
@@ -700,8 +700,8 @@
             <div class="vc-tier-info">45-min XRAIL trail + island tour &middot; Up to 4</div>
           </div>
           <div class="vc-tier-compact-price">
-            <div class="vc-tier-price" id="vcCardPrice_xrail">$30</div>
-            <div class="vc-tier-per">USD / vehicle (TEST)</div>
+            <div class="vc-tier-price" id="vcCardPrice_xrail">$300</div>
+            <div class="vc-tier-per">USD / vehicle</div>
           </div>
         </div>
       </div>
@@ -852,13 +852,11 @@
     'SUNNY15': { percent: 15, label: '15% off' }
   };
 
-  // ⚠️ TEST PRICES — change back to real prices before going live:
-  // jeep: 180, minivan: 250, largevan: 350, xlvan: 500, tierramaya: 249, xrail: 300
   const VC_TIERS = {
     jeep: {
       name: 'Private Jeep',
       max: 4,
-      price: 10,
+      price: 180,
       icon: 'jeep',
       product_type: 'excursion',
       destLabel: 'Where would you like to go or what would you like to do?',
@@ -867,7 +865,7 @@
     minivan: {
       name: 'Minivan',
       max: 6,
-      price: 20,
+      price: 250,
       icon: 'van',
       product_type: 'excursion',
       destLabel: 'Where would you like to go or what would you like to do?',
@@ -876,7 +874,7 @@
     largevan: {
       name: 'Large Van',
       max: 14,
-      price: 30,
+      price: 350,
       icon: 'van',
       product_type: 'excursion',
       destLabel: 'Where would you like to go or what would you like to do?',
@@ -885,7 +883,7 @@
     xlvan: {
       name: 'Extra Large Van',
       max: 19,
-      price: 40,
+      price: 500,
       icon: 'bus',
       product_type: 'excursion',
       destLabel: 'Where would you like to go or what would you like to do?',
@@ -894,7 +892,7 @@
     tierramaya: {
       name: 'Tierra Maya Cultural Experience + Island',
       max: 4,
-      price: 25,
+      price: 249,
       icon: 'jeep',
       product_type: 'tierramaya',
       destLabel: 'What would you like to do with your 2 hours of leisure time?',
@@ -903,7 +901,7 @@
     xrail: {
       name: 'Jeep & XRAIL Buggy Adventure',
       max: 4,
-      price: 30,
+      price: 300,
       icon: 'jeep',
       product_type: 'xrail',
       destLabel: 'After the XRAIL, where would you like to go?',
