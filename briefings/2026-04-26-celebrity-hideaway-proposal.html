@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cozumel Hideaway · A Proposal for Celebrity Cruises</title>
+<title>Cozumel Hideaway · An Excursion Proposal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -401,6 +401,34 @@
     .price-block { text-align: left; }
     .product-narrative p:first-child::first-letter { font-size: 44px; }
   }
+
+  /* PRINT — preserve backgrounds when saving as PDF */
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    html, body { background: var(--paper) !important; }
+    section.dark { background: var(--cacao) !important; color: var(--cream) !important; }
+    .closing { background: var(--ocean) !important; color: var(--cream) !important; }
+    .summary-card, .product-side, .ops-card, .stat-card, .callout {
+      background: var(--cream-soft) !important;
+    }
+    section.dark .product-side, section.dark .stat-card, section.dark .callout {
+      background: rgba(241,232,212,0.06) !important;
+    }
+    .ops-card.both { background: var(--cream-soft) !important; }
+    .hero {
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(200,155,60,0.18), transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(27,58,75,0.14), transparent 50%),
+        var(--paper) !important;
+    }
+    section.chapter, section.dark, .closing { page-break-inside: avoid; }
+    .product-block { page-break-inside: avoid; }
+    .hero { min-height: auto; page-break-after: always; }
+  }
 </style>
 </head>
 <body>
@@ -418,26 +446,8 @@
     <div class="doc-type">A Shore Excursion Proposal</div>
     <h1 class="hero-title">Cozumel <em>Hideaway</em>.<br/>Two new excursions.</h1>
     <p class="hero-deck">
-      A <strong>premium small beach club</strong> and a <strong>fully private cabana experience</strong>, both at Cabana Beach — a secluded venue inside Chankanaab Park, the gateway to the <strong>Cozumel Reefs National Marine Park</strong>. Submitted for consideration to Celebrity's Destination Experiences team.
+      A <strong>premium small beach club</strong> and a <strong>fully private cabana experience</strong>, both at Cabana Beach — a secluded venue inside Chankanaab Park, the gateway to the <strong>Cozumel Reefs National Marine Park</strong>. Submitted for consideration by cruise line Destination Experiences teams.
     </p>
-
-    <div class="recipients-block">
-      <div class="recipient">
-        <div class="recipient-role">Account Executive</div>
-        <div class="recipient-name">Matthew Kaye</div>
-        <div class="recipient-meta">Destination Experiences</div>
-      </div>
-      <div class="recipient">
-        <div class="recipient-role">Manager</div>
-        <div class="recipient-name">Adam Cullen</div>
-        <div class="recipient-meta">Destination Experiences</div>
-      </div>
-      <div class="recipient">
-        <div class="recipient-role">Marketing</div>
-        <div class="recipient-name">Anamae Garcia de Paredes</div>
-        <div class="recipient-meta">Destination Experiences</div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -447,7 +457,7 @@
     <div class="section-label">The proposal · in brief</div>
     <h2 class="chap">Two products. One <em>private venue</em>.</h2>
     <p class="chap-lede">
-      Visit Cozumel proposes adding two excursions to Celebrity's Cozumel shelf, both operating from <strong>Cabana Beach</strong> — a small, intimate beach club at the south end of Chankanaab Park, currently not marketed to any other cruise line. Both products include round-trip private transport, Chankanaab Park entry, an on-site chef preparing a plated lunch, and an open bar.
+      Visit Cozumel proposes adding two excursions to your Cozumel shelf, both operating from <strong>Cabana Beach</strong> — a small, intimate beach club at the south end of Chankanaab Park, not currently marketed to any other cruise line. Both products include round-trip private transport, Chankanaab Park entry, an on-site chef preparing a plated lunch, and an open bar.
     </p>
 
     <div class="summary-grid">
@@ -461,7 +471,7 @@
       </div>
       <div class="summary-card">
         <h4>Both products · <em>one venue</em></h4>
-        <p>Beach Club and Cabana share the same transport when both are booked, allowing Celebrity to offer two distinct guest experiences at one shore-time, with one operational footprint.</p>
+        <p>Beach Club and Cabana share the same transport when both are booked, allowing your team to offer two distinct guest experiences at one shore-time, with one operational footprint.</p>
       </div>
     </div>
   </div>
@@ -511,7 +521,7 @@
             <div class="spec"><span class="lab">Duration</span><span class="val">4–5 hrs</span></div>
             <div class="spec"><span class="lab">Activity</span><span class="val">Mild</span></div>
             <div class="spec"><span class="lab">Min</span><span class="val">8 guests</span></div>
-            <div class="spec"><span class="lab">Max</span><span class="val">14 guests</span></div>
+            <div class="spec"><span class="lab">Max</span><span class="val">48 guests</span></div>
           </div>
         </aside>
       </div>
@@ -555,9 +565,9 @@
           </ul>
           <div class="specs">
             <div class="spec"><span class="lab">Duration</span><span class="val">4–5 hrs</span></div>
-            <div class="spec"><span class="lab">Activity</span><span class="val">Mild</span></div>
-            <div class="spec"><span class="lab">Cabana max</span><span class="val">6 guests</span></div>
-            <div class="spec"><span class="lab">Operates</span><span class="val">Daily, no cancellations</span></div>
+            <div class="spec"><span class="lab">Per cabana</span><span class="val">6 guests max</span></div>
+            <div class="spec"><span class="lab">Cabanas / day</span><span class="val">Up to 12</span></div>
+            <div class="spec"><span class="lab">Operates</span><span class="val">No cancellations</span></div>
           </div>
         </aside>
       </div>
@@ -570,21 +580,21 @@
   <div class="inner">
     <div class="section-label">What's included · the value behind the rate</div>
     <h2 class="chap">A premium-tier <em>experience</em>.</h2>
-    <p class="chap-lede">Each booking includes the full venue stack — Chankanaab Park entry alone retails at <strong>$29 per guest</strong>. Combined with private transport, on-site culinary service, full open bar, and direct National Marine Park reef access, this is positioned for the premium end of Celebrity's Cozumel guest base.</p>
+    <p class="chap-lede">Each booking includes the full venue stack — Chankanaab Park entry alone retails at <strong>$29 per guest</strong>. Combined with private transport, on-site culinary service, full open bar, and direct National Marine Park reef access, this is positioned for the premium end of the Cozumel guest base.</p>
 
     <table class="inclusions-table">
       <thead>
         <tr>
           <th style="width: 32%;">Inclusion</th>
           <th style="width: 50%;">What it covers</th>
-          <th style="width: 18%; text-align: right;">Public retail value</th>
+          <th style="width: 18%; text-align: right;">Status</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="item">Chankanaab Park entrance</td>
           <td class="detail">Gateway to the Cozumel Reefs National Marine Park. Includes lagoon, gardens, trails, and reef access.</td>
-          <td class="value">$29 / guest</td>
+          <td class="value">Included</td>
         </tr>
         <tr>
           <td class="item">Private air-conditioned transport</td>
@@ -630,7 +640,7 @@
   <div class="inner">
     <div class="section-label">Operational model</div>
     <h2 class="chap">One venue, one van, <em>two guest experiences</em>.</h2>
-    <p class="chap-lede">Beach Club and Private Cabana share the same transportation logistics whenever both are booked on a sailing — Celebrity's guests benefit from a single coordinated operational footprint, while the two products offer distinctly different experiences at the venue.</p>
+    <p class="chap-lede">Beach Club and Private Cabana share the same transportation logistics whenever both are booked on a sailing — your guests benefit from a single coordinated operational footprint, while the two products offer distinctly different experiences at the venue.</p>
 
     <div class="ops-grid">
       <div class="ops-card">
@@ -644,7 +654,7 @@
     </div>
 
     <div class="callout honey" style="margin-top: 36px;">
-      <strong>Why this matters operationally.</strong> Celebrity can offer both products on every Cozumel sailing without requiring duplicate logistics. When both products book, transportation is shared. When only the cabana books, the premium party still receives their experience. The Beach Club minimum of 8 guests applies only to that product — the cabana is not gated by it.
+      <strong>Why this matters operationally.</strong> Both products can be offered on every Cozumel sailing without requiring duplicate logistics. When both products book, transportation is shared. When only the cabana books, the premium party still receives their experience. The Beach Club minimum of 8 guests applies only to that product — the cabana is not gated by it.
     </div>
   </div>
 </section>
@@ -689,8 +699,8 @@
   <div class="inner">
     <div class="section-label">The operator · Visit Cozumel</div>
     <h2 class="chap">A licensed Mexican <em>tour operator</em>, based in Cozumel.</h2>
-    <p class="chap-lede" style="color: rgba(241,232,212,0.92);">Visit Cozumel Mexico, S. de R.L. de C.V. has operated Celebrity excursions in Cozumel since 2024, including the <em>Native Kitchen: Market-to-Jungle Workshop</em> (approved January 2026, currently sailing on Silhouette and Constellation). The Burgos family — longtime Cozumel residents — operates across shore excursions, private transfers, cultural heritage experiences, and Sacred Roots, a private cultural preserve.</p>
-    <p class="chap-lede" style="color: rgba(241,232,212,0.85); font-size: 18px;">References from current Celebrity destination managers available on request. Full commercial liability insurance and Mexican maritime regulatory compliance documentation available for any product review.</p>
+    <p class="chap-lede" style="color: rgba(241,232,212,0.92);">Visit Cozumel Mexico, S. de R.L. de C.V. has operated cruise line excursions in Cozumel since 2024, including approved products currently sailing on major cruise line itineraries. The Burgos family — longtime Cozumel residents — operates across shore excursions, private transfers, cultural heritage experiences, and Sacred Roots, a private cultural preserve.</p>
+    <p class="chap-lede" style="color: rgba(241,232,212,0.85); font-size: 18px;">References from current cruise line destination managers available on request. Full commercial liability insurance and Mexican maritime regulatory compliance documentation available for any product review.</p>
   </div>
 </section>
 
@@ -698,8 +708,8 @@
 <section class="closing">
   <div class="inner">
     <h2>We'd be glad to host a <em>site inspection</em>.</h2>
-    <p>Both products are ready for site review by any member of Celebrity's destination team passing through Cozumel. Cabana Beach is 15 minutes from the pier — a half-day visit is sufficient to review the venue, taste the chef's lunch service, snorkel the reef, and inspect the cabana setup.</p>
-    <p>If preferred, we can also coordinate a <strong>sample sailing</strong> — Visit Cozumel will host a test run for the Celebrity team at no cost, in advance of any catalog launch.</p>
+    <p>Both products are ready for site review by any member of your destination team passing through Cozumel. Cabana Beach is 15 minutes from the pier — a half-day visit is sufficient to review the venue, taste the chef's lunch service, snorkel the reef, and inspect the cabana setup.</p>
+    <p>If preferred, we can also coordinate a <strong>sample sailing</strong> — Visit Cozumel will host a test run for your team at no cost, in advance of any catalog launch.</p>
     <p>We look forward to your team's review and feedback.</p>
 
     <div class="signature-block">
