@@ -397,11 +397,12 @@
   @media (max-width: 800px) {
     .recipients-block, .summary-grid,
     .product-body, .ops-grid, .venue-grid,
-    .photo-gallery { grid-template-columns: 1fr; }
+    .photo-gallery, .chankanaab-section { grid-template-columns: 1fr; }
     .product-head { flex-direction: column; align-items: flex-start; }
     .price-block { text-align: left; }
     .product-narrative p:first-child::first-letter { font-size: 44px; }
     .photo-banner { height: 50vh; min-height: 320px; }
+    .chankanaab-photo { min-height: 380px; }
   }
 
   /* PHOTO BANNER */
@@ -430,7 +431,7 @@
   /* PHOTO GALLERY */
   .photo-gallery {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
     margin-top: 36px;
   }
@@ -440,9 +441,45 @@
     background-position: center;
     position: relative;
   }
+  .photo-gallery .photo.hammock { background-image: url('images/cabana-hammock-closeup.jpg'); }
+  .photo-gallery .photo.palapa { background-image: url('images/cabana-row-palapa.jpg'); }
+  .photo-gallery .photo.aerial { background-image: url('images/cabana-property-aerial.jpg'); }
+  .photo-gallery .photo.food { background-image: url('images/food-fish-tacos.jpg'); }
   .photo-gallery .photo.row { background-image: url('images/cabana-row-aerial.jpg'); }
   .photo-gallery .photo.property { background-image: url('images/cabana-property-aerial.jpg'); }
   .photo-gallery .photo.context { background-image: url('images/cabana-pier-context.jpg'); }
+
+  /* CHANKANAAB SECTION — side by side text + vertical photo */
+  .chankanaab-section {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    margin-top: 36px;
+    align-items: stretch;
+  }
+  .chankanaab-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .chankanaab-text p {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--cacao);
+    margin-bottom: 18px;
+  }
+  .chankanaab-text p:last-child {
+    font-size: 16px;
+    color: var(--cacao-soft);
+  }
+  .chankanaab-text p strong { font-weight: 500; }
+  .chankanaab-photo {
+    background-image: url('images/cabana-vertical-aerial.webp');
+    background-size: cover;
+    background-position: center;
+    min-height: 580px;
+  }
   .photo-gallery .photo .label {
     position: absolute;
     bottom: 12px; left: 14px; right: 14px;
@@ -635,16 +672,32 @@
   </div>
 </section>
 
+<!-- CHANKANAAB PARK -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">Chankanaab Park · included access</div>
+    <h2 class="chap">Steps from the cabanas. <em>The whole park, included.</em></h2>
+    <div class="chankanaab-section">
+      <div class="chankanaab-text">
+        <p>Access to <strong>Chankanaab Park</strong> is included with your bracelet in your individual guest fee. Steps from the cabanas and accessible from the beach, visit the park to enjoy the different attractions and activities they have to offer.</p>
+        <p>The park houses the natural lagoon, marine gardens, jungle trails, and the legendary <strong>Chankanaab Reef</strong> — part of the protected Cozumel Reefs National Marine Park system.</p>
+      </div>
+      <div class="chankanaab-photo"></div>
+    </div>
+  </div>
+</section>
+
 <!-- PHOTO GALLERY -->
 <section class="chapter">
   <div class="inner">
     <div class="section-label">The venue · in pictures</div>
     <h2 class="chap">Twelve cabanas. <em>One private beach.</em></h2>
-    <p class="chap-lede">A small property on the south end of Chankanaab Park, fronting the legendary reef of the Cozumel National Marine Park. Direct snorkel access from the shore, no boat required. Below — aerial views of the venue and its setting.</p>
+    <p class="chap-lede">A small property on the south end of Chankanaab Park, fronting the legendary reef of the Cozumel National Marine Park. Direct snorkel access from the shore, an on-site chef, and a hammock under the palms — your party only.</p>
     <div class="photo-gallery">
-      <div class="photo row"><div class="label">Cabanas along the white-sand beach</div></div>
-      <div class="photo property"><div class="label">Full property — twelve cabanas, palm-lined</div></div>
-      <div class="photo context"><div class="label">Reef and pier — National Marine Park access</div></div>
+      <div class="photo hammock"><div class="label">A private cabana — yours alone for the day</div></div>
+      <div class="photo palapa"><div class="label">Cabanas along the white-sand beach</div></div>
+      <div class="photo aerial"><div class="label">Aerial — twelve cabanas on the rocky point</div></div>
+      <div class="photo food"><div class="label">Chef-prepared lunch — two house dishes and a dessert</div></div>
     </div>
   </div>
 </section>
