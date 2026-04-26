@@ -499,21 +499,35 @@
     backdrop-filter: blur(4px);
   }
 
-  /* PRINT — preserve backgrounds when saving as PDF */
+  /* PRINT — paper size, page breaks, preserved backgrounds */
+  @page {
+    size: Letter portrait;
+    margin: 0;
+  }
+
   @media print {
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
-    html, body { background: var(--paper) !important; }
+
+    html, body {
+      width: 8.5in;
+      margin: 0 auto;
+      padding: 0;
+      background: var(--paper) !important;
+      font-size: 11pt;
+    }
+
+    /* Backgrounds preserved */
     section.dark { background: var(--cacao) !important; color: var(--cream) !important; }
     .closing { background: var(--ocean) !important; color: var(--cream) !important; }
-    .summary-card, .product-side, .ops-card, .stat-card, .callout {
+    .summary-card, .product-side, .ops-card, .stat-card, .callout, .why-card {
       background: var(--cream-soft) !important;
     }
     section.dark .product-side, section.dark .stat-card, section.dark .callout {
-      background: rgba(241,232,212,0.06) !important;
+      background: rgba(241,232,212,0.10) !important;
     }
     .ops-card.both { background: var(--cream-soft) !important; }
     .hero {
@@ -522,9 +536,87 @@
         radial-gradient(ellipse at 80% 90%, rgba(27,58,75,0.14), transparent 50%),
         var(--paper) !important;
     }
-    section.chapter, section.dark, .closing { page-break-inside: avoid; }
-    .product-block { page-break-inside: avoid; }
-    .hero { min-height: auto; page-break-after: always; }
+
+    /* Hero = first page, full Letter page */
+    .hero {
+      height: 11in !important;
+      min-height: 11in !important;
+      max-height: 11in !important;
+      padding: 0.5in 0.6in !important;
+      page-break-after: always;
+    }
+    .hero-title { font-size: 48pt !important; line-height: 0.95 !important; margin-bottom: 0.25in !important; }
+    .hero-deck { font-size: 14pt !important; line-height: 1.5 !important; max-width: 6.5in !important; }
+    .doc-type { font-size: 12pt !important; }
+
+    /* Chapter sections: tighter padding, no breaks inside */
+    section.chapter, section.dark {
+      padding: 0.5in 0.6in !important;
+      page-break-inside: avoid;
+    }
+
+    /* Photo banner: own page */
+    .photo-banner {
+      height: 8in !important;
+      min-height: 8in !important;
+      page-break-before: always;
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+
+    /* Headlines: print-scaled */
+    h2.chap { font-size: 24pt !important; line-height: 1.05 !important; margin-bottom: 0.18in !important; }
+    .chap-lede { font-size: 11.5pt !important; line-height: 1.5 !important; margin-bottom: 0.22in !important; max-width: 7in !important; }
+    .section-label { font-size: 8.5pt !important; margin-bottom: 0.12in !important; }
+
+    /* Products: keep each whole, scale typography */
+    .product-block { page-break-inside: avoid; padding: 0.25in 0 !important; }
+    .product-head .left h3 { font-size: 22pt !important; line-height: 1.1 !important; }
+    .product-head .left .tagline { font-size: 11pt !important; }
+    .product-head .left .pre { font-size: 9pt !important; }
+    .price-block .price { font-size: 32pt !important; }
+    .price-block .price-unit { font-size: 9.5pt !important; }
+    .product-narrative { font-size: 10.5pt !important; line-height: 1.55 !important; }
+    .product-narrative p:first-child::first-letter { font-size: 36pt !important; }
+    .product-side { padding: 0.18in 0.2in !important; }
+    .product-side h5 { font-size: 8.5pt !important; margin-bottom: 0.08in !important; }
+    .product-side li { font-size: 10pt !important; padding: 0.05in 0 !important; }
+    .product-side .specs .spec .lab { font-size: 7.5pt !important; }
+    .product-side .specs .spec .val { font-size: 11pt !important; }
+
+    /* Summary cards / why cards */
+    .summary-card, .why-card { padding: 0.22in 0.22in !important; page-break-inside: avoid; }
+    .summary-card h4 { font-size: 14pt !important; margin-bottom: 0.08in !important; }
+    .summary-card p { font-size: 10.5pt !important; line-height: 1.45 !important; }
+
+    /* Photo gallery: keep groups together */
+    .photo-gallery { page-break-inside: avoid; gap: 0.08in !important; margin-top: 0.2in !important; }
+    .photo-gallery .photo .label { font-size: 9pt !important; padding: 0.08in 0.12in !important; }
+
+    /* Chankanaab section */
+    .chankanaab-section { page-break-inside: avoid; gap: 0.4in !important; margin-top: 0.2in !important; }
+    .chankanaab-photo { min-height: 5.5in !important; }
+    .chankanaab-text p { font-size: 12pt !important; line-height: 1.55 !important; margin-bottom: 0.15in !important; }
+
+    /* Inclusions table */
+    .inclusions-table { page-break-inside: avoid; font-size: 10pt !important; }
+    .inclusions-table thead th { font-size: 8.5pt !important; padding: 0.1in 0.12in !important; }
+    .inclusions-table tbody td { padding: 0.12in 0.12in !important; font-size: 10.5pt !important; }
+    .inclusions-table .item { font-size: 11pt !important; }
+    .inclusions-table .detail { font-size: 10pt !important; }
+    .inclusions-table .value { font-size: 11pt !important; }
+
+    /* Callouts */
+    .callout { page-break-inside: avoid; padding: 0.18in 0.22in !important; font-size: 11pt !important; line-height: 1.55 !important; margin: 0.2in 0 !important; }
+
+    /* Provenance grid */
+    .provenance, .summary-grid { page-break-inside: avoid; gap: 0.18in !important; }
+    .provenance { padding: 0.2in 0 !important; margin-top: 0.15in !important; }
+    .prov-label { font-size: 7.5pt !important; }
+    .prov-value { font-size: 12pt !important; }
+
+    /* Hide footer dev meta if needed */
+    footer { font-size: 8pt !important; padding: 0.3in 0.5in !important; }
   }
 </style>
 </head>
