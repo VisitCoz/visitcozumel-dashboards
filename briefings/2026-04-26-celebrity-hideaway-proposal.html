@@ -499,9 +499,9 @@
     backdrop-filter: blur(4px);
   }
 
-  /* PRINT / PDF — ONE single tall page, no page breaks anywhere */
+  /* PRINT / PDF — ONE single page, content-height trimmed, slightly wider */
   @page {
-    size: 14in 80in;
+    size: 18in 79in;
     margin: 0;
   }
 
@@ -519,8 +519,8 @@
     }
 
     html, body {
-      width: 14in;
-      margin: 0 auto;
+      width: 18in;
+      margin: 0;
       padding: 0;
       background: var(--paper) !important;
       font-size: 11pt;
@@ -542,50 +542,61 @@
         var(--paper) !important;
     }
 
-    /* Comfortable section heights, no fixed-page nonsense */
-    .hero { min-height: 7in !important; padding: 0.5in 0.7in !important; }
-    .photo-banner { height: 7in !important; min-height: 7in !important; }
-    section.chapter, section.dark { padding: 0.5in 0.8in !important; }
+    /* Section heights */
+    .hero { min-height: 6in !important; padding: 0.5in 0.7in !important; }
+    .hero-content { padding: 0.5in 0 !important; max-width: 14in !important; }
+    .photo-banner { height: 5.5in !important; min-height: 5.5in !important; }
+    section.chapter, section.dark { padding: 0.55in 0.8in !important; }
 
-    /* Typography */
-    .hero-title { font-size: 60pt !important; line-height: 0.95 !important; margin-bottom: 0.25in !important; }
-    .hero-deck { font-size: 16pt !important; line-height: 1.5 !important; max-width: 9in !important; }
-    .doc-type { font-size: 13pt !important; }
-    h2.chap { font-size: 28pt !important; line-height: 1.05 !important; margin-bottom: 0.2in !important; }
-    .chap-lede { font-size: 13pt !important; line-height: 1.55 !important; margin-bottom: 0.25in !important; max-width: 9.5in !important; }
-    .section-label { font-size: 9pt !important; margin-bottom: 0.12in !important; }
+    /* Hero typography */
+    .top-bar { padding-bottom: 0.2in !important; }
+    .doc-type { font-size: 13pt !important; margin-bottom: 0.18in !important; }
+    .hero-title { font-size: 64pt !important; line-height: 0.95 !important; margin-bottom: 0.25in !important; }
+    .hero-deck { font-size: 17pt !important; line-height: 1.5 !important; max-width: 13in !important; margin-bottom: 0 !important; }
 
+    /* Section headers */
+    h2.chap { font-size: 30pt !important; line-height: 1.05 !important; margin-bottom: 0.2in !important; }
+    .chap-lede { font-size: 13.5pt !important; line-height: 1.55 !important; margin-bottom: 0.25in !important; max-width: 13in !important; }
+    .section-label { font-size: 9.5pt !important; margin-bottom: 0.12in !important; }
+
+    /* Products */
     .product-block { padding: 0.3in 0 !important; }
     .product-head .left h3 { font-size: 26pt !important; line-height: 1.1 !important; }
-    .product-head .left .tagline { font-size: 12pt !important; }
-    .price-block .price { font-size: 38pt !important; }
-    .price-block .price-unit { font-size: 10pt !important; }
-    .product-narrative { font-size: 11.5pt !important; line-height: 1.6 !important; }
-    .product-narrative p:first-child::first-letter { font-size: 42pt !important; }
+    .product-head .left .tagline { font-size: 13pt !important; }
+    .price-block .price { font-size: 40pt !important; }
+    .price-block .price-unit { font-size: 11pt !important; }
+
+    .product-narrative { font-size: 12pt !important; line-height: 1.6 !important; }
+    .product-narrative p:first-child::first-letter { font-size: 44pt !important; }
     .product-side { padding: 0.22in 0.25in !important; }
-    .product-side li { font-size: 11pt !important; padding: 0.06in 0 !important; }
+    .product-side li { font-size: 11.5pt !important; padding: 0.06in 0 !important; }
 
-    .summary-card, .why-card { padding: 0.25in !important; }
-    .summary-card h4 { font-size: 16pt !important; margin-bottom: 0.1in !important; }
-    .summary-card p { font-size: 11.5pt !important; line-height: 1.5 !important; }
+    /* Summary cards */
+    .summary-card, .why-card { padding: 0.28in !important; }
+    .summary-card h4 { font-size: 17pt !important; margin-bottom: 0.1in !important; }
+    .summary-card p { font-size: 12pt !important; line-height: 1.5 !important; }
 
+    /* Photo galleries */
     .photo-gallery { gap: 0.1in !important; margin-top: 0.25in !important; }
-    .photo-gallery .photo .label { font-size: 10pt !important; padding: 0.1in 0.14in !important; }
+    .photo-gallery .photo .label { font-size: 10.5pt !important; padding: 0.1in 0.14in !important; }
+    .photo-banner .caption { font-size: 14pt !important; padding: 0.14in 0.22in !important; bottom: 0.25in !important; left: 0.35in !important; }
 
+    /* Chankanaab side-by-side */
     .chankanaab-section { gap: 0.5in !important; margin-top: 0.25in !important; }
-    .chankanaab-photo { min-height: 6.5in !important; }
-    .chankanaab-text p { font-size: 13pt !important; line-height: 1.6 !important; margin-bottom: 0.18in !important; }
+    .chankanaab-photo { min-height: 5in !important; }
+    .chankanaab-text p { font-size: 14pt !important; line-height: 1.6 !important; margin-bottom: 0.18in !important; }
 
-    .inclusions-table { font-size: 11pt !important; }
-    .inclusions-table thead th { font-size: 9pt !important; padding: 0.12in 0.15in !important; }
-    .inclusions-table tbody td { padding: 0.14in 0.15in !important; font-size: 11.5pt !important; }
-    .inclusions-table .item { font-size: 12pt !important; }
+    /* Inclusions table */
+    .inclusions-table { font-size: 11.5pt !important; }
+    .inclusions-table thead th { font-size: 9.5pt !important; padding: 0.12in 0.15in !important; }
+    .inclusions-table tbody td { padding: 0.14in 0.15in !important; font-size: 12pt !important; }
+    .inclusions-table .item { font-size: 12.5pt !important; }
     .inclusions-table .detail { font-size: 11pt !important; }
     .inclusions-table .value { font-size: 12pt !important; }
 
-    .callout { padding: 0.22in 0.25in !important; font-size: 12pt !important; line-height: 1.6 !important; margin: 0.25in 0 !important; }
+    .callout { padding: 0.22in 0.25in !important; font-size: 12.5pt !important; line-height: 1.6 !important; margin: 0.25in 0 !important; }
 
-    footer { font-size: 9pt !important; padding: 0.35in 0.7in !important; }
+    footer { font-size: 9.5pt !important; padding: 0.35in 0.7in !important; }
   }
 </style>
 </head>
