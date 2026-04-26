@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cozumel Hideaway · A Proposal for Celebrity Cruises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4;
+    --cream-soft: #E8DCC0;
+    --paper: #FAF5EA;
+    --cacao: #1F1308;
+    --cacao-soft: #3A2615;
+    --honey: #C89B3C;
+    --honey-deep: #A67829;
+    --jungle: #3E4A2E;
+    --terracotta: #B85C38;
+    --ocean: #1B3A4B;
+    --ocean-soft: #2C5269;
+    --ink: #2B1A0C;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.65; overflow-x: hidden; }
+  code, .mono { font-family: 'JetBrains Mono', 'Menlo', monospace; }
+
+  /* HERO */
+  .hero { min-height: 92vh; padding: 48px 32px 60px;
+    display: flex; flex-direction: column;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(200,155,60,0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(27,58,75,0.14), transparent 50%),
+      var(--paper);
+  }
+  .top-bar { display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 36px; border-bottom: 1px solid rgba(31,19,8,0.18); }
+  .brand-mark {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 14px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--cacao);
+  }
+  .brand-mark em { font-style: italic; color: var(--honey-deep); font-weight: 400; letter-spacing: 0.2em; }
+  .doc-meta { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--cacao-soft); text-align: right; }
+  .doc-meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 70px 0; max-width: 1000px; }
+  .doc-type {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 17px; color: var(--terracotta); margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+  .hero-title { font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 8vw, 92px);
+    line-height: 0.95; margin-bottom: 32px;
+    letter-spacing: -0.025em; font-weight: 400;
+  }
+  .hero-title em { font-style: italic; color: var(--honey-deep); }
+  .hero-deck { font-family: 'Fraunces', serif;
+    font-size: 22px; max-width: 780px;
+    color: var(--cacao); line-height: 1.5; margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-deck strong { font-weight: 500; color: var(--cacao); }
+
+  .recipients-block {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; max-width: 800px;
+    padding: 32px 0; margin-top: 20px;
+    border-top: 1px solid rgba(31,19,8,0.18);
+    border-bottom: 1px solid rgba(31,19,8,0.18);
+  }
+  .recipient { display: flex; flex-direction: column; gap: 4px; }
+  .recipient-role {
+    font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--cacao-soft); }
+  .recipient-name {
+    font-family: 'Fraunces', serif; font-size: 17px;
+    color: var(--cacao); font-weight: 500;
+  }
+  .recipient-meta {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13.5px; color: var(--cacao-soft);
+  }
+
+  /* SECTIONS */
+  section.chapter { padding: 100px 32px; }
+  .inner { max-width: 1080px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--honey-deep); margin-bottom: 18px; font-weight: 500; }
+  section.dark { background: var(--cacao); color: var(--cream); }
+  section.dark .section-label { color: var(--honey); }
+  section.dark .chap-lede { color: rgba(241,232,212,0.82); }
+  h2.chap { font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4.8vw, 54px);
+    line-height: 1.04; margin-bottom: 28px;
+    letter-spacing: -0.025em; font-weight: 400;
+  }
+  h2.chap em { font-style: italic; color: var(--honey-deep); }
+  section.dark h2.chap em { color: var(--honey); }
+  .chap-lede { font-family: 'Fraunces', serif;
+    font-size: 20px; color: var(--cacao);
+    margin-bottom: 36px; line-height: 1.55;
+    max-width: 820px; font-weight: 300;
+  }
+  .chap-lede strong { font-weight: 500; }
+
+  /* EXEC SUMMARY CARDS */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 22px; margin-top: 36px; }
+  .summary-card {
+    background: var(--cream-soft);
+    padding: 32px 28px;
+    border-top: 3px solid var(--honey-deep);
+  }
+  .summary-card h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; line-height: 1.2;
+    margin-bottom: 12px; font-weight: 500;
+    color: var(--cacao);
+  }
+  .summary-card h4 em { font-style: italic; color: var(--honey-deep); }
+  .summary-card p {
+    font-family: 'Fraunces', serif;
+    font-size: 16px; line-height: 1.55;
+    color: var(--cacao-soft);
+  }
+
+  /* PRODUCT BLOCKS */
+  .product-block { padding: 48px 0; }
+  .product-block + .product-block {
+    border-top: 1px solid rgba(31,19,8,0.15);
+    margin-top: 24px; padding-top: 56px;
+  }
+  section.dark .product-block + .product-block {
+    border-top-color: rgba(241,232,212,0.2);
+  }
+  .product-head { display: flex; justify-content: space-between;
+    align-items: flex-end; flex-wrap: wrap; gap: 24px;
+    margin-bottom: 32px; padding-bottom: 22px;
+    border-bottom: 2px solid var(--cacao); }
+  section.dark .product-head { border-bottom-color: rgba(241,232,212,0.3); }
+  .product-head .left .pre {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--cacao-soft);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 6px; }
+  section.dark .product-head .left .pre { color: rgba(241,232,212,0.75); }
+  .product-head .left h3 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 38px);
+    font-weight: 500; line-height: 1.1;
+    color: var(--cacao); letter-spacing: -0.015em;
+  }
+  section.dark .product-head .left h3 { color: var(--cream); }
+  .product-head .left h3 em { font-style: italic; color: var(--honey-deep); }
+  section.dark .product-head .left h3 em { color: var(--honey); }
+  .product-head .left .tagline {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 17px; color: var(--cacao-soft);
+    margin-top: 8px; max-width: 600px; line-height: 1.45; }
+  section.dark .product-head .left .tagline { color: rgba(241,232,212,0.75); }
+  .price-block { text-align: right; }
+  .price-block .price {
+    font-family: 'Fraunces', serif;
+    font-size: 48px; font-weight: 500;
+    color: var(--cacao); line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  section.dark .price-block .price { color: var(--honey); }
+  .price-block .price-unit {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; color: var(--cacao-soft);
+    margin-top: 6px;
+  }
+  section.dark .price-block .price-unit { color: rgba(241,232,212,0.7); }
+
+  .product-body {
+    display: grid; grid-template-columns: 1.5fr 1fr;
+    gap: 48px;
+  }
+  .product-narrative {
+    font-family: 'Fraunces', serif;
+    font-size: 16.5px; line-height: 1.65;
+    color: var(--cacao);
+  }
+  section.dark .product-narrative { color: rgba(241,232,212,0.92); }
+  .product-narrative p { margin-bottom: 14px; }
+  .product-narrative p strong { font-weight: 500; }
+  .product-narrative p:first-child::first-letter {
+    font-family: 'Fraunces', serif;
+    font-size: 56px; float: left;
+    line-height: 0.85; padding: 6px 10px 0 0;
+    color: var(--honey-deep); font-weight: 500;
+  }
+  section.dark .product-narrative p:first-child::first-letter { color: var(--honey); }
+
+  .product-side {
+    background: var(--cream-soft);
+    padding: 28px 26px;
+    border-left: 2px solid var(--honey-deep);
+  }
+  section.dark .product-side {
+    background: rgba(241,232,212,0.06);
+    border-left-color: var(--honey);
+  }
+  .product-side h5 {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cacao-soft); margin-bottom: 14px;
+    font-weight: 500;
+  }
+  section.dark .product-side h5 { color: rgba(241,232,212,0.7); }
+  .product-side ul { list-style: none; padding: 0; }
+  .product-side li {
+    padding: 9px 0; font-family: 'Fraunces', serif;
+    font-size: 14.5px; line-height: 1.45;
+    color: var(--cacao); border-bottom: 1px solid rgba(31,19,8,0.1);
+  }
+  section.dark .product-side li {
+    color: rgba(241,232,212,0.92);
+    border-bottom-color: rgba(241,232,212,0.12);
+  }
+  .product-side li:last-child { border-bottom: none; }
+  .product-side li::before { content: '✦  '; color: var(--honey-deep); }
+  section.dark .product-side li::before { color: var(--honey); }
+  .product-side .specs {
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid rgba(31,19,8,0.18);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  section.dark .product-side .specs { border-top-color: rgba(241,232,212,0.2); }
+  .product-side .specs .spec {
+    font-family: 'Fraunces', serif;
+  }
+  .product-side .specs .spec .lab {
+    font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--cacao-soft); display: block; margin-bottom: 3px;
+    font-style: normal; font-family: 'Inter Tight', sans-serif;
+  }
+  section.dark .product-side .specs .spec .lab { color: rgba(241,232,212,0.65); }
+  .product-side .specs .spec .val {
+    font-size: 15px; color: var(--cacao); font-weight: 500;
+  }
+  section.dark .product-side .specs .spec .val { color: var(--cream); }
+
+  /* INCLUSIONS TABLE */
+  .inclusions-table { width: 100%; border-collapse: collapse;
+    margin-top: 20px; font-family: 'Inter Tight', sans-serif; }
+  .inclusions-table thead th {
+    text-align: left; padding: 13px 16px;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--cacao-soft); border-bottom: 2px solid var(--cacao);
+    font-weight: 500; }
+  section.dark .inclusions-table thead th {
+    color: rgba(241,232,212,0.7);
+    border-bottom-color: rgba(241,232,212,0.3); }
+  .inclusions-table tbody td {
+    padding: 16px 16px; border-bottom: 1px solid rgba(31,19,8,0.1);
+    vertical-align: middle; font-size: 15px;
+  }
+  section.dark .inclusions-table tbody td {
+    border-bottom-color: rgba(241,232,212,0.1);
+    color: rgba(241,232,212,0.92);
+  }
+  .inclusions-table .item {
+    font-family: 'Fraunces', serif; font-size: 16px;
+  }
+  .inclusions-table .detail {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14.5px; color: var(--cacao-soft);
+  }
+  section.dark .inclusions-table .detail { color: rgba(241,232,212,0.72); }
+  .inclusions-table .value {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    color: var(--honey-deep); font-size: 15px; white-space: nowrap;
+    text-align: right;
+  }
+  section.dark .inclusions-table .value { color: var(--honey); }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--cream-soft);
+    border-left: 3px solid var(--terracotta);
+    padding: 26px 30px; margin: 32px 0;
+    font-family: 'Fraunces', serif;
+    font-size: 17px; line-height: 1.6;
+    color: var(--cacao);
+  }
+  .callout strong { font-weight: 500; }
+  .callout.honey { border-left-color: var(--honey-deep); }
+  .callout.jungle { border-left-color: var(--jungle); }
+  section.dark .callout {
+    background: rgba(241,232,212,0.06);
+    color: rgba(241,232,212,0.92);
+  }
+  section.dark .callout strong { color: var(--cream); }
+  section.dark .callout.honey { border-left-color: var(--honey); }
+
+  /* OPERATIONAL */
+  .ops-grid { display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 28px; }
+  .ops-card { padding: 28px 28px; border-radius: 0;
+    background: var(--cream); border-top: 3px solid var(--ocean); }
+  .ops-card.both { border-top-color: var(--honey-deep); background: var(--cream-soft); }
+  .ops-card h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px; line-height: 1.2;
+    margin-bottom: 8px; font-weight: 500; color: var(--cacao);
+  }
+  .ops-card h4 em { font-style: italic; color: var(--honey-deep); }
+  .ops-card p {
+    font-family: 'Fraunces', serif;
+    font-size: 15.5px; line-height: 1.6;
+    color: var(--cacao-soft);
+  }
+  .ops-card p strong { color: var(--cacao); font-weight: 500; }
+
+  /* VENUE BLOCK */
+  .venue-grid { display: grid; grid-template-columns: 1fr 1fr;
+    gap: 36px; margin-top: 36px; align-items: flex-start; }
+  .venue-narrative {
+    font-family: 'Fraunces', serif; font-size: 17px;
+    line-height: 1.65; color: var(--cacao);
+  }
+  section.dark .venue-narrative { color: rgba(241,232,212,0.92); }
+  .venue-narrative p { margin-bottom: 16px; }
+  .venue-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .stat-card {
+    background: var(--cream-soft);
+    padding: 22px 22px; border-top: 2px solid var(--honey-deep);
+  }
+  section.dark .stat-card {
+    background: rgba(241,232,212,0.06);
+    border-top-color: var(--honey);
+  }
+  .stat-card .number {
+    font-family: 'Fraunces', serif; font-size: 38px; font-weight: 500;
+    color: var(--cacao); line-height: 1; margin-bottom: 8px;
+  }
+  section.dark .stat-card .number { color: var(--honey); }
+  .stat-card .number em { font-style: italic; }
+  .stat-card .label {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; color: var(--cacao-soft); line-height: 1.4;
+  }
+  section.dark .stat-card .label { color: rgba(241,232,212,0.75); }
+
+  /* CLOSING */
+  .closing { background: var(--ocean); color: var(--cream); padding: 90px 32px; }
+  .closing h2 { font-family: 'Fraunces', serif;
+    font-size: clamp(30px, 4.5vw, 46px); line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 28px; max-width: 800px;
+    font-weight: 400;
+  }
+  .closing h2 em { font-style: italic; color: var(--honey); }
+  .closing p {
+    font-family: 'Fraunces', serif; font-size: 18px;
+    line-height: 1.65; color: rgba(241,232,212,0.88);
+    max-width: 760px; margin-bottom: 18px; font-weight: 300;
+  }
+  .closing p strong { font-weight: 500; color: var(--cream); }
+  .signature-block {
+    margin-top: 48px; padding-top: 32px;
+    border-top: 1px solid rgba(241,232,212,0.25);
+    max-width: 760px;
+  }
+  .signature-block .sig-from {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(241,232,212,0.6); margin-bottom: 10px;
+  }
+  .signature-block .sig-name {
+    font-family: 'Fraunces', serif; font-size: 22px;
+    font-weight: 500; color: var(--cream); margin-bottom: 4px;
+  }
+  .signature-block .sig-role {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 15px; color: rgba(241,232,212,0.78);
+  }
+  .signature-block .sig-contact {
+    font-size: 14px; color: rgba(241,232,212,0.7);
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  footer { padding: 40px 32px; text-align: center;
+    font-size: 11px; color: var(--cacao-soft);
+    letter-spacing: 0.25em; text-transform: uppercase;
+    background: var(--paper);
+  }
+
+  @media (max-width: 800px) {
+    .recipients-block, .summary-grid,
+    .product-body, .ops-grid, .venue-grid { grid-template-columns: 1fr; }
+    .product-head { flex-direction: column; align-items: flex-start; }
+    .price-block { text-align: left; }
+    .product-narrative p:first-child::first-letter { font-size: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="top-bar">
+    <div class="brand-mark">Visit Cozumel <em>Mexico</em></div>
+    <div class="doc-meta">
+      A Proposal · <strong>April 2026</strong>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="doc-type">A Shore Excursion Proposal</div>
+    <h1 class="hero-title">Cozumel <em>Hideaway</em>.<br/>Two new excursions.</h1>
+    <p class="hero-deck">
+      A <strong>premium small beach club</strong> and a <strong>fully private cabana experience</strong>, both at Cabana Beach — a secluded venue inside Chankanaab Park, the gateway to the <strong>Cozumel Reefs National Marine Park</strong>. Submitted for consideration to Celebrity's Destination Experiences team.
+    </p>
+
+    <div class="recipients-block">
+      <div class="recipient">
+        <div class="recipient-role">Account Executive</div>
+        <div class="recipient-name">Matthew Kaye</div>
+        <div class="recipient-meta">Destination Experiences</div>
+      </div>
+      <div class="recipient">
+        <div class="recipient-role">Manager</div>
+        <div class="recipient-name">Adam Cullen</div>
+        <div class="recipient-meta">Destination Experiences</div>
+      </div>
+      <div class="recipient">
+        <div class="recipient-role">Marketing</div>
+        <div class="recipient-name">Anamae Garcia de Paredes</div>
+        <div class="recipient-meta">Destination Experiences</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">The proposal · in brief</div>
+    <h2 class="chap">Two products. One <em>private venue</em>.</h2>
+    <p class="chap-lede">
+      Visit Cozumel proposes adding two excursions to Celebrity's Cozumel shelf, both operating from <strong>Cabana Beach</strong> — a small, intimate beach club at the south end of Chankanaab Park, currently not marketed to any other cruise line. Both products include round-trip private transport, Chankanaab Park entry, an on-site chef preparing a plated lunch, and an open bar.
+    </p>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>Product A · <em>Beach Club</em></h4>
+        <p>A premium small-group beach experience with chef-prepared lunch, open bar, and direct reef snorkeling. <strong>$149 net per guest</strong>, minimum 8 guests to operate.</p>
+      </div>
+      <div class="summary-card">
+        <h4>Product B · <em>Private Cabana</em></h4>
+        <p>A fully private cabana — one party only, no sharing — with the same inclusions. <strong>$895 net per cabana, flat</strong>, for 1–6 guests. Runs every day, no cancellations.</p>
+      </div>
+      <div class="summary-card">
+        <h4>Both products · <em>one venue</em></h4>
+        <p>Beach Club and Cabana share the same transport when both are booked, allowing Celebrity to offer two distinct guest experiences at one shore-time, with one operational footprint.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">The two products · in detail</div>
+    <h2 class="chap">Cozumel <em>Hideaway</em>.</h2>
+
+    <!-- PRODUCT A -->
+    <div class="product-block">
+      <div class="product-head">
+        <div class="left">
+          <div class="pre">Product A</div>
+          <h3>Cozumel Hideaway: Beach Club &amp; <em>Caribbean Feast</em></h3>
+          <div class="tagline">An exclusive small beach club at Chankanaab Park, with chef-prepared lunch, open bar, and direct reef snorkeling.</div>
+        </div>
+        <div class="price-block">
+          <div class="price">$149</div>
+          <div class="price-unit">USD net per guest</div>
+        </div>
+      </div>
+
+      <div class="product-body">
+        <div class="product-narrative">
+          <p>Leave behind the worries of everyday life for a tropical getaway and enjoy the amenities of Cozumel's most exclusive small beach club, including direct reef snorkeling, a chef-prepared lunch, and an open bar.</p>
+          <p>Board your air-conditioned van and enjoy a 15-minute scenic drive to Cabana Beach, a small private retreat tucked into the south end of Chankanaab Park. This is a secluded venue that operates only when a small group is booked — never crowded, never shared with another tour.</p>
+          <p>Soak in the tropical sun by the Caribbean's pristine waters, sip a refreshing cocktail from the bartender, and drift to the soothing sounds of the waves. Snorkel directly off the legendary <strong>Chankanaab Reef</strong>, part of the Cozumel Reefs National Marine Park, just steps from your lounger — no boat, no waiting.</p>
+          <p>Prepare to be pampered — the venue comes with a gracious bilingual host, attentive waiters, and an on-site chef who prepares a delicious plated lunch: <strong>two house dishes and a dessert</strong>, paired with an <strong>open bar of soft drinks, ice-cold beer, and domestic spirits</strong>.</p>
+          <p>Feeling adventurous? Explore Chankanaab's full grounds — the natural lagoon, gardens, and trails are all yours, since park entry is included. A relaxing massage from on-site experts is available at an additional cost. After unforgettable memories, return to your awaiting ship feeling fully refreshed.</p>
+        </div>
+
+        <aside class="product-side">
+          <h5>Operational specs</h5>
+          <ul>
+            <li>Round-trip private air-conditioned van</li>
+            <li>Bilingual host dedicated to the group</li>
+            <li>Chankanaab Park entrance + Cozumel Reefs National Marine Park access</li>
+            <li>On-site chef · two house dishes + dessert</li>
+            <li>Open bar · soft drinks, beer, domestic spirits</li>
+            <li>Direct reef snorkeling · gear, towels, water</li>
+            <li>Optional on-site massage at additional cost</li>
+          </ul>
+          <div class="specs">
+            <div class="spec"><span class="lab">Duration</span><span class="val">4–5 hrs</span></div>
+            <div class="spec"><span class="lab">Activity</span><span class="val">Mild</span></div>
+            <div class="spec"><span class="lab">Min</span><span class="val">8 guests</span></div>
+            <div class="spec"><span class="lab">Max</span><span class="val">14 guests</span></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- PRODUCT B -->
+    <div class="product-block">
+      <div class="product-head">
+        <div class="left">
+          <div class="pre">Product B</div>
+          <h3>Cozumel Hideaway: Private Cabana &amp; <em>Caribbean Feast</em></h3>
+          <div class="tagline">Per-cabana flat · food included · 1 party per cabana · runs every day, no cancellations.</div>
+        </div>
+        <div class="price-block">
+          <div class="price">$895</div>
+          <div class="price-unit">USD net per cabana, flat</div>
+        </div>
+      </div>
+
+      <div class="product-body">
+        <div class="product-narrative">
+          <p>Leave behind the worries of everyday life for a tropical getaway and enjoy your own fully private beach cabana, including direct reef snorkeling, a chef-prepared lunch, and an open bar — all yours, no sharing.</p>
+          <p>Board your air-conditioned van and enjoy a 15-minute scenic drive to Cabana Beach. Step into your <strong>fully private cabana</strong> — yours alone, no sharing with other guests. From 1 to 6 guests, the cabana is yours; the price is the same.</p>
+          <p>Soak in the tropical sun by the Caribbean's pristine waters, sip a refreshing cocktail from the bartender, and drift to the soothing sounds of the waves. Snorkel directly off the legendary <strong>Chankanaab Reef</strong>, part of the Cozumel Reefs National Marine Park, steps from your cabana — no boat, no waiting.</p>
+          <p>Prepare to be pampered — your cabana comes with a dedicated bilingual host and an on-site chef who prepares a delicious plated lunch: <strong>two house dishes and a dessert</strong>, paired with an <strong>open bar of soft drinks, ice-cold beer, and domestic spirits</strong> for everyone in your party.</p>
+          <p>Wander all of Chankanaab's grounds — the natural lagoon, gardens, and trails are all yours, since park entry is included for every guest. A relaxing massage from on-site experts is available at an additional cost. After unforgettable memories, return to your awaiting ship feeling fully refreshed.</p>
+        </div>
+
+        <aside class="product-side">
+          <h5>Operational specs</h5>
+          <ul>
+            <li>Fully private cabana — one party only</li>
+            <li>Same flat price for 2 guests or 6 guests</li>
+            <li>Round-trip private air-conditioned van</li>
+            <li>Dedicated bilingual host</li>
+            <li>Chankanaab Park entrance for all cabana guests</li>
+            <li>On-site chef · two house dishes + dessert</li>
+            <li>Open bar · soft drinks, beer, domestic spirits</li>
+            <li>Direct reef snorkeling · gear, towels, water</li>
+            <li>Optional on-site massage at additional cost</li>
+          </ul>
+          <div class="specs">
+            <div class="spec"><span class="lab">Duration</span><span class="val">4–5 hrs</span></div>
+            <div class="spec"><span class="lab">Activity</span><span class="val">Mild</span></div>
+            <div class="spec"><span class="lab">Cabana max</span><span class="val">6 guests</span></div>
+            <div class="spec"><span class="lab">Operates</span><span class="val">Daily, no cancellations</span></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED — VALUE -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">What's included · the value behind the rate</div>
+    <h2 class="chap">A premium-tier <em>experience</em>.</h2>
+    <p class="chap-lede">Each booking includes the full venue stack — Chankanaab Park entry alone retails at <strong>$29 per guest</strong>. Combined with private transport, on-site culinary service, full open bar, and direct National Marine Park reef access, this is positioned for the premium end of Celebrity's Cozumel guest base.</p>
+
+    <table class="inclusions-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">Inclusion</th>
+          <th style="width: 50%;">What it covers</th>
+          <th style="width: 18%; text-align: right;">Public retail value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="item">Chankanaab Park entrance</td>
+          <td class="detail">Gateway to the Cozumel Reefs National Marine Park. Includes lagoon, gardens, trails, and reef access.</td>
+          <td class="value">$29 / guest</td>
+        </tr>
+        <tr>
+          <td class="item">Private air-conditioned transport</td>
+          <td class="detail">Round-trip pier ↔ venue, 14-passenger van, 15-minute scenic drive each way.</td>
+          <td class="value">Included</td>
+        </tr>
+        <tr>
+          <td class="item">Bilingual host</td>
+          <td class="detail">Dedicated to your group from pier to pier. Local guide with island expertise.</td>
+          <td class="value">Included</td>
+        </tr>
+        <tr>
+          <td class="item">Chef-prepared lunch</td>
+          <td class="detail">On-site chef. Two house dishes and a dessert, plated.</td>
+          <td class="value">Included</td>
+        </tr>
+        <tr>
+          <td class="item">Open bar</td>
+          <td class="detail">Soft drinks, ice-cold beer, and Mexican domestic spirits. Bartender on-site.</td>
+          <td class="value">Included</td>
+        </tr>
+        <tr>
+          <td class="item">Direct reef snorkeling</td>
+          <td class="detail">Snorkel directly off Chankanaab Reef — part of the National Marine Park. Gear, towels, and bottled water provided.</td>
+          <td class="value">Included</td>
+        </tr>
+        <tr>
+          <td class="item">Optional · on-site massage</td>
+          <td class="detail">Relaxing massage from on-site experts. Available for booking at the venue.</td>
+          <td class="value">Additional cost</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout honey">
+      <strong>A note on positioning.</strong> The price reflects the inclusion of Chankanaab Park entry (a $29 retail value per guest), private transport, an on-site chef preparing fresh meals, full open bar, and direct National Marine Park reef access. Both products are designed for the <strong>premium-market guest</strong> seeking a curated, exclusive Cozumel beach experience.
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONAL -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">Operational model</div>
+    <h2 class="chap">One venue, one van, <em>two guest experiences</em>.</h2>
+    <p class="chap-lede">Beach Club and Private Cabana share the same transportation logistics whenever both are booked on a sailing — Celebrity's guests benefit from a single coordinated operational footprint, while the two products offer distinctly different experiences at the venue.</p>
+
+    <div class="ops-grid">
+      <div class="ops-card">
+        <h4>If <em>Beach Club</em> reaches its minimum</h4>
+        <p>The van runs with up to 14 guests across both products. <strong>Beach Club guests</strong> share the small beach club; <strong>Cabana guests</strong> step into their fully private cabana on arrival. Same transport, same arrival time, two distinct experiences.</p>
+      </div>
+      <div class="ops-card both">
+        <h4>If <em>only the Cabana</em> is booked</h4>
+        <p>The van runs for the cabana party alone. <strong>The cabana product never cancels</strong> — every booked cabana operates regardless of Beach Club bookings. Premium guests can rely on the booking being honored.</p>
+      </div>
+    </div>
+
+    <div class="callout honey" style="margin-top: 36px;">
+      <strong>Why this matters operationally.</strong> Celebrity can offer both products on every Cozumel sailing without requiring duplicate logistics. When both products book, transportation is shared. When only the cabana books, the premium party still receives their experience. The Beach Club minimum of 8 guests applies only to that product — the cabana is not gated by it.
+    </div>
+  </div>
+</section>
+
+<!-- VENUE -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">The venue · Cabana Beach at Chankanaab Park</div>
+    <h2 class="chap">A small, <em>private retreat</em>.</h2>
+
+    <div class="venue-grid">
+      <div class="venue-narrative">
+        <p>Cabana Beach is located at the south end of <strong>Chankanaab Park</strong>, one of Cozumel's most celebrated natural destinations and the gateway to the <strong>Cozumel Reefs National Marine Park</strong>. The venue is small by design — twelve cabanas total — and not currently marketed to any cruise line.</p>
+        <p>Guests have full access to the entirety of Chankanaab Park: the natural lagoon, marine gardens, trails, and reef. The reef itself is part of the protected National Marine Park system and offers direct snorkeling from the shore — no boat ride required.</p>
+        <p>The on-site team includes a dedicated chef, bartender, waiters, and trained massage therapists, providing a full-service experience without the volume of a typical beach club operation.</p>
+      </div>
+
+      <div class="venue-stats">
+        <div class="stat-card">
+          <div class="number">12</div>
+          <div class="label">Private cabanas on the property — small by design</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">15<em>min</em></div>
+          <div class="label">From cruise pier to venue, by private van</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">$29</div>
+          <div class="label">Retail value of Chankanaab Park entry, per guest</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">100%</div>
+          <div class="label">Of National Marine Park reef accessible from the venue</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT VC -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">The operator · Visit Cozumel</div>
+    <h2 class="chap">A licensed Mexican <em>tour operator</em>, based in Cozumel.</h2>
+    <p class="chap-lede" style="color: rgba(241,232,212,0.92);">Visit Cozumel Mexico, S. de R.L. de C.V. has operated Celebrity excursions in Cozumel since 2024, including the <em>Native Kitchen: Market-to-Jungle Workshop</em> (approved January 2026, currently sailing on Silhouette and Constellation). The Burgos family — longtime Cozumel residents — operates across shore excursions, private transfers, cultural heritage experiences, and Sacred Roots, a private cultural preserve.</p>
+    <p class="chap-lede" style="color: rgba(241,232,212,0.85); font-size: 18px;">References from current Celebrity destination managers available on request. Full commercial liability insurance and Mexican maritime regulatory compliance documentation available for any product review.</p>
+  </div>
+</section>
+
+<!-- CLOSING / SITE VISIT -->
+<section class="closing">
+  <div class="inner">
+    <h2>We'd be glad to host a <em>site inspection</em>.</h2>
+    <p>Both products are ready for site review by any member of Celebrity's destination team passing through Cozumel. Cabana Beach is 15 minutes from the pier — a half-day visit is sufficient to review the venue, taste the chef's lunch service, snorkel the reef, and inspect the cabana setup.</p>
+    <p>If preferred, we can also coordinate a <strong>sample sailing</strong> — Visit Cozumel will host a test run for the Celebrity team at no cost, in advance of any catalog launch.</p>
+    <p>We look forward to your team's review and feedback.</p>
+
+    <div class="signature-block">
+      <div class="sig-from">From</div>
+      <div class="sig-name">Miguel Ángel Burgos García</div>
+      <div class="sig-role">Managing Partner · Visit Cozumel Mexico, S. de R.L. de C.V.</div>
+      <div class="sig-contact">
+        mr.burgos.miguel@gmail.com<br/>
+        Cozumel, Quintana Roo, México
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Visit Cozumel · Cozumel Hideaway Proposal · April 2026
+</footer>
+
+</body>
+</html>
