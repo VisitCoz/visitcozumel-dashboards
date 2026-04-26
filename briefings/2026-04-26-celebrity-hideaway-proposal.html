@@ -435,6 +435,7 @@
     gap: 14px;
     margin-top: 36px;
   }
+  .photo-gallery.three-col { grid-template-columns: repeat(3, 1fr); }
   .photo-gallery .photo {
     aspect-ratio: 4 / 3;
     background-size: cover;
@@ -444,10 +445,16 @@
   .photo-gallery .photo.hammock { background-image: url('images/cabana-hammock-closeup.jpg'); }
   .photo-gallery .photo.palapa { background-image: url('images/cabana-row-palapa.jpg'); }
   .photo-gallery .photo.aerial { background-image: url('images/cabana-property-aerial.jpg'); }
+  .photo-gallery .photo.vertical-aerial { background-image: url('images/cabana-vertical-scaled.jpg'); }
+  .photo-gallery .photo.rocky-aerial { background-image: url('images/cabana-rocky-aerial-2.jpg'); }
+  .photo-gallery .photo.row-aerial { background-image: url('images/cabana-row-aerial-2.jpg'); }
+  .photo-gallery .photo.context { background-image: url('images/cabana-pier-context.jpg'); }
+  .photo-gallery .photo.food-tacos { background-image: url('images/food-fish-tacos.jpg'); }
+  .photo-gallery .photo.food-salad { background-image: url('images/food-salad.jpg'); }
+  .photo-gallery .photo.food-burger { background-image: url('images/food-burger.jpg'); }
   .photo-gallery .photo.food { background-image: url('images/food-fish-tacos.jpg'); }
   .photo-gallery .photo.row { background-image: url('images/cabana-row-aerial.jpg'); }
   .photo-gallery .photo.property { background-image: url('images/cabana-property-aerial.jpg'); }
-  .photo-gallery .photo.context { background-image: url('images/cabana-pier-context.jpg'); }
 
   /* CHANKANAAB SECTION — side by side text + vertical photo */
   .chankanaab-section {
@@ -687,17 +694,33 @@
   </div>
 </section>
 
-<!-- PHOTO GALLERY -->
+<!-- PHOTO GALLERY · THE VENUE -->
 <section class="chapter">
   <div class="inner">
     <div class="section-label">The venue · in pictures</div>
     <h2 class="chap">Twelve cabanas. <em>One private beach.</em></h2>
-    <p class="chap-lede">A small property on the south end of Chankanaab Park, fronting the legendary reef of the Cozumel National Marine Park. Direct snorkel access from the shore, an on-site chef, and a hammock under the palms — your party only.</p>
-    <div class="photo-gallery">
-      <div class="photo hammock"><div class="label">A private cabana — yours alone for the day</div></div>
+    <p class="chap-lede">A small property on the south end of Chankanaab Park, fronting the legendary reef of the Cozumel National Marine Park. Direct snorkel access from the shore, Balinese-style daybeds in every cabana, and a hammock under the palms — your party only.</p>
+    <div class="photo-gallery three-col">
+      <div class="photo hammock"><div class="label">Inside a cabana — Balinese-style daybed and hammock</div></div>
       <div class="photo palapa"><div class="label">Cabanas along the white-sand beach</div></div>
+      <div class="photo vertical-aerial"><div class="label">Aerial — looking down on the cabanas</div></div>
       <div class="photo aerial"><div class="label">Aerial — twelve cabanas on the rocky point</div></div>
-      <div class="photo food"><div class="label">Chef-prepared lunch — two house dishes and a dessert</div></div>
+      <div class="photo rocky-aerial"><div class="label">Aerial — full property on the rocky shore</div></div>
+      <div class="photo row-aerial"><div class="label">Aerial — cabana row on the beach</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOD SECTION -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">The food · what's served</div>
+    <h2 class="chap">Chef-prepared, <em>plated to order</em>.</h2>
+    <p class="chap-lede">Two house dishes and a dessert per guest, paired with an open bar of soft drinks, beer, and domestic spirits. Below — what comes off the on-site kitchen.</p>
+    <div class="photo-gallery three-col">
+      <div class="photo food-tacos"><div class="label">Fresh fish tacos</div></div>
+      <div class="photo food-salad"><div class="label">Garden bowl on the sand</div></div>
+      <div class="photo food-burger"><div class="label">Beach burger plate</div></div>
     </div>
   </div>
 </section>
