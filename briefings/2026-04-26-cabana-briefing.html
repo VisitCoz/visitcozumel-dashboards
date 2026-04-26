@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cozumel Hideaway · Briefing for Mario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4;
+    --cream-soft: #E8DCC0;
+    --cacao: #1F1308;
+    --cacao-soft: #3A2615;
+    --honey: #C89B3C;
+    --honey-deep: #A67829;
+    --jungle: #3E4A2E;
+    --terracotta: #B85C38;
+    --ocean: #1B3A4B;
+    --ocean-soft: #2C5269;
+    --ink: #2B1A0C;
+    --alarm: #B8362F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.6; overflow-x: hidden; }
+  code, .mono { font-family: 'JetBrains Mono', 'Menlo', monospace; }
+
+  .hero { min-height: 70vh; padding: 40px 32px 60px; display: flex; flex-direction: column;
+    background: radial-gradient(ellipse at 20% 10%, rgba(200,155,60,0.22), transparent 50%),
+                radial-gradient(ellipse at 80% 90%, rgba(27,58,75,0.18), transparent 50%),
+                var(--cream); }
+  .top-bar { display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 32px; border-bottom: 1px solid rgba(31,19,8,0.15); }
+  .brand { font-family: 'Fraunces', serif; font-size: 14px; letter-spacing: 0.3em;
+    text-transform: uppercase; font-weight: 500; }
+  .doc-id { font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: var(--cacao-soft); }
+  .doc-id span { color: var(--honey-deep); font-weight: 500; font-style: normal; }
+  .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 60px 0; max-width: 980px; }
+  .welcome-whisper { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 17px; color: var(--terracotta); margin-bottom: 22px; }
+  .hero-title { font-family: 'Fraunces', serif; font-size: clamp(40px, 7.5vw, 80px);
+    line-height: 0.96; margin-bottom: 24px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--honey-deep); }
+  .hero-sub { font-size: 19px; max-width: 720px; color: var(--cacao-soft); margin-bottom: 36px; }
+  .provenance {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; max-width: 800px; padding: 28px 0;
+    border-top: 1px solid rgba(31, 19, 8, 0.15);
+    border-bottom: 1px solid rgba(31, 19, 8, 0.15);
+  }
+  .prov-item { display: flex; flex-direction: column; gap: 4px; }
+  .prov-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cacao-soft); }
+  .prov-value { font-family: 'Fraunces', serif; font-size: 16px; color: var(--ink); }
+
+  section.chapter { padding: 90px 32px; }
+  .inner { max-width: 1080px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--honey-deep); margin-bottom: 16px; }
+  section.dark { background: var(--cacao); color: var(--cream); }
+  section.dark .section-label { color: var(--honey); }
+  section.dark .chap-lede { color: rgba(241,232,212,0.78); }
+  h2.chap { font-family: 'Fraunces', serif; font-size: clamp(30px, 4.5vw, 48px);
+    line-height: 1.05; margin-bottom: 26px; letter-spacing: -0.02em; }
+  h2.chap em { font-style: italic; color: var(--honey-deep); }
+  section.dark h2.chap em { color: var(--honey); }
+  .chap-lede { font-family: 'Fraunces', serif; font-size: 19px;
+    color: var(--cacao-soft); margin-bottom: 32px; line-height: 1.55; max-width: 820px; }
+
+  /* WHY CONTEXT */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 32px; }
+  .why-card { background: var(--cream-soft); padding: 26px 28px;
+    border-left: 3px solid var(--honey-deep); }
+  .why-card h4 { font-family: 'Fraunces', serif; font-size: 19px; line-height: 1.2;
+    margin-bottom: 8px; font-weight: 500; }
+  .why-card h4 em { font-style: italic; color: var(--honey-deep); }
+  .why-card p { font-family: 'Fraunces', serif; font-size: 15.5px; line-height: 1.55;
+    color: var(--cacao-soft); }
+
+  /* INPUTS */
+  .input-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+  .input-table thead th { text-align: left; padding: 12px 16px;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cacao-soft); border-bottom: 2px solid var(--cacao); font-weight: 500; }
+  .input-table tbody td { padding: 14px 16px; border-bottom: 1px solid rgba(31,19,8,0.1);
+    vertical-align: middle; font-size: 14px; }
+  .input-table .item { font-family: 'Fraunces', serif; font-size: 15.5px; }
+  .input-table .num { font-family: 'JetBrains Mono', monospace; color: var(--cacao); white-space: nowrap; font-weight: 500; }
+  .input-table .src { font-size: 12.5px; color: var(--cacao-soft); font-style: italic; font-family: 'Fraunces', serif; }
+
+  /* PRODUCT HEADER */
+  .product-header { display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 20px; margin-bottom: 30px; padding-bottom: 24px;
+    border-bottom: 2px solid var(--cacao); }
+  section.dark .product-header { border-bottom-color: rgba(241,232,212,0.25); }
+  .product-header .left h2 { font-family: 'Fraunces', serif; font-size: 36px; line-height: 1.05;
+    font-weight: 500; letter-spacing: -0.01em; }
+  .product-header .left h2 em { font-style: italic; color: var(--honey-deep); }
+  section.dark .product-header .left h2 em { color: var(--honey); }
+  .product-header .left p { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 16px; color: var(--cacao-soft); margin-top: 6px; }
+  section.dark .product-header .left p { color: rgba(241,232,212,0.7); }
+  .product-header .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge { padding: 7px 14px; background: var(--cacao); color: var(--cream);
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-family: 'Inter Tight', sans-serif; font-weight: 500; }
+  section.dark .badge { background: var(--cream); color: var(--cacao); }
+  .badge.honey { background: var(--honey-deep); color: var(--cream); }
+  section.dark .badge.honey { background: var(--honey); color: var(--cacao); }
+  .badge.jungle { background: var(--jungle); color: var(--cream); }
+  .badge.alarm { background: var(--alarm); color: var(--cream); }
+
+  .build-table { width: 100%; border-collapse: collapse; margin-top: 16px;
+    font-family: 'Inter Tight', sans-serif; }
+  .build-table th { text-align: left; padding: 11px 12px;
+    font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 500; }
+  .build-table.light th { color: var(--cacao-soft); border-bottom: 2px solid var(--cacao); }
+  .build-table.dark th { color: rgba(241,232,212,0.7); border-bottom: 1px solid rgba(241,232,212,0.2); }
+  .build-table td { padding: 13px 12px; font-size: 13.5px; }
+  .build-table.light td { border-bottom: 1px solid rgba(31,19,8,0.1); color: var(--cacao); }
+  .build-table.dark td { border-bottom: 1px solid rgba(241,232,212,0.1); color: rgba(241,232,212,0.9); }
+  .build-table .scenario { font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; }
+  .build-table .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; white-space: nowrap; }
+  .build-table .good { color: var(--jungle); font-weight: 500; }
+  .build-table.dark .good { color: var(--honey); }
+  .build-table .ok { color: var(--cacao); }
+  .build-table.dark .ok { color: rgba(241,232,212,0.9); }
+  .build-table .thin { color: var(--terracotta); font-weight: 500; }
+  .build-table tr.hl { background: rgba(200,155,60,0.10); }
+
+  /* OP MODELS — FIXED COLORS */
+  .models-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 24px; }
+  .model-card { padding: 28px 24px; }
+  .model-card.alpha {
+    background: var(--cream); color: var(--cacao);
+    border-top: 3px solid var(--terracotta);
+  }
+  .model-card.beta {
+    background: var(--cream); color: var(--cacao);
+    border-top: 3px solid var(--ocean);
+  }
+  .model-card.gamma {
+    background: var(--honey-deep); color: var(--cream);
+    border-top: 3px solid var(--honey);
+  }
+  .model-card .greek { font-family: 'Fraunces', serif; font-style: italic; font-size: 28px;
+    color: var(--cacao-soft); margin-bottom: 4px; line-height: 1; }
+  .model-card.alpha .greek { color: var(--terracotta); }
+  .model-card.beta .greek { color: var(--ocean); }
+  .model-card.gamma .greek { color: var(--cream); opacity: 0.85; }
+  .model-card .model-name { font-family: 'Fraunces', serif; font-size: 19px;
+    line-height: 1.2; font-weight: 500; margin-bottom: 16px; color: var(--cacao); }
+  .model-card.gamma .model-name { color: var(--cream); }
+  .model-card .price-tag { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 500;
+    margin: 8px 0 4px; line-height: 1; color: var(--cacao); }
+  .model-card.gamma .price-tag { color: var(--cream); }
+  .model-card .price-unit { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cacao-soft); margin-bottom: 22px; }
+  .model-card.gamma .price-unit { color: rgba(241,232,212,0.85); }
+  .model-card .pros, .model-card .cons { padding: 14px 16px; margin: 10px 0;
+    font-size: 13.5px; line-height: 1.55; color: var(--cacao); }
+  .model-card.gamma .pros, .model-card.gamma .cons { color: var(--cream); }
+  .model-card .pros { background: rgba(62,74,46,0.10); border-left: 2px solid var(--jungle); }
+  .model-card.gamma .pros { background: rgba(241,232,212,0.15); border-left-color: var(--cream); }
+  .model-card .cons { background: rgba(184,92,56,0.12); border-left: 2px solid var(--terracotta); }
+  .model-card.gamma .cons { background: rgba(31,19,8,0.20); border-left-color: var(--cacao); }
+  .model-card .pros strong, .model-card .cons strong { display: block;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .model-card .pros strong { color: var(--jungle); }
+  .model-card.gamma .pros strong { color: var(--cream); }
+  .model-card .cons strong { color: var(--terracotta); }
+  .model-card.gamma .cons strong { color: var(--cacao); }
+
+  .callout { background: var(--cream-soft); border-left: 3px solid var(--terracotta);
+    padding: 22px 26px; margin: 28px 0;
+    font-family: 'Fraunces', serif; font-size: 16.5px; line-height: 1.6; color: var(--cacao-soft); }
+  .callout strong { color: var(--cacao); font-weight: 500; }
+  .callout.honey { border-left-color: var(--honey-deep); }
+  .callout.jungle { border-left-color: var(--jungle); }
+  .callout.alarm { border-left-color: var(--alarm); background: rgba(184,54,47,0.06); }
+  section.dark .callout { background: rgba(241,232,212,0.06); color: rgba(241,232,212,0.92); }
+  section.dark .callout strong { color: var(--cream); }
+  section.dark .callout.honey { border-left-color: var(--honey); }
+
+  /* CATALOG COPY */
+  .catalog-spread { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 32px; }
+  .catalog-card { background: white; border: 1px solid rgba(31,19,8,0.12);
+    padding: 36px 32px; box-shadow: 0 4px 20px rgba(31,19,8,0.06); }
+  .catalog-card.cabana { background: var(--cream-soft); }
+  .catalog-card .cat-tag { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ocean); margin-bottom: 12px; font-weight: 500; }
+  .catalog-card.cabana .cat-tag { color: var(--honey-deep); }
+  .catalog-card h3 { font-family: 'Fraunces', serif; font-size: 26px; line-height: 1.15;
+    margin-bottom: 6px; font-weight: 500; color: var(--cacao); }
+  .catalog-card .subtitle { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 15.5px; color: var(--cacao-soft); margin-bottom: 22px; }
+  .catalog-card .body-copy { font-family: 'Fraunces', serif; font-size: 15.5px;
+    line-height: 1.65; color: var(--cacao); }
+  .catalog-card .body-copy p { margin-bottom: 14px; }
+  .catalog-card .body-copy p strong { font-weight: 500; }
+  .catalog-card .highlights { margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid rgba(31,19,8,0.12); }
+  .catalog-card .highlights h5 { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cacao-soft); margin-bottom: 10px; font-weight: 500; }
+  .catalog-card .highlights ul { list-style: none; padding: 0; }
+  .catalog-card .highlights li { padding: 5px 0; font-family: 'Fraunces', serif;
+    font-size: 14px; color: var(--cacao-soft); }
+  .catalog-card .highlights li::before { content: '✦  '; color: var(--honey-deep); }
+  .catalog-card .meta-row { display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid rgba(31,19,8,0.12); }
+  .catalog-card .meta-cell .lab { font-size: 9.5px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--cacao-soft); }
+  .catalog-card .meta-cell .val { font-family: 'Fraunces', serif; font-size: 16px;
+    color: var(--cacao); margin-top: 3px; font-weight: 500; }
+
+  /* EMAIL DRAFT */
+  .email-frame { background: white; border: 1px solid rgba(31,19,8,0.15);
+    padding: 36px 38px; margin-top: 24px; max-width: 820px;
+    box-shadow: 0 4px 20px rgba(31,19,8,0.06); }
+  .email-headers { padding-bottom: 18px; margin-bottom: 22px;
+    border-bottom: 1px solid rgba(31,19,8,0.12); }
+  .email-headers .row { display: flex; gap: 14px; padding: 4px 0;
+    font-size: 14px; font-family: 'Inter Tight', sans-serif; }
+  .email-headers .row .lab { width: 60px; color: var(--cacao-soft);
+    text-transform: uppercase; font-size: 11px; letter-spacing: 0.15em;
+    padding-top: 2px; }
+  .email-headers .row .val { color: var(--cacao); font-family: 'Fraunces', serif;
+    font-size: 15px; }
+  .email-body { font-family: 'Fraunces', serif; font-size: 15.5px;
+    line-height: 1.7; color: var(--cacao); }
+  .email-body p { margin-bottom: 14px; }
+  .email-body strong { font-weight: 500; }
+  .email-body ul { padding-left: 22px; margin: 12px 0 18px; }
+  .email-body ul li { padding: 3px 0; }
+  .email-body .signature { margin-top: 24px; padding-top: 18px;
+    border-top: 1px solid rgba(31,19,8,0.12);
+    font-style: italic; color: var(--cacao-soft); font-size: 14.5px; }
+
+  .ask { background: var(--ocean); color: var(--cream); padding: 70px 32px; }
+  .ask h3 { font-family: 'Fraunces', serif; font-size: clamp(26px, 3.6vw, 38px);
+    line-height: 1.1; margin-bottom: 24px; max-width: 800px; }
+  .ask h3 em { font-style: italic; color: var(--honey); }
+  .ask ol { list-style: none; padding: 0; counter-reset: ask; max-width: 800px; }
+  .ask ol li { counter-increment: ask; padding: 16px 0 16px 56px; position: relative;
+    font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.4;
+    border-bottom: 1px solid rgba(241,232,212,0.18); }
+  .ask ol li::before { content: counter(ask, lower-roman) '.';
+    position: absolute; left: 0; font-style: italic; color: var(--honey);
+    opacity: 0.85; font-size: 18px; }
+  .ask ol li small { display: block; font-family: 'Inter Tight', sans-serif; font-style: normal;
+    font-size: 13px; color: rgba(241,232,212,0.65); margin-top: 6px; }
+
+  footer { padding: 36px 32px; text-align: center; font-size: 11px; color: var(--cacao-soft);
+    letter-spacing: 0.2em; text-transform: uppercase; background: var(--cream); }
+
+  @media (max-width: 800px) {
+    .why-grid, .models-grid, .catalog-spread, .provenance { grid-template-columns: 1fr; }
+    .provenance { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="top-bar">
+    <div class="brand">Visit Cozumel · Vela</div>
+    <div class="doc-id">Briefing for Mario · <span>04 / 26 / 2026</span></div>
+  </div>
+  <div class="hero-content">
+    <div class="welcome-whisper">Mario — here's where we are with Celebrity. Read top to bottom, ~10 minutes.</div>
+    <h1 class="hero-title">Two products for <em>Celebrity</em>.<br/>Cozumel Hideaway.</h1>
+    <p class="hero-sub">After Mike's Seatrade meeting with Matthew Kaye and Adam Cullen on Apr 15, we're submitting two excursions to fill a gap in Celebrity's Cozumel shelf: a per-pax beach club and a private cabana. Both sold at Cabana Beach. Below: why we're doing this, what we're proposing, the math, and the exact words Matthew and Adam will read.</p>
+    <div class="provenance">
+      <div class="prov-item"><span class="prov-label">For</span><span class="prov-value">Mario Burgos</span></div>
+      <div class="prov-item"><span class="prov-label">From</span><span class="prov-value">Mike + Vela</span></div>
+      <div class="prov-item"><span class="prov-label">Subject</span><span class="prov-value">Celebrity excursion proposal</span></div>
+      <div class="prov-item"><span class="prov-label">Status</span><span class="prov-value">Decision required</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">Context · why we're doing this</div>
+    <h2 class="chap">The opportunity, <em>in plain words</em>.</h2>
+    <p class="chap-lede">Celebrity has dozens of Cozumel excursions, but no <strong>fully private cabana</strong> on its shelf. Their existing beach products — Kuza VIP, La Casa, Barracuda — are all <em>shared</em> beach clubs at $137–209 per guest. We have access to Cabana Beach (Tan Navarro's venue at the south end of Chankanaab Park). Tan does not market to cruise lines directly. That's our wedge.</p>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <h4>Why <em>now</em></h4>
+        <p>Mike pitched this to Matthew Kaye and Adam Cullen at Seatrade Miami on April 15. They were receptive. The window to submit a formal Tour Content Worksheet is open — Native Kitchen took ~3 weeks from pitch to approval, and we want to move before momentum fades.</p>
+      </div>
+      <div class="why-card">
+        <h4>Why <em>two products</em>, not one</h4>
+        <p>One product covers the budget guest, one covers the premium guest. Beach Club competes with La Casa and Barracuda on price. Private Cabana owns the white space — nothing else on Celebrity's shelf is fully private. Two SKUs gives Celebrity flexibility to upsell across guest types.</p>
+      </div>
+      <div class="why-card">
+        <h4>Why <em>per-pax for one</em>, <em>per-cabana for the other</em></h4>
+        <p>Beach Club is shared — strangers fill a van together — so per-pax pricing is natural. Private Cabana is exclusive — one party per cabana — so flat per-cabana pricing protects the privacy promise. A couple pays the same as a family of six. That's the deal.</p>
+      </div>
+      <div class="why-card">
+        <h4>Why <em>Cabana Beach</em></h4>
+        <p>Tan offers wholesale rates: cabana 50% off retail, food package 25% off, park entry direct to Mike at $20/pax (vs $29 retail). Twelve cabanas at the venue — small enough to feel exclusive, big enough to scale. Existing Tikin Xic-style food, beach access, snorkel, all built in.</p>
+      </div>
+    </div>
+
+    <div class="callout honey" style="margin-top: 36px;">
+      <strong>What this means commercially.</strong> If Celebrity approves both, we're looking at meaningful incremental revenue per Celebrity sailing day with healthy margins (31% on Beach Club, 41–65% on Cabana for typical party sizes). Across a season, this is six-figure revenue from a single account.
+    </div>
+  </div>
+</section>
+
+<!-- INPUTS -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">Cost inputs · sourced from Tan</div>
+    <h2 class="chap">What it costs us, <em>per line item</em>.</h2>
+    <p class="chap-lede">All prices wholesale to us. Tan's WhatsApp Jan 9 + Mar 26 confirms the cabana rate; Mike's direct quote covers the rest. Park entry is the variable that bites — it stacks per pax on every cabana.</p>
+
+    <table class="input-table" style="background: rgba(241,232,212,0.04);">
+      <thead><tr><th style="color: rgba(241,232,212,0.7); border-bottom-color: rgba(241,232,212,0.25); width: 38%;">Item</th><th style="color: rgba(241,232,212,0.7); border-bottom-color: rgba(241,232,212,0.25); width: 18%;">Cost</th><th style="color: rgba(241,232,212,0.7); border-bottom-color: rgba(241,232,212,0.25); width: 44%;">Note</th></tr></thead>
+      <tbody style="color: rgba(241,232,212,0.92);">
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Beach break · per pax (Product A only)</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$30.00</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">Includes Chankanaab access, snorkel, towel.</td></tr>
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Cabana · per cabana (Product B only)</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$62.50</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">Cabana structure only. Park entry NOT included.</td></tr>
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Park entry · per pax (Product B only)</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$20.00</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">Mike's direct rate ($29 retail).</td></tr>
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Food &amp; drink package · per pax</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$51.75</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">Lunch + open bar (soft drinks, beer, domestic spirits).</td></tr>
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Van — 14-pax</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$180.00</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">One van per operating day. Round-trip pier ↔ Cabana Beach.</td></tr>
+        <tr style="border-bottom-color: rgba(241,232,212,0.1);"><td class="item" style="border-bottom-color: rgba(241,232,212,0.1);">Guide</td><td class="num" style="color: rgba(241,232,212,0.9); border-bottom-color: rgba(241,232,212,0.1);">$30.00</td><td class="src" style="color: rgba(241,232,212,0.65); border-bottom-color: rgba(241,232,212,0.1);">One bilingual guide per operating day.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRODUCT A -->
+<section class="chapter">
+  <div class="inner">
+    <div class="product-header">
+      <div class="left">
+        <h2>Product A · <em>Beach Club</em></h2>
+        <p>Per-pax, food included, strangers share the van. Min 10 guests to operate.</p>
+      </div>
+      <div class="badges">
+        <span class="badge">Per pax</span>
+        <span class="badge jungle">Food in</span>
+        <span class="badge alarm">Min 10</span>
+      </div>
+    </div>
+
+    <p class="chap-lede">Recommended price: <strong>$149/pax net to operator</strong>. Celebrity retail at typical 1.8x markup ≈ <strong>$268/pax</strong>. Sits above La Casa ($152.99 retail) and Barracuda ($137.99) — premium positioning, justified by the venue and the cabana sister-product on the same shelf.</p>
+
+    <table class="build-table light">
+      <thead>
+        <tr><th>Pax</th><th>Variable cost</th><th>Fixed (van+guide)</th><th>Total cost</th><th>Per-pax cost</th><th>Revenue @ $149</th><th>Margin</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="scenario">10 (min)</td><td class="num">$817.50</td><td class="num">$210</td><td class="num">$1,027.50</td><td class="num">$102.75</td><td class="num">$1,490</td><td class="num good">$462.50 · 31%</td></tr>
+        <tr><td class="scenario">12</td><td class="num">$981</td><td class="num">$210</td><td class="num">$1,191</td><td class="num">$99.25</td><td class="num">$1,788</td><td class="num good">$597 · 33%</td></tr>
+        <tr class="hl"><td class="scenario">14 (full van)</td><td class="num">$1,144.50</td><td class="num">$210</td><td class="num">$1,354.50</td><td class="num">$96.75</td><td class="num">$2,086</td><td class="num good">$731.50 · 35%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRODUCT B -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="product-header">
+      <div class="left">
+        <h2>Product B · <em>Private Cabana</em></h2>
+        <p>Per-cabana flat. One party per cabana. Couples to families of six.</p>
+      </div>
+      <div class="badges">
+        <span class="badge">Per cabana flat</span>
+        <span class="badge honey">Food in</span>
+        <span class="badge">1 party · cabana</span>
+      </div>
+    </div>
+
+    <p class="chap-lede">The hard question for cabana: <em>how do we handle the van trip?</em> Three viable models, each with a different price point and trade-off. The recommendation lands on <strong>γ (gamma)</strong> — the cabana rides the same van as Beach Club, no marginal van/guide cost.</p>
+
+    <div class="models-grid">
+      <div class="model-card alpha">
+        <div class="greek">α</div>
+        <div class="model-name">Solo van<br/>(1 cabana = 1 van trip)</div>
+        <div class="price-tag">$995</div>
+        <div class="price-unit">net per cabana · flat</div>
+        <div class="pros">
+          <strong>Pros</strong>
+          Premium guarantee — every booking runs no matter what. Customers love this.
+        </div>
+        <div class="cons">
+          <strong>Cons</strong>
+          Highest sticker price. Margin still thin (29%) at 6-guest cabana.
+        </div>
+      </div>
+
+      <div class="model-card beta">
+        <div class="greek">β</div>
+        <div class="model-name">Shared van<br/>(min 2 cabanas to run)</div>
+        <div class="price-tag">$795</div>
+        <div class="price-unit">net per cabana · flat</div>
+        <div class="pros">
+          <strong>Pros</strong>
+          Lower price drives volume. Margin floor 25% at 2 full cabanas.
+        </div>
+        <div class="cons">
+          <strong>Cons</strong>
+          Solo cabana bookings get cancelled if no second party books. Customer friction.
+        </div>
+      </div>
+
+      <div class="model-card gamma">
+        <div class="greek">γ</div>
+        <div class="model-name">Cabana rides<br/>Beach Club van</div>
+        <div class="price-tag">$595</div>
+        <div class="price-unit">net per cabana · flat</div>
+        <div class="pros">
+          <strong>Pros</strong>
+          Cleanest economics — van &amp; guide already paid by Product A. Pure upsell. 41–65% margin floor.
+        </div>
+        <div class="cons">
+          <strong>Cons</strong>
+          Requires Product A to be running (min 10 beach club guests booked). Can't run a cabana-only day.
+        </div>
+      </div>
+    </div>
+
+    <table class="build-table dark" style="margin-top: 32px;">
+      <thead>
+        <tr><th>Cabana scenario</th><th>Cabana</th><th>Park</th><th>Food</th><th>Marginal cost (γ)</th><th>Net @ $595</th><th>Margin</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="scenario">2 guests (couple)</td><td class="num">$62.50</td><td class="num">$40</td><td class="num">$103.50</td><td class="num">$206</td><td class="num">$595</td><td class="num good">$389 · 65%</td></tr>
+        <tr><td class="scenario">4 guests (family)</td><td class="num">$62.50</td><td class="num">$80</td><td class="num">$207</td><td class="num">$349.50</td><td class="num">$595</td><td class="num good">$245.50 · 41%</td></tr>
+        <tr class="hl"><td class="scenario">6 guests (max)</td><td class="num">$62.50</td><td class="num">$120</td><td class="num">$310.50</td><td class="num">$493</td><td class="num">$595</td><td class="num ok">$102 · 17%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout honey">
+      <strong style="color: var(--cream);">Note.</strong> γ assumes Beach Club is already running that day (Product A's van + guide is already paid). The $206–493 cabana cost above only counts the marginal expense. Most cabana bookings will be 2–4 guests (couples and families); the 6-guest scenario is the edge case.
+    </div>
+  </div>
+</section>
+
+<!-- WHAT MATTHEW & ADAM SEE: CATALOG COPY -->
+<section class="chapter">
+  <div class="inner">
+    <div class="section-label">What Celebrity guests will see · catalog copy</div>
+    <h2 class="chap">How both products will <em>read on the shelf</em>.</h2>
+    <p class="chap-lede">This is the consumer-facing copy that goes into Celebrity's Tour Content Worksheet, cells A127 and A133 — Tour Highlights and Full Description. Matthew and Adam see this first when reviewing. Sensory, story-form, designed to convert browsing guests into bookers. (The cover email Matthew gets is shorter and operator-voice — see next section.)</p>
+
+    <div class="catalog-spread">
+
+      <!-- BEACH CLUB CATALOG CARD -->
+      <div class="catalog-card">
+        <div class="cat-tag">Product A · Catalog listing</div>
+        <h3>Cozumel Hideaway: Beach Club &amp; Caribbean Feast</h3>
+        <div class="subtitle">A relaxed beach day at Cozumel's most exclusive private venue, with lunch and open bar included.</div>
+
+        <div class="body-copy">
+          <p>Trade the cruise pier for a tucked-away corner of <strong>Chankanaab Park</strong> — Cozumel's most celebrated marine sanctuary — at a venue not marketed to other cruise lines. Just 15 minutes from your ship, your private air-conditioned van delivers you to a small, palm-shaded retreat where the day unfolds at your own pace.</p>
+
+          <p>Snorkel directly off the reef with no boat ride and no crowds. Stretch out on a sun lounger steps from the Caribbean. Wander the Chankanaab lagoon. When hunger calls, your group gathers for a <strong>plated lunch under the palms</strong> — fresh fish, ceviche, guacamole, handmade tortillas — paired with an <strong>open bar</strong> of soft drinks, ice-cold beer, and Mexican spirits.</p>
+
+          <p>Your bilingual host stays with the group from pier to pier, handling logistics so you don't have to. This is a small-group experience designed for guests who want the warmth of Cozumel without the noise of the typical beach club.</p>
+        </div>
+
+        <div class="highlights">
+          <h5>Highlights</h5>
+          <ul>
+            <li>Private van transfer, 15 minutes from the cruise pier</li>
+            <li>Snorkel directly off the reef — gear, towels, water provided</li>
+            <li>Plated Caribbean lunch with open bar (soft drinks, beer, domestic spirits)</li>
+            <li>Chankanaab Park entrance and natural lagoon access</li>
+            <li>Bilingual guide dedicated to your group</li>
+            <li>4–5 hours on property</li>
+          </ul>
+        </div>
+
+        <div class="meta-row">
+          <div class="meta-cell"><div class="lab">Duration</div><div class="val">4–5 hrs</div></div>
+          <div class="meta-cell"><div class="lab">Activity</div><div class="val">Mild</div></div>
+          <div class="meta-cell"><div class="lab">Min · Max</div><div class="val">10 · 14</div></div>
+        </div>
+      </div>
+
+      <!-- CABANA CATALOG CARD -->
+      <div class="catalog-card cabana">
+        <div class="cat-tag">Product B · Catalog listing</div>
+        <h3>Cozumel Hideaway: Private Cabana &amp; Caribbean Feast</h3>
+        <div class="subtitle">Your own cabana on Cozumel's most exclusive private beach — for couples, families, or a small group of friends.</div>
+
+        <div class="body-copy">
+          <p>Step away from everything. <strong>Cozumel Hideaway: Private Cabana</strong> reserves a fully private beach cabana — yours alone for the day, no sharing — at a small Chankanaab retreat that does not appear on any other cruise line's shelf. From 1 to 6 guests, the cabana is yours; the price is the same.</p>
+
+          <p>A private air-conditioned van delivers you to the venue 15 minutes from the cruise pier. Inside the cabana — shaded, breezy, steps from the water — your group settles in with a <strong>plated Caribbean lunch and open bar</strong>. Snorkel off the reef. Float in the natural Chankanaab lagoon. Disappear into the rhythm of the island for an afternoon.</p>
+
+          <p>The cabana includes everything: private transfer, dedicated bilingual host, park entrance, snorkel gear, towels, lunch, and open bar (soft drinks, beer, domestic spirits). For honeymoons, anniversaries, family days, or a small celebration, this is the most private beach experience Celebrity offers in Cozumel.</p>
+        </div>
+
+        <div class="highlights">
+          <h5>Highlights</h5>
+          <ul>
+            <li>Fully private cabana — your party only, no sharing</li>
+            <li>Same flat price for 2 guests or 6 guests</li>
+            <li>Plated Caribbean lunch + open bar included for all guests</li>
+            <li>Direct reef snorkeling and natural lagoon access</li>
+            <li>Private van transfer, bilingual host, all park fees included</li>
+            <li>4–5 hours of total island escape</li>
+          </ul>
+        </div>
+
+        <div class="meta-row">
+          <div class="meta-cell"><div class="lab">Duration</div><div class="val">4–5 hrs</div></div>
+          <div class="meta-cell"><div class="lab">Activity</div><div class="val">Mild</div></div>
+          <div class="meta-cell"><div class="lab">Cabana max</div><div class="val">6 guests</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COVER EMAIL -->
+<section class="chapter dark">
+  <div class="inner">
+    <div class="section-label">What Matthew &amp; Adam will read · the cover email</div>
+    <h2 class="chap">The pitch, <em>operator to operator</em>.</h2>
+    <p class="chap-lede">Cover email is short. No purple prose, no marketing voice — just a straight pitch with the data Matthew and Adam need. Sensory copy stays in the worksheet (above). This is the email that lands in their inbox once we hit Send.</p>
+
+    <div class="email-frame">
+      <div class="email-headers">
+        <div class="row"><span class="lab">To</span><span class="val">Matthew Kaye &lt;mkaye@celebrity.com&gt;</span></div>
+        <div class="row"><span class="lab">Cc</span><span class="val">Adam Cullen &lt;acullen@celebrity.com&gt;</span></div>
+        <div class="row"><span class="lab">From</span><span class="val">Miguel Burgos · Visit Cozumel</span></div>
+        <div class="row"><span class="lab">Subject</span><span class="val">Apr 28 · Visit Cozumel · New Excursion Proposals (×2)</span></div>
+      </div>
+
+      <div class="email-body">
+        <p>Matthew, Adam,</p>
+
+        <p>Following up from Seatrade — submitting two new excursions for Cozumel, both at <strong>Cabana Beach</strong> (Tan Navarro's venue at the south end of Chankanaab Park, not currently marketed to any cruise line). Tour Content Worksheets attached.</p>
+
+        <p><strong>Product A · Cozumel Hideaway: Beach Club &amp; Caribbean Feast</strong></p>
+        <ul>
+          <li>$149 net per pax · min 10 / max 14 · 4–5 hrs</li>
+          <li>Includes: private van, bilingual guide, park entry, plated lunch, open bar, reef snorkeling</li>
+          <li>Positions against La Casa and Barracuda · suggested retail $268/pax</li>
+        </ul>
+
+        <p><strong>Product B · Cozumel Hideaway: Private Cabana &amp; Caribbean Feast</strong></p>
+        <ul>
+          <li>$595 net per cabana · flat (1–6 guests) · 4–5 hrs</li>
+          <li>Includes: everything in Product A, plus a fully private cabana for the booked party</li>
+          <li>The only fully private beach option on Celebrity's Cozumel shelf · suggested retail $1,071 per cabana</li>
+        </ul>
+
+        <p>Operationally, both products run on the same van — Beach Club is the floor, Cabana is the upsell — so we can offer them as a paired set on the catalog without splitting our minimum.</p>
+
+        <p>We'd be happy to host a site inspection at Cabana Beach for any team member coming through Cozumel — just let us know the sailing and we'll coordinate.</p>
+
+        <div class="signature">
+          Miguel Burgos<br/>
+          Managing Partner · Visit Cozumel Mexico, S. de R.L. de C.V.<br/>
+          mr.burgos.miguel@gmail.com · Cozumel, Q. Roo
+        </div>
+      </div>
+    </div>
+
+    <div class="callout honey" style="margin-top: 28px;">
+      <strong style="color: var(--cream);">Mario, this is the email Mike copy-pastes into Gmail and sends.</strong> Five short paragraphs, two bulleted product summaries, one site-visit offer. No fluff. The full sensory pitch lives in the attached worksheets — Matthew opens those when he wants to dig in.
+    </div>
+  </div>
+</section>
+
+<!-- ASK -->
+<section class="ask">
+  <div class="inner">
+    <h3>Mario — three calls and we <em>send it this week</em>.</h3>
+    <ol>
+      <li>
+        <strong>Sign off on submitting both products as a paired set?</strong>
+        <small>Beach Club ($149/pax min 10) + Private Cabana ($595 flat, model γ) on one van. If you want cabana to stand alone (not depend on beach club bookings), we'd go β at $795/cabana with min 2 cabanas to run.</small>
+      </li>
+      <li>
+        <strong>Catalog copy + email read OK?</strong>
+        <small>Anything you want changed in the consumer-facing descriptions or the operator email? This is what Matthew and Adam read first.</small>
+      </li>
+      <li>
+        <strong>Mike still owes the real jeep number — but with the γ model, it's no longer load-bearing.</strong>
+        <small>The cabana rides the beach club van. No jeep needed in this configuration. We can come back to that if we ever do solo cabana days.</small>
+      </li>
+    </ol>
+    <p style="font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; margin-top: 32px; color: rgba(241,232,212,0.78);">
+      Sign-off from you and Mike, then I write both <span class="mono" style="background: rgba(241,232,212,0.12); padding: 2px 6px; font-size: 14px; color: var(--honey);">.xlsx</span> worksheets and Mike sends the email Tuesday.
+    </p>
+  </div>
+</section>
+
+<footer>
+  Visit Cozumel · Vela · Briefing for Mario · 2026/04/26 · Cabana Beach × Celebrity Cruises
+</footer>
+
+</body>
+</html>
