@@ -549,11 +549,18 @@
     .hero-deck { font-size: 14pt !important; line-height: 1.5 !important; max-width: 6.5in !important; }
     .doc-type { font-size: 12pt !important; }
 
-    /* Chapter sections: tighter padding, no breaks inside */
+    /* Chapter sections: tighter padding, flow naturally across pages */
     section.chapter, section.dark {
       padding: 0.5in 0.6in !important;
-      page-break-inside: avoid;
     }
+
+    /* Keep section headers tied to following content (prevents orphan headers) */
+    .section-label, h2.chap {
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+    }
+    .section-label { page-break-before: auto; }
+    .chap-lede { page-break-before: avoid; break-before: avoid; }
 
     /* Photo banner: own page */
     .photo-banner {
