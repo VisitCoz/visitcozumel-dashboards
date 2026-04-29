@@ -344,18 +344,27 @@ function resolvedUrl(name) {
 
 // Tour-name normalizer — folds messy variants into a canonical name.
 // Mirrors normalize_tour_name() in scripts/sync_tui_cfdis_to_sheet.py so Manifests
-// and Invoices aggregate cleanly on the same key.
-function normalizeTourName(raw) {
-  if (!raw) return 'Unknown';
-  const s = String(raw);
+// and Invoices aggregate cleanly on the same key. Pre-Apr-2026 invoices have a
+// generic "Adultos Servicio de Excursion" description; the tour identity in those
+// cases lives in the dossier code prefix.
+function normalizeTourName(raw, dossier) {
+  const s = String(raw || '');
+  const d = String(dossier || '').toUpperCase();
+
+  // Description-based (preferred)
   if (/cozumel\s+highlights/i.test(s))                 return 'Cozumel Highlights';
   if (/tulum.*xel/i.test(s))                            return 'Tulum + Xel-Há';
   if (/r[íi]o\s*secreto/i.test(s))                      return 'Río Secreto';
   if (/eco\s+explorers|bee\s*farm|martha/i.test(s))    return 'Eco Explorers (Bee Farm)';
   if (/family\s*fiesta|mariachi|mayan\s*cooking/i.test(s)) return 'Family Fiesta';
   if (/chich[ée]n/i.test(s))                            return 'Chichén Itzá';
-  if (/^cob[áa]\s|tulum/i.test(s))                      return 'Tulum';
-  // Strip "CZ110 BE NGD " style prefixes if present
+
+  // Dossier-prefix fallback (matches sync_tui_cfdis_to_sheet.py)
+  if (/^SHX-CZM-TM1/.test(d))   return 'Cozumel Highlights';
+  if (/^NGE-CZM-D/.test(d))     return 'NatGeo Tour (Disney)';
+  if (/^SHX-CZM-D/.test(d))     return 'TUI Shorex (Disney ship)';
+
+  // Strip "CZ110 BE NGD " style prefixes if present (Karla's manifest format)
   return s.replace(/^CZ\d+\s+\w{2,3}\s+\w{2,3}\s+/i, '').slice(0, 40) || 'Other';
 }
 
@@ -575,7 +584,7 @@ function renderTourChart(manifests, invoices) {
   }
 
   for (const inv of (invoices || [])) {
-    const key = normalizeTourName(inv.tour_name);
+    const key = normalizeTourName(inv.tour_name, inv.dossier_code);
     const pax = num(inv.adult_qty) + num(inv.child_qty);
     combined.set(key, (combined.get(key) || 0) + pax);
   }
@@ -691,7 +700,7 @@ async function main() {
   const paxInvoice  = invoicesIngresos.reduce((s, i) => s + num(i.adult_qty) + num(i.child_qty), 0);
   const paxTotal    = paxManifest + paxInvoice;
   const cozHighlightsPax = invoicesIngresos
-    .filter(i => normalizeTourName(i.tour_name) === 'Cozumel Highlights')
+    .filter(i => normalizeTourName(i.tour_name, i.dossier_code) === 'Cozumel Highlights')
     .reduce((s, i) => s + num(i.adult_qty) + num(i.child_qty), 0);
   const months = new Set(payments.map(p => toMonth(p.payment_date)).filter(Boolean));
   const monthsSpan = months.size;
