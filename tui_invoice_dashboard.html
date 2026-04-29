@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TUI Invoice Radar — Visit Cozumel Mexico</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --surface2: #1c2330;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #58a6ff;
+      --tui-red:  #ed5565;
+      --usd-green: #22c55e;
+      --warn:     #f59e0b;
+      --error:    #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 24px 20px 48px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-left h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .header-left h1::before {
+      content: "🚐 ";
+    }
+    .header-left p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+    .header-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .header-badge {
+      background: #1d3052;
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .header-badge.live {
+      background: #0d2818;
+      border-color: var(--usd-green);
+      color: #86efac;
+    }
+    .header-badge.live::before {
+      content: "● ";
+      color: var(--usd-green);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* KPIs */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+      letter-spacing: -0.3px;
+    }
+    .kpi-value.usd { color: var(--usd-green); }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* Chart cards */
+    .charts-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .chart-wrap {
+      position: relative;
+    }
+
+    /* Table */
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 11px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:hover td {
+      background: var(--surface2);
+    }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .usd { color: var(--usd-green); font-weight: 600; }
+    .muted { color: var(--muted); }
+    .badge-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .pill-paid { background: #0d2818; color: #86efac; border: 1px solid #166534; }
+    .pill-pending { background: #1f1d11; color: #fde68a; border: 1px solid #92400e; }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .loading-overlay {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .loading-overlay.error {
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .config-warn {
+      background: #1f1d11;
+      border: 1px solid #92400e;
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #fde68a;
+      margin-bottom: 24px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .config-warn code {
+      background: #0d1117;
+      color: #93c5fd;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>TUI Invoice Radar</h1>
+    <p>Visit Cozumel Mexico &mdash; VC ↔ TUI Mexicana audit ledger &mdash; All amounts USD</p>
+  </div>
+  <div class="header-badges">
+    <span class="header-badge live">Live</span>
+    <span class="header-badge" id="dataBadge">Loading…</span>
+  </div>
+</div>
+
+<div id="configWarn" class="config-warn" style="display:none;"></div>
+
+<!-- KPI ROW -->
+<div class="section-label">Key Performance Indicators</div>
+<div class="kpi-grid" id="kpiGrid">
+  <div class="loading-overlay" style="grid-column:1/-1;">Loading data from sheet…</div>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="section-label">Revenue & Activity</div>
+<div class="charts-row">
+  <div class="chart-card">
+    <div class="chart-title">Monthly Revenue Received from TUI (USD)</div>
+    <div class="chart-wrap" style="height:280px;">
+      <canvas id="monthChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Pax by Ship (last 12 months)</div>
+    <div class="chart-wrap" style="height:280px;">
+      <canvas id="shipChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="charts-row">
+  <div class="chart-card">
+    <div class="chart-title">Wire-Receipt Rhythm (payments per month)</div>
+    <div class="chart-wrap" style="height:240px;">
+      <canvas id="rhythmChart"></canvas>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Top Tours by Pax</div>
+    <div class="chart-wrap" style="height:240px;">
+      <canvas id="tourChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENTS TABLE -->
+<div class="section-label">Recent Payments (last 25)</div>
+<div class="table-card">
+  <table id="paymentsTable">
+    <thead>
+      <tr>
+        <th>Payment Date</th>
+        <th>Total</th>
+        <th>Invoices Liquidated</th>
+        <th>Account</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody id="paymentsBody">
+      <tr><td colspan="5" class="muted" style="text-align:center;padding:20px;">Loading…</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer">
+  Built by Sable &bull; Visit Cozumel Mexico Command Center &bull; <span id="dataDate">—</span>
+  <br/>
+  Data source: Google Sheet "TUI Invoice Radar" via published CSV. Refresh page for latest.
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// CONFIG — replace these CSV URLs with the published-to-web URLs from
+// File → Share → Publish to web → Payments / Manifests tabs as CSV.
+// ═══════════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  SHEET_ID: '1sTWmJ7G8H8SJyRh3EmdrUpt2wnVbpxR1May9BfUvPLU',
+  // Set these to the publish-to-web URLs once Mike publishes the sheet:
+  PAYMENTS_CSV_URL: '',
+  MANIFESTS_CSV_URL: '',
+  // Fallback: if publish-to-web URLs aren't set, try the gviz endpoint
+  // (requires the sheet to be set to "Anyone with the link → Viewer")
+  USE_GVIZ_FALLBACK: true
+};
+
+function gvizUrl(sheetTab) {
+  return `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetTab)}`;
+}
+
+function resolvedUrl(name) {
+  if (name === 'Payments')  return CONFIG.PAYMENTS_CSV_URL  || (CONFIG.USE_GVIZ_FALLBACK ? gvizUrl('Payments')  : '');
+  if (name === 'Manifests') return CONFIG.MANIFESTS_CSV_URL || (CONFIG.USE_GVIZ_FALLBACK ? gvizUrl('Manifests') : '');
+  return '';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════════════════════════════
+
+async function loadCsv(url) {
+  if (!url) return [];
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error(`Fetch ${url} → HTTP ${r.status}`);
+  const txt = await r.text();
+  return new Promise(resolve => {
+    Papa.parse(txt, {
+      header: true,
+      dynamicTyping: false, // keep as strings; we'll cast as needed
+      skipEmptyLines: true,
+      complete: res => resolve(res.data || [])
+    });
+  });
+}
+
+function num(v) {
+  if (v == null || v === '') return 0;
+  const n = parseFloat(String(v).replace(/[, ]/g, ''));
+  return isNaN(n) ? 0 : n;
+}
+
+function toMonth(d) {
+  if (!d) return '';
+  const s = String(d);
+  // Accept 2026-04-30 or M/D/YYYY (Sheet display) or ISO timestamp
+  let yr, mo;
+  let m = s.match(/^(\d{4})-(\d{1,2})-/);
+  if (m) { yr = +m[1]; mo = +m[2]; }
+  else {
+    m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (m) { yr = +m[3]; mo = +m[1]; }
+    else {
+      const dt = new Date(s);
+      if (isNaN(dt.getTime())) return '';
+      yr = dt.getFullYear(); mo = dt.getMonth() + 1;
+    }
+  }
+  return `${yr}-${String(mo).padStart(2,'0')}`;
+}
+
+function fmtUsd(n) {
+  return '$' + Math.round(n).toLocaleString('en-US');
+}
+function fmtUsd2(n) {
+  return '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════════
+
+const CHART_COLORS = ['#3b82f6', '#a855f7', '#22c55e', '#f97316', '#ec4899', '#eab308', '#14b8a6', '#ef4444', '#8b5cf6', '#84cc16'];
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { labels: { color: '#e6edf3', font: { size: 11 } } },
+    tooltip: { backgroundColor: '#161b22', titleColor: '#e6edf3', bodyColor: '#e6edf3', borderColor: '#30363d', borderWidth: 1 }
+  },
+  scales: {
+    x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d33' } },
+    y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d33' }, beginAtZero: true }
+  }
+};
+
+function renderKpis({totalUsd, paymentCount, invoiceCount, paxTotal, monthsSpan}) {
+  const grid = document.getElementById('kpiGrid');
+  grid.innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">Total Received (USD)</div>
+      <div class="kpi-value usd">${fmtUsd(totalUsd)}</div>
+      <div class="kpi-sub">across ${paymentCount} wires</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Wire (USD)</div>
+      <div class="kpi-value">${fmtUsd(paymentCount ? totalUsd/paymentCount : 0)}</div>
+      <div class="kpi-sub">over ${monthsSpan} months</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Invoices Liquidated</div>
+      <div class="kpi-value">${invoiceCount}</div>
+      <div class="kpi-sub">across all wires</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Pax Served (manifest)</div>
+      <div class="kpi-value">${paxTotal.toLocaleString('en-US')}</div>
+      <div class="kpi-sub">per Karla's manifests</div>
+    </div>
+  `;
+}
+
+function groupBy(rows, keyFn, sumFn = () => 1) {
+  const map = new Map();
+  for (const r of rows) {
+    const k = keyFn(r);
+    if (!k) continue;
+    map.set(k, (map.get(k) || 0) + sumFn(r));
+  }
+  return map;
+}
+
+function sortedEntries(map, dir = 'desc') {
+  const arr = [...map.entries()];
+  arr.sort((a, b) => dir === 'desc' ? b[1] - a[1] : a[1] - b[1]);
+  return arr;
+}
+
+function renderMonthChart(payments) {
+  const monthMap = groupBy(payments, p => toMonth(p.payment_date), p => num(p.total_usd));
+  const months = [...monthMap.keys()].sort();
+  const totals = months.map(m => monthMap.get(m));
+
+  new Chart(document.getElementById('monthChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Total USD received',
+        data: totals,
+        borderColor: '#22c55e',
+        backgroundColor: '#22c55e22',
+        borderWidth: 2.5,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: {
+          ...CHART_DEFAULTS.plugins.tooltip,
+          callbacks: {
+            label: ctx => fmtUsd2(ctx.parsed.y)
+          }
+        }
+      },
+      scales: {
+        ...CHART_DEFAULTS.scales,
+        y: {
+          ...CHART_DEFAULTS.scales.y,
+          ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => '$' + (v/1000).toFixed(0) + 'k' }
+        }
+      }
+    }
+  });
+}
+
+function renderShipChart(manifests) {
+  const map = groupBy(manifests, m => m.ship_code, m => num(m.total_pax));
+  const sorted = sortedEntries(map).slice(0, 8);
+  const labels = sorted.map(e => e[0]);
+  const data = sorted.map(e => e[1]);
+
+  new Chart(document.getElementById('shipChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Pax',
+        data,
+        backgroundColor: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      indexAxis: 'y',
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } }
+    }
+  });
+}
+
+function renderRhythmChart(payments) {
+  const map = groupBy(payments, p => toMonth(p.payment_date));
+  const months = [...map.keys()].sort();
+  const counts = months.map(m => map.get(m));
+
+  new Chart(document.getElementById('rhythmChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Wires received',
+        data: counts,
+        backgroundColor: '#3b82f6'
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } }
+    }
+  });
+}
+
+function renderTourChart(manifests) {
+  const map = groupBy(manifests, m => (m.tour_name || '').slice(0, 50), m => num(m.total_pax));
+  const sorted = sortedEntries(map).slice(0, 6);
+  const labels = sorted.map(e => e[0]);
+  const data = sorted.map(e => e[1]);
+
+  new Chart(document.getElementById('tourChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Pax',
+        data,
+        backgroundColor: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      indexAxis: 'y',
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } }
+    }
+  });
+}
+
+function renderPaymentsTable(payments) {
+  const sorted = [...payments].sort((a, b) => {
+    return (b.payment_date || '').localeCompare(a.payment_date || '');
+  });
+  const rows = sorted.slice(0, 25);
+  const tbody = document.getElementById('paymentsBody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center;padding:20px;">No payments found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(p => `
+    <tr>
+      <td>${p.payment_date || '—'}</td>
+      <td class="num usd">${fmtUsd2(num(p.total_usd))}</td>
+      <td class="muted" style="font-size:11px;font-family:ui-monospace,Menlo,monospace;">${(p.invoice_list || '').slice(0, 80)}${(p.invoice_list || '').length > 80 ? '…' : ''}</td>
+      <td class="muted">…${p.target_account_last5 || '—'}</td>
+      <td class="muted">${(p.notes || '').slice(0, 60)}</td>
+    </tr>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN
+// ═══════════════════════════════════════════════════════════════════
+
+async function main() {
+  const paymentsUrl = resolvedUrl('Payments');
+  const manifestsUrl = resolvedUrl('Manifests');
+
+  if (!paymentsUrl && !manifestsUrl) {
+    document.getElementById('configWarn').style.display = 'block';
+    document.getElementById('configWarn').innerHTML = `
+      <strong>Dashboard not yet wired to data.</strong>
+      Set <code>PAYMENTS_CSV_URL</code> and <code>MANIFESTS_CSV_URL</code> at the top of the &lt;script&gt; block,
+      OR set the source Sheet to "Anyone with the link → Viewer" to use the gviz fallback.
+    `;
+    document.getElementById('kpiGrid').innerHTML = `<div class="loading-overlay">No data source configured yet.</div>`;
+    document.getElementById('paymentsBody').innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center;padding:20px;">No data source configured yet.</td></tr>`;
+    return;
+  }
+
+  let payments = [];
+  let manifests = [];
+  const errors = [];
+
+  try {
+    payments = await loadCsv(paymentsUrl);
+  } catch (e) {
+    errors.push('Payments: ' + e.message);
+  }
+  try {
+    manifests = await loadCsv(manifestsUrl);
+  } catch (e) {
+    errors.push('Manifests: ' + e.message);
+  }
+
+  if (errors.length) {
+    document.getElementById('configWarn').style.display = 'block';
+    document.getElementById('configWarn').innerHTML = `
+      <strong>Couldn't load some data:</strong><br>${errors.join('<br>')}
+      <br><br>If this is the gviz fallback, set the Sheet to "Anyone with the link → Viewer" or use publish-to-web instead.
+    `;
+  }
+
+  // Compute aggregates
+  const totalUsd = payments.reduce((s, p) => s + num(p.total_usd), 0);
+  const paymentCount = payments.length;
+  const invoiceCount = payments.reduce((s, p) => s + ((p.invoice_list || '').split('|').filter(Boolean).length), 0);
+  const paxTotal = manifests.reduce((s, m) => s + num(m.total_pax), 0);
+  const months = new Set(payments.map(p => toMonth(p.payment_date)).filter(Boolean));
+  const monthsSpan = months.size;
+
+  renderKpis({ totalUsd, paymentCount, invoiceCount, paxTotal, monthsSpan });
+  renderMonthChart(payments);
+  renderShipChart(manifests);
+  renderRhythmChart(payments);
+  renderTourChart(manifests);
+  renderPaymentsTable(payments);
+
+  document.getElementById('dataBadge').textContent =
+    `${paymentCount} payments · ${manifests.length} manifest rows`;
+  document.getElementById('dataDate').textContent =
+    'Loaded ' + new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+main();
+</script>
+
+</body>
+</html>
