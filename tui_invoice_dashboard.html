@@ -324,6 +324,8 @@ const CONFIG = {
   // Publish-to-web CSV URLs (set 2026-04-29 by Mike).
   PAYMENTS_CSV_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjMknTHgtv7DV28oE3gBCIzAJ5OlueKmcXkWOicuaQCMLZH_9-7xbl9iEGzJ4kaou3cgbmfPurPQuv/pub?gid=409524562&single=true&output=csv',
   MANIFESTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjMknTHgtv7DV28oE3gBCIzAJ5OlueKmcXkWOicuaQCMLZH_9-7xbl9iEGzJ4kaou3cgbmfPurPQuv/pub?gid=850202217&single=true&output=csv',
+  // v1.1 (2026-04-29): SAT-fed Invoices tab. Mike publishes this tab as CSV after the first sync.
+  INVOICES_CSV_URL:  '',
   // Fallback: if publish-to-web URLs aren't set, try the gviz endpoint
   // (requires the sheet to be set to "Anyone with the link → Viewer")
   USE_GVIZ_FALLBACK: true
@@ -336,7 +338,25 @@ function gvizUrl(sheetTab) {
 function resolvedUrl(name) {
   if (name === 'Payments')  return CONFIG.PAYMENTS_CSV_URL  || (CONFIG.USE_GVIZ_FALLBACK ? gvizUrl('Payments')  : '');
   if (name === 'Manifests') return CONFIG.MANIFESTS_CSV_URL || (CONFIG.USE_GVIZ_FALLBACK ? gvizUrl('Manifests') : '');
+  if (name === 'Invoices')  return CONFIG.INVOICES_CSV_URL  || (CONFIG.USE_GVIZ_FALLBACK ? gvizUrl('Invoices')  : '');
   return '';
+}
+
+// Tour-name normalizer — folds messy variants into a canonical name.
+// Mirrors normalize_tour_name() in scripts/sync_tui_cfdis_to_sheet.py so Manifests
+// and Invoices aggregate cleanly on the same key.
+function normalizeTourName(raw) {
+  if (!raw) return 'Unknown';
+  const s = String(raw);
+  if (/cozumel\s+highlights/i.test(s))                 return 'Cozumel Highlights';
+  if (/tulum.*xel/i.test(s))                            return 'Tulum + Xel-Há';
+  if (/r[íi]o\s*secreto/i.test(s))                      return 'Río Secreto';
+  if (/eco\s+explorers|bee\s*farm|martha/i.test(s))    return 'Eco Explorers (Bee Farm)';
+  if (/family\s*fiesta|mariachi|mayan\s*cooking/i.test(s)) return 'Family Fiesta';
+  if (/chich[ée]n/i.test(s))                            return 'Chichén Itzá';
+  if (/^cob[áa]\s|tulum/i.test(s))                      return 'Tulum';
+  // Strip "CZ110 BE NGD " style prefixes if present
+  return s.replace(/^CZ\d+\s+\w{2,3}\s+\w{2,3}\s+/i, '').slice(0, 40) || 'Other';
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -409,28 +429,28 @@ const CHART_DEFAULTS = {
   }
 };
 
-function renderKpis({totalUsd, paymentCount, invoiceCount, paxTotal, monthsSpan}) {
+function renderKpis({totalUsd, paymentCount, invoiceCount, paxManifest, paxInvoice, paxTotal, monthsSpan, cozHighlightsPax}) {
   const grid = document.getElementById('kpiGrid');
   grid.innerHTML = `
     <div class="kpi-card">
       <div class="kpi-label">Total Received (USD)</div>
       <div class="kpi-value usd">${fmtUsd(totalUsd)}</div>
-      <div class="kpi-sub">across ${paymentCount} wires</div>
+      <div class="kpi-sub">across ${paymentCount} wires · ${monthsSpan} months</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Avg Wire (USD)</div>
-      <div class="kpi-value">${fmtUsd(paymentCount ? totalUsd/paymentCount : 0)}</div>
-      <div class="kpi-sub">over ${monthsSpan} months</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Invoices Liquidated</div>
-      <div class="kpi-value">${invoiceCount}</div>
-      <div class="kpi-sub">across all wires</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Pax Served (manifest)</div>
+      <div class="kpi-label">Total Pax Served</div>
       <div class="kpi-value">${paxTotal.toLocaleString('en-US')}</div>
-      <div class="kpi-sub">per Karla's manifests</div>
+      <div class="kpi-sub">${paxManifest.toLocaleString('en-US')} manifest · ${paxInvoice.toLocaleString('en-US')} invoice</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Cozumel Highlights Pax</div>
+      <div class="kpi-value">${cozHighlightsPax.toLocaleString('en-US')}</div>
+      <div class="kpi-sub">12 months · TUI Cruises ships</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Invoices · Liquidations</div>
+      <div class="kpi-value">${invoiceCount}</div>
+      <div class="kpi-sub">across ${paymentCount} wire receipts</div>
     </div>
   `;
 }
@@ -541,9 +561,29 @@ function renderRhythmChart(payments) {
   });
 }
 
-function renderTourChart(manifests) {
-  const map = groupBy(manifests, m => (m.tour_name || '').slice(0, 50), m => num(m.total_pax));
-  const sorted = sortedEntries(map).slice(0, 6);
+function renderTourChart(manifests, invoices) {
+  // Combine pax counts from BOTH sources:
+  //   - Manifests: Karla's tour-grid manifests (Eco Explorers + Family Fiesta)
+  //   - Invoices: Adela's CFDIs via SAT pull (Cozumel Highlights + others)
+  // Tour names are normalized so "CZ110 BE NGD Eco Explorers Mrs. Martha's Bee Farm"
+  // and "Eco Explorers" aggregate to the same key.
+  const combined = new Map();
+
+  for (const m of manifests) {
+    const key = normalizeTourName(m.tour_name);
+    combined.set(key, (combined.get(key) || 0) + num(m.total_pax));
+  }
+
+  for (const inv of (invoices || [])) {
+    const key = normalizeTourName(inv.tour_name);
+    const pax = num(inv.adult_qty) + num(inv.child_qty);
+    combined.set(key, (combined.get(key) || 0) + pax);
+  }
+
+  const sorted = [...combined.entries()]
+    .filter(([k, v]) => v > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
   const labels = sorted.map(e => e[0]);
   const data = sorted.map(e => e[1]);
 
@@ -594,6 +634,7 @@ function renderPaymentsTable(payments) {
 async function main() {
   const paymentsUrl = resolvedUrl('Payments');
   const manifestsUrl = resolvedUrl('Manifests');
+  const invoicesUrl = resolvedUrl('Invoices');
 
   if (!paymentsUrl && !manifestsUrl) {
     document.getElementById('configWarn').style.display = 'block';
@@ -609,17 +650,18 @@ async function main() {
 
   let payments = [];
   let manifests = [];
+  let invoices = [];
   const errors = [];
+  const warnings = [];
 
-  try {
-    payments = await loadCsv(paymentsUrl);
-  } catch (e) {
-    errors.push('Payments: ' + e.message);
-  }
-  try {
-    manifests = await loadCsv(manifestsUrl);
-  } catch (e) {
-    errors.push('Manifests: ' + e.message);
+  try { payments  = await loadCsv(paymentsUrl);  } catch (e) { errors.push('Payments: ' + e.message); }
+  try { manifests = await loadCsv(manifestsUrl); } catch (e) { errors.push('Manifests: ' + e.message); }
+  // Invoices is optional in v1.1 — if not yet published, just warn (don't block).
+  if (invoicesUrl) {
+    try { invoices = await loadCsv(invoicesUrl); }
+    catch (e) { warnings.push('Invoices: ' + e.message + ' (Cozumel Highlights pax will be 0 until published)'); }
+  } else {
+    warnings.push('Invoices CSV not yet published — Cozumel Highlights pax will be 0. Publish the Invoices tab as CSV and add the URL to CONFIG.INVOICES_CSV_URL.');
   }
 
   if (errors.length) {
@@ -628,25 +670,41 @@ async function main() {
       <strong>Couldn't load some data:</strong><br>${errors.join('<br>')}
       <br><br>If this is the gviz fallback, set the Sheet to "Anyone with the link → Viewer" or use publish-to-web instead.
     `;
+  } else if (warnings.length) {
+    document.getElementById('configWarn').style.display = 'block';
+    document.getElementById('configWarn').innerHTML = `
+      <strong>Heads-up:</strong><br>${warnings.join('<br>')}
+    `;
   }
+
+  // Filter invoices to Ingreso (sales) — exclude any Egreso/credit notes that may sneak in.
+  const invoicesIngresos = (invoices || []).filter(i => {
+    const t = (i.tipo_comprobante || 'I').toUpperCase();
+    return t === 'I' || t === '';
+  });
 
   // Compute aggregates
   const totalUsd = payments.reduce((s, p) => s + num(p.total_usd), 0);
   const paymentCount = payments.length;
   const invoiceCount = payments.reduce((s, p) => s + ((p.invoice_list || '').split('|').filter(Boolean).length), 0);
-  const paxTotal = manifests.reduce((s, m) => s + num(m.total_pax), 0);
+  const paxManifest = manifests.reduce((s, m) => s + num(m.total_pax), 0);
+  const paxInvoice  = invoicesIngresos.reduce((s, i) => s + num(i.adult_qty) + num(i.child_qty), 0);
+  const paxTotal    = paxManifest + paxInvoice;
+  const cozHighlightsPax = invoicesIngresos
+    .filter(i => normalizeTourName(i.tour_name) === 'Cozumel Highlights')
+    .reduce((s, i) => s + num(i.adult_qty) + num(i.child_qty), 0);
   const months = new Set(payments.map(p => toMonth(p.payment_date)).filter(Boolean));
   const monthsSpan = months.size;
 
-  renderKpis({ totalUsd, paymentCount, invoiceCount, paxTotal, monthsSpan });
+  renderKpis({ totalUsd, paymentCount, invoiceCount, paxManifest, paxInvoice, paxTotal, monthsSpan, cozHighlightsPax });
   renderMonthChart(payments);
   renderShipChart(manifests);
   renderRhythmChart(payments);
-  renderTourChart(manifests);
+  renderTourChart(manifests, invoicesIngresos);
   renderPaymentsTable(payments);
 
   document.getElementById('dataBadge').textContent =
-    `${paymentCount} payments · ${manifests.length} manifest rows`;
+    `${paymentCount} payments · ${manifests.length} manifests · ${invoicesIngresos.length} invoices`;
   document.getElementById('dataDate').textContent =
     'Loaded ' + new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
 }
