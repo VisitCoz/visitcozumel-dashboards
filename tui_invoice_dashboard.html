@@ -343,29 +343,38 @@ function resolvedUrl(name) {
 }
 
 // Tour-name normalizer — folds messy variants into a canonical name.
-// Mirrors normalize_tour_name() in scripts/sync_tui_cfdis_to_sheet.py so Manifests
-// and Invoices aggregate cleanly on the same key. Pre-Apr-2026 invoices have a
-// generic "Adultos Servicio de Excursion" description; the tour identity in those
-// cases lives in the dossier code prefix.
+// Per Memory/claude_code_memory/reference_tui_tour_taxonomy.md, VC has exactly
+// TWO TUI-related tours regardless of label diversity:
+//   1. Cozumel Highlights (TUI Cruises ships)
+//   2. Eco Explorers (NatGeo) — sold to Disney via Intercruises NatGeo franchise.
+//      All these names refer to the same product:
+//        Eco Explorers · Bee Farm · Mrs. Martha's · NatGeo Day Tour · Family Fiesta
+//        · Mariachi · Mayan Cooking · TUI Shorex (Disney ship)
+// Mirrors normalize_tour_name() in scripts/sync_tui_cfdis_to_sheet.py.
 function normalizeTourName(raw, dossier) {
   const s = String(raw || '');
   const d = String(dossier || '').toUpperCase();
 
-  // Description-based (preferred)
-  if (/cozumel\s+highlights/i.test(s))                 return 'Cozumel Highlights';
-  if (/tulum.*xel/i.test(s))                            return 'Tulum + Xel-Há';
-  if (/r[íi]o\s*secreto/i.test(s))                      return 'Río Secreto';
-  if (/eco\s+explorers|bee\s*farm|martha/i.test(s))    return 'Eco Explorers (Bee Farm)';
-  if (/family\s*fiesta|mariachi|mayan\s*cooking/i.test(s)) return 'Family Fiesta';
-  if (/chich[ée]n/i.test(s))                            return 'Chichén Itzá';
+  // ── Cozumel Highlights ──
+  if (/cozumel\s+highlights/i.test(s))    return 'Cozumel Highlights';
+  if (/^SHX-CZM-TM1/.test(d))             return 'Cozumel Highlights';
 
-  // Dossier-prefix fallback (matches sync_tui_cfdis_to_sheet.py)
-  if (/^SHX-CZM-TM1/.test(d))   return 'Cozumel Highlights';
-  if (/^NGE-CZM-D/.test(d))     return 'NatGeo Tour (Disney)';
-  if (/^SHX-CZM-D/.test(d))     return 'TUI Shorex (Disney ship)';
+  // ── Eco Explorers (NatGeo) — single bucket for all Disney/NatGeo variants ──
+  if (/eco\s+explorers|bee\s*farm|martha/i.test(s))         return 'Eco Explorers (NatGeo)';
+  if (/family\s*fiesta|mariachi|mayan\s*cooking/i.test(s))  return 'Eco Explorers (NatGeo)';
+  if (/natgeo|nat\s*geo|nge/i.test(s))                      return 'Eco Explorers (NatGeo)';
+  if (/^NGE-CZM-/.test(d))                                  return 'Eco Explorers (NatGeo)';
+  if (/^SHX-CZM-D/.test(d))                                 return 'Eco Explorers (NatGeo)';
+  // Karla manifest format prefix (e.g., "CZ110 BE NGD ..." or "CZ116 NG NGD ...")
+  if (/^CZ\d+\s+\w{2,3}\s+NGD/i.test(s))                    return 'Eco Explorers (NatGeo)';
 
-  // Strip "CZ110 BE NGD " style prefixes if present (Karla's manifest format)
-  return s.replace(/^CZ\d+\s+\w{2,3}\s+\w{2,3}\s+/i, '').slice(0, 40) || 'Other';
+  // ── Future tours (currently not sold via TUI but in pipeline per memory) ──
+  if (/tulum.*xel/i.test(s))     return 'Tulum + Xel-Há';
+  if (/r[íi]o\s*secreto/i.test(s)) return 'Río Secreto';
+  if (/chich[ée]n/i.test(s))     return 'Chichén Itzá';
+
+  // Last-resort: short readable label
+  return s.replace(/^CZ\d+\s+\w{2,3}\s+\w{2,3}\s+/i, '').slice(0, 40) || 'Other (TUI)';
 }
 
 // ═══════════════════════════════════════════════════════════════════
