@@ -114,7 +114,7 @@ function render(rows) {
     `Data through ${sorted[sorted.length-1]} · ${c1.length.toLocaleString()} txns`;
 
   // KPIs
-  const today = new Date('2026-04-30'); // anchor; update on render
+  const today = new Date();
   const thisMonth = today.toISOString().slice(0,7);
   const thisYear = String(today.getFullYear());
   const lastCompleteMonth = sorted[sorted.length-1];
