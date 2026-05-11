@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUI Tour B · Plaza + Dome · Routing Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; padding: 28px 20px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1100px; margin: 0 auto; }
+  .mono { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 0.9em; }
+
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 42px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 14.5px; line-height: 1.5;
+    color: var(--cacao); max-width: 78ch; font-weight: 300; margin-bottom: 22px; }
+  .deck strong { font-weight: 500; }
+  .deck em { font-style: italic; color: var(--honey-deep); }
+
+  h2 {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 26px; letter-spacing: -0.005em;
+    margin: 32px 0 8px; color: var(--cacao);
+    padding-bottom: 4px; border-bottom: 1px solid var(--rule);
+  }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  h3 { font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 17px; color: var(--cacao); margin: 16px 0 6px; }
+  h3 em { font-style: italic; color: var(--honey-deep); }
+
+  .reality-check {
+    background: rgba(184, 92, 56, 0.08);
+    border-left: 4px solid var(--terracotta);
+    border-radius: 6px; padding: 14px 18px; margin: 12px 0 22px;
+  }
+  .reality-check .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--terracotta); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .reality-check p {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; line-height: 1.55; color: var(--cacao); margin-bottom: 6px;
+  }
+  .reality-check p strong { font-style: normal; color: var(--cacao); }
+
+  /* OPTION COMPARISON */
+  .options-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin: 12px 0 22px;
+  }
+  .option-card {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 18px 22px;
+  }
+  .option-card.recommended {
+    background: var(--cream); border-left: 4px solid var(--honey-deep);
+  }
+  .option-card .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .option-card.recommended .tag::before { content: "★ "; }
+  .option-card .title {
+    font-family: 'Fraunces', serif; font-size: 19px; font-weight: 500;
+    color: var(--cacao); margin-bottom: 8px; line-height: 1.1;
+  }
+  .option-card .title em { font-style: italic; color: var(--honey-deep); }
+  .option-card .arc {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13.5px; color: var(--cacao-soft); margin-bottom: 10px;
+  }
+  .option-card .pros, .option-card .cons {
+    font-size: 12.5px; line-height: 1.5; margin-bottom: 8px;
+  }
+  .option-card .pros { color: var(--jungle); }
+  .option-card .cons { color: var(--terracotta); }
+  .option-card .label-mini {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  /* ITINERARY TABLES */
+  table.timing {
+    width: 100%; border-collapse: collapse;
+    margin: 12px 0 18px; font-size: 13px;
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;
+  }
+  table.timing th, table.timing td {
+    text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule);
+  }
+  table.timing th {
+    background: var(--cream-soft);
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 11.5px; letter-spacing: 0.04em; color: var(--cacao);
+  }
+  table.timing tr:last-child td { border-bottom: none; }
+  table.timing .min {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--terracotta); white-space: nowrap;
+  }
+  table.timing .stop {
+    font-weight: 500; color: var(--cacao);
+  }
+
+  /* NAMING */
+  .names-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    margin: 12px 0;
+  }
+  .name-card {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .name-card .num {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--honey-deep); letter-spacing: 0.1em; margin-bottom: 3px;
+  }
+  .name-card .name {
+    font-family: 'Fraunces', serif; font-size: 15.5px; font-weight: 500;
+    color: var(--cacao); margin-bottom: 3px;
+  }
+  .name-card .name em { font-style: italic; color: var(--honey-deep); }
+  .name-card .for {
+    font-size: 11.5px; color: var(--cacao-soft);
+    font-family: 'Fraunces', serif; font-style: italic;
+  }
+
+  /* ECONOMICS */
+  .econ-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin: 12px 0 22px;
+  }
+  .econ-card {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 14px; text-align: center;
+  }
+  .econ-card .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .econ-card .value {
+    font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500;
+    color: var(--cacao); line-height: 1.0;
+  }
+  .econ-card .value em { font-style: italic; color: var(--honey-deep); }
+  .econ-card .sub {
+    font-size: 11px; color: var(--cacao-soft); margin-top: 4px;
+    font-family: 'Fraunces', serif; font-style: italic;
+  }
+
+  /* COPY ZONES */
+  .copy-zone {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 22px 26px;
+    font-family: 'Inter Tight', sans-serif; font-size: 14.5px;
+    line-height: 1.7; color: #1a1a1a; margin-bottom: 16px;
+  }
+  .copy-zone p { margin: 0 0 12px; }
+  .copy-zone p:last-child { margin-bottom: 0; }
+  .copy-zone .title-line {
+    font-family: 'Fraunces', serif; font-size: 19px; line-height: 1.05;
+    font-weight: 500; margin-bottom: 12px;
+  }
+  .copy-zone .title-line em { font-style: italic; color: var(--honey-deep); }
+  .copy-hint {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11px; color: var(--terracotta);
+    letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+
+  /* GUARDRAIL */
+  .guardrail {
+    background: rgba(184, 92, 56, 0.06);
+    border: 1px solid rgba(184, 92, 56, 0.25);
+    border-radius: 8px; padding: 16px 20px; margin: 14px 0;
+  }
+  .guardrail .label {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11px; color: var(--terracotta); letter-spacing: 0.06em;
+    text-transform: lowercase; margin-bottom: 6px;
+  }
+  .guardrail .row { display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 4px 0; align-items: start; }
+  .guardrail .yes { color: var(--jungle); font-weight: 600; }
+  .guardrail .no { color: var(--terracotta); font-weight: 600; }
+  .guardrail .row span { font-size: 13.5px; line-height: 1.5; }
+
+  .footer {
+    margin-top: 32px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft);
+  }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · TUI Tour B · Plaza + Dome</div>
+      <div class="meta">Drafted <strong>2026-05-11</strong> · For intercruises today</div>
+    </div>
+
+    <div class="doc-type">internal · adds Plaza de las Dos Culturas to justify €45/pax · two routing options compared</div>
+    <h1>Plaza <em>+</em> Dome · two ways to walk it</h1>
+    <div class="deck">Tour A was the dome alone — too close to the pier, too short, hard to charge €45. Tour B adds <strong>Plaza de las Dos Culturas</strong> as the cultural anchor — the Mayan + Spanish heritage of Cozumel — before (or after) the immersive 360° fulldome experience and the solar telescope. The dome is never called a planetarium in customer copy; it is a "premier 360° immersive cinema." Below: two routing options, both 2.5 hours, with the recommended pick.</div>
+
+    <div class="reality-check">
+      <div class="label">your reality check</div>
+      <p><strong>2 hours is too short for €45.</strong> The dome alone is a 60-min experience near the pier — guests would feel the price is high for what they got. Adding Plaza de las Dos Culturas <strong>extends the tour to 2.5 hours, adds a cultural walking layer, and gives a tangible "second experience"</strong> that justifies the ticket. Same one bus, same throughput (3 departures per ship call), better perceived value.</p>
+      <p><strong>"Planetarium" is never used in customer copy.</strong> We call it: <em>"Mexico's premier 360° immersive cinema"</em> · <em>"the 360° fulldome theater"</em> · <em>"the semisphere"</em>. Never the institutional name.</p>
+    </div>
+
+    <h2>The two <em>options</em></h2>
+
+    <div class="options-grid">
+
+      <div class="option-card">
+        <div class="tag">option 1</div>
+        <div class="title">Dome first · <em>then</em> Plaza</div>
+        <div class="arc">Pier → 360° immersive cinema + telescope → Plaza walking tour → pier</div>
+        <div>
+          <div class="label-mini" style="color: var(--jungle);">pros</div>
+          <div class="pros">
+            Air-conditioned start (cool exit from the ship).<br/>
+            Solar telescope earlier in the morning when guests are alert.<br/>
+            Plaza closes the tour as a relaxed walking stop near the pier — easy walk-back.
+          </div>
+        </div>
+        <div>
+          <div class="label-mini" style="color: var(--terracotta);">cons</div>
+          <div class="cons">
+            Ends on a casual walking note rather than a wow moment.<br/>
+            Solar telescope may not be a "climax" if delivered at the start.
+          </div>
+        </div>
+      </div>
+
+      <div class="option-card recommended">
+        <div class="tag">option 2 · recommended</div>
+        <div class="title">Plaza first · <em>then</em> Dome + telescope</div>
+        <div class="arc">Pier → Plaza walking tour → 360° immersive cinema → solar telescope → pier</div>
+        <div>
+          <div class="label-mini" style="color: var(--jungle);">pros</div>
+          <div class="pros">
+            Builds anticipation: <strong>history primes the cosmology</strong>.<br/>
+            Climax at the rooftop — looking at the Sun directly is the final wow.<br/>
+            Matches the proven "setup → payoff" pattern (Earth/heritage → Sky/cosmos).<br/>
+            Plaza is shaded in the morning hours — comfortable walking weather.
+          </div>
+        </div>
+        <div>
+          <div class="label-mini" style="color: var(--terracotta);">cons</div>
+          <div class="cons">
+            Final telescope is sun-dependent — overcast days drop the climax.<br/>
+            Plaza in 11am+ heat could fatigue guests on later departures.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2>Recommended itinerary · <em>Plaza → Dome → Telescope</em></h2>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: var(--cacao-soft); margin-bottom: 12px;">2.5 hours · 45 pax · one bus · 3 departures per ship call (≈ 8:00 / 11:00 / 14:00) · up to 135 pax served.</div>
+
+    <table class="timing">
+      <thead>
+        <tr><th>Time</th><th>Stop</th><th>What happens</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="min">0:00 – 0:10</td><td class="stop">Pier pickup</td><td>Welcome at the ship in German + English. Board the coach (or short guided walk if pickup is congested). Transfer to Plaza de las Dos Culturas — 5 min.</td></tr>
+        <tr><td class="min">0:10 – 0:45</td><td class="stop">Plaza de las Dos Culturas</td><td>A guided walking experience through the historic plaza — the meeting of two cultures, Mayan and Spanish-Mexican, on the island of Cozumel. Photo stops at the kiosk and historical monuments. Brief story of <strong>Ixchel</strong>, the Mayan Goddess of the Moon, whose pilgrimage temple at San Gervasio drew Maya from across the peninsula. The cultural primer for what comes next.</td></tr>
+        <tr><td class="min">0:45 – 0:55</td><td class="stop">Short transfer</td><td>Short bus or walk to the 360° immersive cinema (≈ 500 m).</td></tr>
+        <tr><td class="min">0:55 – 1:55</td><td class="stop">The 360° immersive cinema</td><td>Inside Mexico's premier 360° fulldome theater. Eighteen-minute fulldome film <em>Mayan Archaeoastronomy: Observers of the Universe</em> in German narration — a poetic journey through six Mayan temples (San Gervasio in Cozumel, Chichén Itzá, Uxmal, Edzná, Palenque, Bonampak) and their alignment to the Sun, the Moon, and Venus. Followed by a live astronomy-guide segment: your own birthday in the Mayan Long Count + the night sky as it stood the day you were born.</td></tr>
+        <tr><td class="min">1:55 – 2:20</td><td class="stop">Rooftop solar telescope</td><td>Climb to the rooftop. Guided viewing of <strong>Kin, the Sun god</strong> — the Sun itself, safely magnified through a 16-inch telescope with a professional solar filter. The climax of the day. Wheelchair-accessible ground-level scope available.</td></tr>
+        <tr><td class="min">2:20 – 2:30</td><td class="stop">Return to ship</td><td>Short walk or coach back to the cruise pier (≈ 540 m).</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Naming · <em>Tour B</em></h2>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 13px; color: var(--cacao-soft); margin-bottom: 8px;">German-first for TUI. Each names what we actually do.</div>
+
+    <div class="names-grid">
+
+      <div class="name-card">
+        <div class="num">N1 · recommended</div>
+        <div class="name">Maya in Cozumel · <em>Plaza, Sterne &amp; Sonne</em></div>
+        <div class="for">Plaza, Stars &amp; Sun — names all three components in plain German.</div>
+      </div>
+
+      <div class="name-card">
+        <div class="num">N2</div>
+        <div class="name">Auf den Spuren der <em>Maya</em> · Cozumels Geschichte &amp; Kosmos</div>
+        <div class="for">"In the Footsteps of the Maya" — narrative arc, history + cosmos.</div>
+      </div>
+
+      <div class="name-card">
+        <div class="num">N3</div>
+        <div class="name">Cozumel Maya · <em>Plaza &amp; Kuppel</em></div>
+        <div class="for">Plaza &amp; Dome. Shortest. Brochure-scannable.</div>
+      </div>
+
+      <div class="name-card">
+        <div class="num">N4</div>
+        <div class="name">Zwei Kulturen, ein <em>Himmel</em></div>
+        <div class="for">"Two Cultures, One Sky." Poetic. Echoes Plaza de las Dos Culturas + the dome arc.</div>
+      </div>
+
+    </div>
+
+    <h2>One-bus <em>economics</em></h2>
+
+    <div class="econ-grid">
+      <div class="econ-card">
+        <div class="label">duration</div>
+        <div class="value"><em>2.5 h</em></div>
+        <div class="sub">Plaza + dome + scope</div>
+      </div>
+      <div class="econ-card">
+        <div class="label">pax / departure</div>
+        <div class="value">45</div>
+        <div class="sub">1 coach</div>
+      </div>
+      <div class="econ-card">
+        <div class="label">departures / call</div>
+        <div class="value">3</div>
+        <div class="sub">≈ 8:00 / 11:00 / 14:00</div>
+      </div>
+      <div class="econ-card">
+        <div class="label">pax / call</div>
+        <div class="value">135</div>
+        <div class="sub">on one bus</div>
+      </div>
+    </div>
+
+    <h3>Per-departure margin <em>(rough · Knox to validate)</em></h3>
+    <table class="timing">
+      <thead>
+        <tr><th>Line item</th><th>Per pax</th><th>Per 45-pax departure</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sales price to guest</td><td>€45.00</td><td>€2,025</td></tr>
+        <tr><td>TUI commission (~25%)</td><td>−€11.25</td><td>−€506</td></tr>
+        <tr><td><strong>Net to Visit Cozumel</strong></td><td><strong>€33.75</strong></td><td><strong>€1,519</strong></td></tr>
+        <tr><td>Dome show (operator cost ≈ €5/pax)</td><td>−€5.00</td><td>−€225</td></tr>
+        <tr><td>Solar telescope (≈ €3.70/pax)</td><td>−€3.70</td><td>−€167</td></tr>
+        <tr><td>Plaza walking-tour guide</td><td>−€1.50</td><td>−€68</td></tr>
+        <tr><td>Bus + driver (shared, ≈ €180/departure)</td><td>−€4.00</td><td>−€180</td></tr>
+        <tr><td>German-speaking guide (≈ €90)</td><td>−€2.00</td><td>−€90</td></tr>
+        <tr><td>Materials / water / misc</td><td>−€1.00</td><td>−€45</td></tr>
+        <tr><td><strong>Gross margin / departure</strong></td><td><strong>≈ €16.50</strong></td><td><strong>≈ €744</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 13px; font-family: 'Fraunces', serif; font-style: italic; color: var(--cacao-soft); margin-top: -4px;">
+      <strong>Per ship call:</strong> 3 departures × 135 pax × €16.50 net = <strong>≈ €2,230 / call</strong>. Slightly lower margin than Tour A but a <strong>much stronger value proposition</strong> at €45 — guests get a 2.5-hr cultural tour, not a 1.5-hr "expensive ticket."
+    </p>
+
+    <h2>Truth-in-advertising <em>guardrails</em></h2>
+    <div class="guardrail">
+      <div class="label">copy review checklist · for the TUI SED + brochure</div>
+      <div class="row"><span class="no">✗</span><span><strong>Never say:</strong> "planetarium," "Cha'an Ka'an," "Planetario." Customer-facing only.</span></div>
+      <div class="row"><span class="yes">✓</span><span><strong>Use:</strong> "360° immersive cinema," "Mexico's premier fulldome theater," "the semisphere," "360° fulldome experience."</span></div>
+      <div class="row"><span class="no">✗</span><span><strong>Never say:</strong> "3D" — no stereoscopic glasses are worn. The dome is fulldome 360°, not stereo 3D.</span></div>
+      <div class="row"><span class="yes">✓</span><span><strong>Use:</strong> "stunning 360° visuals," "fulldome 4K," "like being inside a beautiful stylized painting" (lifted from the film's own promo language).</span></div>
+      <div class="row"><span class="yes">✓</span><span><strong>The Plaza walking tour</strong> is real Cozumel history (the actual historic plaza, the Mayan-Spanish meeting point). No invention required.</span></div>
+      <div class="row"><span class="no">✗</span><span><strong>Don't promise</strong> wheelchair access on the rooftop telescope — but DO promise the ground-level scope alternative (the venue is inclusive-destination certified).</span></div>
+    </div>
+
+    <h2>Pitch language for <em>intercruises</em> · today</h2>
+    <div class="copy-hint">↓ select the white block, paste into your reply ↓</div>
+    <div class="copy-zone">
+      <div class="title-line">Maya in Cozumel · <em>Plaza, Sterne &amp; Sonne</em></div>
+      <p>Hi [intercruises contact],</p>
+      <p>For the 2026–29 TUI program in Cozumel we would like to add one new tour: <strong><em>Maya in Cozumel · Plaza, Sterne &amp; Sonne</em></strong> ("Mayan Cozumel · Plaza, Stars &amp; Sun"). It is designed to capture the culture-curious German guest who wants a serious Mayan experience without the 4.5-hour beach commitment of MXCZM016 — and pairs cultural walking with a cinematic and astronomical climax.</p>
+      <p><strong>Format:</strong> 2.5 hours, 45 passengers per departure, one coach. We are committing one bus to this tour with three rotating departures per ship call (≈ 8:00, 11:00, 14:00) — serving up to <strong>135 guests per call</strong>.</p>
+      <p><strong>Content:</strong></p>
+      <p>• A guided walking experience at <strong>Plaza de las Dos Culturas</strong>, the historic Cozumel plaza where Mayan and Spanish-Mexican heritage meet. Photo stops, brief story of Ixchel — the Mayan Goddess of the Moon whose pilgrimage temple at San Gervasio drew Maya from across the peninsula.</p>
+      <p>• Inside <strong>Mexico's premier 360° immersive fulldome cinema</strong>, the 18-minute fulldome film <em>Mayan Archaeoastronomy: Observers of the Universe</em> in the German narration version — six Mayan temples (San Gervasio in Cozumel, Chichén Itzá, Uxmal, Edzná, Palenque, Bonampak) and their alignment to the Sun, Moon, and Venus. Followed by a live astronomy-guide segment that writes each guest's birthday in the Mayan Long Count and surfaces the night sky as it stood the day they were born.</p>
+      <p>• A guided viewing of the Sun through a <strong>16-inch solar telescope</strong> with a safety filter — direct, safe, daylight observation of Kin, the Sun god.</p>
+      <p><strong>Logistics:</strong> All venues within ≈ 540 m of the cruise pier. Walking and short coach legs only. All-weather (indoor dome runs in any weather; only the rooftop telescope is sun-dependent — on overcast days the time is given back to an extended astronomy-guide segment). Inclusive-destination certified — wheelchair-accessible solar scope at ground level.</p>
+      <p>We will fill the NEW1 tab of the Shore Excursion Details workbook and return it tomorrow with full SED detail, pricing per departure, and the German tour description. Please confirm this aligns with TUI's 2026–29 portfolio direction.</p>
+      <p>Best,<br/>Mike</p>
+    </div>
+
+    <h2>Public-facing <em>tour description</em> (for SED R118)</h2>
+    <div class="copy-hint">↓ select the white block, paste into Section 10 of NEW1 ↓</div>
+    <div class="copy-zone">
+      <div class="title-line">Maya in Cozumel · <em>Plaza, Sterne &amp; Sonne</em></div>
+      <p>Two and a half hours through the Mayan world of Cozumel — beginning on foot, ending under the dome of the sky itself.</p>
+      <p>Begin your tour at <strong>Plaza de las Dos Culturas</strong>, the historic heart of Cozumel where Mayan and Spanish-Mexican cultures met. Your guide walks you through the plaza, the kiosk, and the monuments that mark the meeting of two worlds — and tells the story of Ixchel, the Mayan Goddess of the Moon, whose pilgrimage temple at San Gervasio drew Maya seekers from across the peninsula for over a thousand years.</p>
+      <p>Then step inside Mexico's premier 360° immersive fulldome cinema. The official 18-minute film <em>Mayan Archaeoastronomy: Observers of the Universe</em> tours six great Mayan temples — San Gervasio (here on Cozumel), Chichén Itzá, Uxmal, Edzná, Palenque, and Bonampak — and shows how each was built as a calendar in stone, aligned to the Sun, the Moon, and Venus. A feast of colors and sounds in stunning 360° visuals — like being inside a beautiful stylized painting. After the film, our astronomy guide writes your own birthday in the Mayan Long Count and surfaces the sky as it stood the day you were born.</p>
+      <p>The climax comes on the rooftop. Through a 16-inch solar telescope with a professional safety filter, you look directly at the Sun — Kin, the Sun god the Maya invented their entire world to honor — safely magnified into the field of view of your own eye. A short walk back to the cruise pier closes the day.</p>
+      <p>All-weather; the only sun-dependent element is the rooftop telescope. Inclusive-destination certified.</p>
+    </div>
+
+    <h2>What to verify <em>before SED ships tomorrow</em></h2>
+    <div class="guardrail" style="background: rgba(166, 120, 41, 0.06); border-color: rgba(166, 120, 41, 0.25);">
+      <div class="label" style="color: var(--honey-deep);">six checks · share with Mario for parallel work</div>
+      <div class="row"><span class="yes">1</span><span><strong>Plaza walking guide.</strong> Confirm we have (or can hire) a bilingual DE/EN guide for the Plaza segment. 30 min, light cultural narration. Could double as the dome-segment escort.</span></div>
+      <div class="row"><span class="yes">2</span><span><strong>Yesli's parallel agreement.</strong> Confirm the 8:00 / 11:00 / 14:00 windows don't clash with Playa Mía's existing exclusive slots at the dome venue.</span></div>
+      <div class="row"><span class="yes">3</span><span><strong>German dome narration.</strong> Confirm the German dub of <em>Arqueomaya</em> is still loaded and current on the projector.</span></div>
+      <div class="row"><span class="yes">4</span><span><strong>Tony's segment per group.</strong> Confirm the birthday-Long-Count + night-sky segment is delivered to every group, not on-request.</span></div>
+      <div class="row"><span class="yes">5</span><span><strong>Knox prices the tour.</strong> €45 retail is a working assumption — anchor against MXCZM016 + the lower-tier TUI excursions in the workbook.</span></div>
+      <div class="row"><span class="yes">6</span><span><strong>Plaza-to-dome routing.</strong> Confirm the short transfer (≈ 500 m) can be done on the coach without traffic delays at the proposed departure times. Walking is fallback.</span></div>
+    </div>
+
+    <div class="footer">
+      Briefing · <code>visitcozumel-dashboards/briefings/2026-05-11-tui-tour-b-plaza-and-dome.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-11-tui-tour-b-plaza-and-dome.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-11-tui-tour-b-plaza-and-dome.html</a><br/>
+      Previous version (dome-only Tour A) · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-11-tui-intercruises-planetarium-pitch.html">2026-05-11-tui-intercruises-planetarium-pitch.html</a>
+    </div>
+
+  </div>
+</body>
+</html>
