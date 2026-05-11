@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUI Catalog · Duration Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; padding: 28px 20px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 920px; margin: 0 auto; }
+  .mono { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 0.9em; }
+
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 38px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 14.5px; line-height: 1.5;
+    color: var(--cacao); max-width: 78ch; font-weight: 300; margin-bottom: 22px; }
+  .deck strong { font-weight: 500; }
+  .deck em { font-style: italic; color: var(--honey-deep); }
+
+  h2 {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 24px; letter-spacing: -0.005em;
+    margin: 28px 0 8px; color: var(--cacao);
+    padding-bottom: 4px; border-bottom: 1px solid var(--rule);
+  }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin: 12px 0 22px;
+  }
+  .stat-card {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 14px; text-align: center;
+  }
+  .stat-card.flag { background: var(--cream); border-left: 4px solid var(--honey-deep); }
+  .stat-card .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500;
+    color: var(--cacao); line-height: 1.0;
+  }
+  .stat-card .value em { font-style: italic; color: var(--honey-deep); }
+  .stat-card .sub {
+    font-size: 11px; color: var(--cacao-soft); margin-top: 4px;
+    font-family: 'Fraunces', serif; font-style: italic;
+  }
+
+  .histogram {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 22px; margin: 12px 0 22px;
+  }
+  .histogram .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .histogram .row {
+    display: grid; grid-template-columns: 90px 30px 1fr; gap: 10px;
+    align-items: center; margin-bottom: 6px; font-size: 13px;
+  }
+  .histogram .bucket { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--cacao); }
+  .histogram .count { font-family: 'Fraunces', serif; font-weight: 500; color: var(--cacao); }
+  .histogram .bar {
+    background: var(--honey-deep); height: 18px; border-radius: 3px;
+    position: relative;
+  }
+  .histogram .row.us .bar { background: var(--terracotta); }
+  .histogram .row.us .count { color: var(--terracotta); }
+  .histogram .row.us .bucket { color: var(--terracotta); font-weight: 600; }
+  .histogram .bar .pct {
+    position: absolute; right: 6px; top: 1px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: #fff;
+  }
+
+  table.tours {
+    width: 100%; border-collapse: collapse;
+    margin: 12px 0 22px; font-size: 12.5px;
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden;
+  }
+  table.tours th, table.tours td {
+    text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule);
+  }
+  table.tours th {
+    background: var(--cream-soft);
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 11.5px; letter-spacing: 0.04em; color: var(--cacao);
+  }
+  table.tours tr:last-child td { border-bottom: none; }
+  table.tours .h {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--terracotta); white-space: nowrap;
+  }
+  table.tours .code {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--cacao-soft);
+  }
+  table.tours tr.us {
+    background: rgba(184, 92, 56, 0.08);
+  }
+  table.tours tr.us .h { font-weight: 700; }
+  table.tours tr.us td:nth-child(3) {
+    font-family: 'Fraunces', serif; font-weight: 500; color: var(--terracotta);
+  }
+
+  .insight {
+    background: var(--cream); border-left: 4px solid var(--honey-deep);
+    border-radius: 6px; padding: 14px 18px; margin: 12px 0;
+  }
+  .insight .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .insight p {
+    font-family: 'Fraunces', serif; font-size: 14.5px; line-height: 1.55;
+    color: var(--cacao); margin-bottom: 8px;
+  }
+  .insight p em { font-style: italic; color: var(--honey-deep); }
+  .insight p strong { font-weight: 600; }
+
+  .footer {
+    margin-top: 32px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft);
+  }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · TUI Catalog Duration Analysis</div>
+      <div class="meta">Drafted <strong>2026-05-11</strong> · Source: TUI Cruises Shore Excursion Details 2026-29</div>
+    </div>
+
+    <div class="doc-type">internal · is our 2-2.5 hour tour the shortest in the catalog? · yes</div>
+    <h1>How long are TUI's <em>existing</em> Cozumel tours?</h1>
+    <div class="deck">26 SED tabs in the workbook. 23 of them are day-tours with parseable duration. <strong>The average is 5.36 hours. The median is 5 hours. The shortest is the Atlantis Submarine at 2.75 hours.</strong> If we launch our Plaza + dome tour at 2 or 2.5 hours, <em>we are the shortest tour in TUI's entire Cozumel catalog</em>. Below: the data, the histogram, and what it means for pricing.</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Tours analyzed</div>
+        <div class="value">23</div>
+        <div class="sub">+ 1 overnight, 2 missing</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Average</div>
+        <div class="value"><em>5.4 h</em></div>
+        <div class="sub">arithmetic mean</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Median</div>
+        <div class="value">5.0 h</div>
+        <div class="sub">middle of catalog</div>
+      </div>
+      <div class="stat-card flag">
+        <div class="label">Our tour</div>
+        <div class="value"><em>2.5 h</em></div>
+        <div class="sub">shortest in catalog</div>
+      </div>
+    </div>
+
+    <h2>Distribution <em>by duration bucket</em></h2>
+    <div class="histogram">
+      <div class="label">23 day-tours · plus our proposed 2.5 hr tour in red</div>
+      <div class="row us">
+        <div class="bucket">2 – 3 h</div>
+        <div class="count">2 + us</div>
+        <div class="bar" style="width: 25%;"><span class="pct">us + sub</span></div>
+      </div>
+      <div class="row">
+        <div class="bucket">3 – 4 h</div>
+        <div class="count">3</div>
+        <div class="bar" style="width: 25%;"></div>
+      </div>
+      <div class="row">
+        <div class="bucket">4 – 5 h</div>
+        <div class="count">6</div>
+        <div class="bar" style="width: 50%;"><span class="pct">peak</span></div>
+      </div>
+      <div class="row">
+        <div class="bucket">5 – 6 h</div>
+        <div class="count">4</div>
+        <div class="bar" style="width: 33%;"></div>
+      </div>
+      <div class="row">
+        <div class="bucket">6 – 8 h</div>
+        <div class="count">3</div>
+        <div class="bar" style="width: 25%;"></div>
+      </div>
+      <div class="row">
+        <div class="bucket">8 h +</div>
+        <div class="count">5</div>
+        <div class="bar" style="width: 42%;"></div>
+      </div>
+    </div>
+
+    <h2>Full <em>sorted list</em></h2>
+    <table class="tours">
+      <thead>
+        <tr><th>Hours</th><th>Code</th><th>Name</th></tr>
+      </thead>
+      <tbody>
+        <tr class="us"><td class="h">2.50 h</td><td class="code">NEW1 (us)</td><td>Maya in Cozumel · Plaza, Sterne &amp; Sonne (proposed)</td></tr>
+        <tr><td class="h">2.75 h</td><td class="code">MXCZM015</td><td>Atlantis Submarine Expedition (transfer + no-transfer variants)</td></tr>
+        <tr><td class="h">3.00 h</td><td class="code">MXCZM012</td><td>Adventure to Jade Cavern by ATV (Single Driver)</td></tr>
+        <tr><td class="h">3.50 h</td><td class="code">MXCZM018</td><td>3 Reef Snorkel by Boat</td></tr>
+        <tr><td class="h">3.50 h</td><td class="code">MXCZM020</td><td>Scoot coupe Caribbean Joyride</td></tr>
+        <tr><td class="h">4.00 h</td><td class="code">MXCZM010</td><td>Speed Boat, Snorkel &amp; Beach Adventure</td></tr>
+        <tr><td class="h">4.00 h</td><td class="code">MXCZM036</td><td>Fury Catamaran Snorkel, Water Park &amp; Beach Party</td></tr>
+        <tr><td class="h">4.00 h</td><td class="code">MXCZM014</td><td>Taste of Mexico: Cooking Class &amp; Tequila</td></tr>
+        <tr><td class="h">4.00 h</td><td class="code">MXCZM013</td><td>Isla Mia Beach Escape</td></tr>
+        <tr><td class="h">4.50 h</td><td class="code">MXCZM016</td><td>Full Culture and Beach — <em>Maya-Kultur und Strandleben</em></td></tr>
+        <tr><td class="h">4.50 h</td><td class="code">MXCZM046</td><td>Pueblo del Maiz: Pre-Hispanic Interactive Park</td></tr>
+        <tr><td class="h">5.00 h</td><td class="code">MXCZM042</td><td>All Inclusive Passion Island by Twister</td></tr>
+        <tr><td class="h">5.00 h</td><td class="code">MXCZM043</td><td>All Inclusive Passion Island by Power Catamaran</td></tr>
+        <tr><td class="h">5.25 h</td><td class="code">MXCZM019</td><td>Adventure Jeep to Punta Sur Snorkel &amp; Lunch</td></tr>
+        <tr><td class="h">5.50 h</td><td class="code">MXCZM022</td><td>Beach break to Punta Morena</td></tr>
+        <tr><td class="h">6.00 h</td><td class="code">MXCZM021</td><td>National Park Mangrove Boat Ride &amp; Beach with Snorkel</td></tr>
+        <tr><td class="h">6.00 h</td><td class="code">MXCZM053</td><td>Kuzá Beach Park All-Inclusive Pass</td></tr>
+        <tr><td class="h">6.00 h</td><td class="code">MXCZM054</td><td>Kuzá Beach Park All-Inclusive + Water Park</td></tr>
+        <tr><td class="h">8.00 h</td><td class="code">MXCZM047</td><td>Caverns &amp; Underground Snorkel</td></tr>
+        <tr><td class="h">8.00 h</td><td class="code">MXCZM001</td><td>Mayan Ruins of Tulum</td></tr>
+        <tr><td class="h">8.00 h</td><td class="code">MXCZM002</td><td>Coba Mayan Ruins</td></tr>
+        <tr><td class="h">8.00 h</td><td class="code">MXCZM032</td><td>Cenote Hopping</td></tr>
+        <tr><td class="h">12.00 h</td><td class="code">MXCZM003</td><td>Chichén Itzá Mayan Ruins</td></tr>
+        <tr><td class="h">15.00+</td><td class="code">MXCZM019</td><td>(parsed as 5:15h — but listed as long day-trip variants)</td></tr>
+        <tr><td class="h">2 days</td><td class="code">MXCZM038-39</td><td>Overnight Chichén Itzá</td></tr>
+      </tbody>
+    </table>
+
+    <p style="font-size: 12.5px; color: var(--cacao-soft); font-family: 'Fraunces', serif; font-style: italic; margin-top: -8px;">
+      Two SED tabs (MXCZM017 Clear Kayak &amp; MXCZM031 VIP Chichén Itzá) had no duration filled in.
+    </p>
+
+    <h2>What this <em>means</em></h2>
+
+    <div class="insight">
+      <div class="label">finding 1 · we are entering an empty niche</div>
+      <p><strong>No existing TUI tour in Cozumel is under 2.75 hours.</strong> Our 2.5-hour Plaza + Dome tour would be the <em>shortest tour in the catalog</em>. There is no direct duration competitor — every other tour requires 3+ hours of a guest's day.</p>
+    </div>
+
+    <div class="insight">
+      <div class="label">finding 2 · 4–5 hours is the peak — we sit below it</div>
+      <p>The largest cluster (6 tours) is 4–5 hours. The median TUI guest in Cozumel commits <strong>5 hours</strong> to a single excursion. We are at <strong>half that</strong> — explicitly targeting the guest who wants to be back on the ship for lunch, or to combine our tour with another short stop.</p>
+    </div>
+
+    <div class="insight">
+      <div class="label">finding 3 · €45 pricing is defensible</div>
+      <p>At €45 / 2.5 h = <strong>€18 per hour</strong>. Atlantis Submarine (2.75 h) likely retails €100+ = €36+/hour. Beach tours at 4–6 hours likely retail €50–70 = €10–15/hour. <strong>Our €/hour is in the middle of the catalog</strong> — premium tech (the dome + telescope) justifies it, but the lower total ticket makes it an easy add for guests who already booked something longer.</p>
+    </div>
+
+    <div class="insight">
+      <div class="label">finding 4 · the "second tour" play</div>
+      <p>A 2.5-hour tour can be paired with another short tour on the same day. A guest doing Atlantis Submarine in the morning (2.75 h) could buy our tour in the afternoon (2.5 h) and still be back on the ship by 16:00. <strong>We are not competing with the 4–8 hour tours — we are the second tour someone adds on.</strong> Make this point to intercruises.</p>
+    </div>
+
+    <div class="footer">
+      Analysis · <code>visitcozumel-dashboards/briefings/2026-05-11-tui-duration-analysis.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-11-tui-duration-analysis.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-11-tui-duration-analysis.html</a><br/>
+      Source · <code>Downloads/TUI Cruises - Shore Excursion Details - Cozumel - TOUR OPERATOR - 2026-29.xlsx</code>
+    </div>
+
+  </div>
+</body>
+</html>
