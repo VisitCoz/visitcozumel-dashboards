@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TUI Submission · Fields to Fill</title>
+<title>TUI Submission · Fields to Fill · v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -73,11 +73,29 @@
     background: rgba(184,92,56,0.1); padding: 2px 8px; border-radius: 8px;
     margin-left: 8px; letter-spacing: 0.06em;
   }
+  h2 .count.done {
+    color: var(--jungle); background: rgba(62,74,46,0.12);
+  }
 
   .section-deck {
     font-family: 'Fraunces', serif; font-style: italic;
     font-size: 13px; color: var(--cacao-soft); margin-bottom: 12px;
   }
+
+  .resolved {
+    background: rgba(62, 74, 46, 0.06);
+    border-left: 4px solid var(--jungle);
+    border-radius: 6px; padding: 12px 18px; margin: 12px 0;
+  }
+  .resolved .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--jungle); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .resolved ul { margin-left: 22px; }
+  .resolved li { font-size: 13px; line-height: 1.5; margin-bottom: 5px; }
+  .resolved li strong { color: var(--cacao); }
+  .resolved li code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--jungle); }
 
   .field-table {
     width: 100%; border-collapse: collapse;
@@ -105,11 +123,6 @@
     font-family: 'Fraunces', serif; font-style: italic;
     color: var(--cacao-soft); font-size: 12px;
   }
-  .field-table .my-fill {
-    color: var(--jungle); font-size: 12px;
-  }
-  .field-table tr.you-fill { background: rgba(184,92,56,0.04); }
-  .field-table tr.mario { background: rgba(27,58,75,0.04); }
 
   .extras {
     background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
@@ -136,120 +149,93 @@
   <div class="shell">
 
     <div class="top-bar">
-      <div class="brand">Visit <em>Cozumel</em> · TUI Submission · Fields to Fill</div>
-      <div class="meta">Drafted <strong>2026-05-12</strong> · For Mike + Mario · Deadline tomorrow</div>
+      <div class="brand">Visit <em>Cozumel</em> · TUI Submission · Fields to Fill · v2</div>
+      <div class="meta">Updated <strong>2026-05-12</strong> · Most fields now resolved from constancia + bank</div>
     </div>
 
-    <div class="doc-type">internal · what I filled, what you + Mario need to fill, what to attach</div>
-    <h1>What's <em>left</em> for you + Mario</h1>
-    <div class="deck">I filled every cell I could reasonably know in the three header tabs (TO Information · Guide &amp; Port Information · Private Arrangements). Every cell that needs your input is marked <code>[CONFIRM: ...]</code> in the xlsx so it cannot be missed. This doc lists them organized by tab so you and Mario can divide the work.</div>
+    <div class="doc-type">internal · v2 · what's resolved + what's still pending</div>
+    <h1>Mostly <em>resolved</em></h1>
+    <div class="deck">Three tabs filled. Most legal, address, contact, and banking fields are now locked from the constancia (RFC VCM2107167R6) and the BBVA USD account. <strong>Private Arrangements is left blank per your instruction.</strong> Below: what's done (green) and what's still open (red).</div>
 
     <div class="deadline">
       <div class="label">submission deadline</div>
       <div class="when">13 May 2026 — tomorrow</div>
     </div>
 
-    <h2>Tab 1 · TO Information <span class="count">22 fields for you</span></h2>
-    <div class="section-deck">Legal entity, contacts, banking, signing officer. I prefilled the company name, country, and what I knew about contacts. Banking is sensitive — Mario or accounting should fill those directly in Excel.</div>
+    <h2>Tab 1 · TO Information <span class="count done">most resolved</span></h2>
+
+    <div class="resolved">
+      <div class="label">✓ resolved from constancia + bank statement + your notes</div>
+      <ul>
+        <li><strong>Legal name:</strong> <code>Visit Cozumel Mexico, S. de R.L. de C.V.</code></li>
+        <li><strong>RFC / VAT-ID:</strong> <code>VCM2107167R6</code></li>
+        <li><strong>Address:</strong> Calle 23 Sur 568 C, Col. Colonos Cuzamil, Cozumel, Quintana Roo · CP <code>77664</code></li>
+        <li><strong>Régimen:</strong> Régimen General de Ley Personas Morales</li>
+        <li><strong>Website:</strong> <code>visitcozumel.com.mx</code></li>
+        <li><strong>Main contact + signing + emergency:</strong> Mario Patricio Burgos García · <code>contabilidad@visitcozumel.com.mx</code></li>
+        <li><strong>Signing position:</strong> Administrador Único / Owner</li>
+        <li><strong>Operations contact 2:</strong> Adela Poot · <code>admin@visitcozumel.com.mx</code></li>
+        <li><strong>Accounting:</strong> <code>contabilidad@visitcozumel.com.mx</code></li>
+        <li><strong>Bank:</strong> BBVA México · USD account <code>0120894885</code> · SWIFT <code>BCMRMXMM</code> · CLABE <code>012692001208948851</code> · Sucursal: PYME Playa del Carmen</li>
+      </ul>
+    </div>
 
     <table class="field-table">
-      <thead><tr><th>SED cell</th><th>Field</th><th>What to enter</th></tr></thead>
+      <thead><tr><th>SED cell</th><th>Field still open</th><th>Source</th></tr></thead>
       <tbody>
-        <tr class="you-fill"><td class="ref">R6 c3</td><td class="field">VAT-ID-No.</td><td class="hint">Your RFC (Persona Moral, Régimen General 601)</td></tr>
-        <tr class="you-fill"><td class="ref">R7 c3</td><td class="field">Website</td><td class="hint">visitcozumel.com.mx — confirm exact URL</td></tr>
-        <tr class="you-fill"><td class="ref">R12 c3</td><td class="field">Street</td><td class="hint">Visit Cozumel administrative street address</td></tr>
-        <tr class="you-fill"><td class="ref">R13 c3</td><td class="field">Postal Code</td><td class="hint">Cozumel postal code</td></tr>
-        <tr class="you-fill"><td class="ref">R16 c3</td><td class="field">Office Hours</td><td class="hint">e.g. Mon–Sat 09:00–18:00 CST</td></tr>
-        <tr class="you-fill"><td class="ref">R24 c3</td><td class="field">Port-office VAT-ID</td><td class="hint">Same RFC if same entity</td></tr>
-        <tr class="you-fill"><td class="ref">R25–R29</td><td class="field">Port-office address + hours</td><td class="hint">Same as admin if no separate office</td></tr>
-        <tr class="you-fill"><td class="ref">R36 c3</td><td class="field">Main contact office phone</td><td class="hint">Mike's office phone</td></tr>
-        <tr class="you-fill"><td class="ref">R37 c3</td><td class="field">Main contact mobile</td><td class="hint">Mike's mobile</td></tr>
-        <tr class="mario"><td class="ref">R44, R45</td><td class="field">Mike's office + mobile (ops)</td><td class="hint">Same as above; confirm</td></tr>
-        <tr class="mario"><td class="ref">R47–R50</td><td class="field">Mario's contact info</td><td class="hint">Name (filled), email, office, mobile</td></tr>
-        <tr class="you-fill"><td class="ref">R56–R59</td><td class="field">Emergency contact</td><td class="hint">Who is reachable 24/7? Could be Mike, Mario, or ops manager</td></tr>
-        <tr class="you-fill"><td class="ref">R64–R66</td><td class="field">Signing officer</td><td class="hint">Mike or Mario as Administrador Único; confirm name + email + position</td></tr>
-        <tr class="you-fill"><td class="ref">R71 c3</td><td class="field">Publishable phone</td><td class="hint">Phone you're OK with TUI publishing on their site</td></tr>
-        <tr class="you-fill"><td class="ref">R72 c3</td><td class="field">Publishable email</td><td class="hint">info@visitcozumel.com.mx or reservations@</td></tr>
-        <tr class="mario"><td class="ref">R77–R83</td><td class="field">Bank Details (main)</td><td class="hint">Bank name, address, account #, SWIFT/BIC, ABA/routing, IBAN, currency (MXN/USD)</td></tr>
-        <tr class="mario"><td class="ref">R86–R89</td><td class="field">Intermediary bank</td><td class="hint">Only if wire transfers go through a correspondent bank</td></tr>
-        <tr class="you-fill"><td class="ref">R92 c3</td><td class="field">Accounting phone</td><td class="hint">contabilidad@ phone — Mario or accounting</td></tr>
-        <tr class="you-fill"><td class="ref">R94 c3</td><td class="field">VAT Number (Section 6)</td><td class="hint">Same RFC as R6</td></tr>
+        <tr><td class="ref">R36 c3</td><td class="field">Office phone (main contact)</td><td class="hint">Mario or company office line</td></tr>
+        <tr><td class="ref">R37 c3</td><td class="field">Mario's mobile</td><td class="hint">Personal mobile</td></tr>
+        <tr><td class="ref">R49, R50</td><td class="field">Adela's office phone + mobile</td><td class="hint">For ops contact 2</td></tr>
+        <tr><td class="ref">R71 c3</td><td class="field">Publishable phone</td><td class="hint">Phone TUI can publish on their website</td></tr>
+        <tr><td class="ref">R92 c3</td><td class="field">Accounting phone</td><td class="hint">contabilidad@ phone line</td></tr>
       </tbody>
     </table>
 
-    <h2>Tab 2 · Guide &amp; Port Information <span class="count">12 fields for you</span></h2>
-    <div class="section-deck">Cruise experience, guide policies, sustainability. I drafted reasonable answers for every question — review and adjust. Critical: the German-speaking guide section (TUI is German cruise line; this is the biggest commercial conversation).</div>
+    <h2>Tab 2 · Guide &amp; Port Information <span class="count done">mostly resolved</span></h2>
+
+    <div class="resolved">
+      <div class="label">✓ resolved from your notes</div>
+      <ul>
+        <li><strong>Cruise lines worked with:</strong> <code>Celebrity Cruises (4 seasons)</code>, <code>Disney Cruise Line (4 seasons)</code>, <code>Intercruises — Cozumel Highlights excursion (4 seasons)</code>. <em>Not Princess.</em></li>
+        <li><strong>Celebrity ships:</strong> Constellation, Silhouette, Eclipse, Xcel, Apex, Summit — ~40-50 calls/season</li>
+        <li><strong>Disney ships:</strong> Treasure, Destiny, Magic, Fantasy — ~25-30 calls/season</li>
+        <li><strong>German cruise experience:</strong> Yes, via Intercruises for TUI guests — 4 seasons</li>
+        <li><strong>German-speaking guides:</strong> Up to <strong>1 GSG for 2026</strong>, contractually guaranteed; pool expanding through 2026–29</li>
+        <li><strong>GSG-priority tours:</strong> Overnight Chichen Itzá + Chichen Itzá day-trip</li>
+        <li><strong>GSTC certified:</strong> No — application planned</li>
+        <li><strong>Tour guide policy:</strong> Lead guides salary + bonus; specialists per-tour contract; all licensed (INAH/SECTUR/municipal); internal training before solo</li>
+        <li><strong>Sustainability:</strong> Tierra Maya cultural preserve · Mayan artisan support · Cozumel municipal conservation campaigns</li>
+      </ul>
+    </div>
 
     <table class="field-table">
-      <thead><tr><th>SED cell</th><th>Field</th><th>What to confirm or adjust</th></tr></thead>
+      <thead><tr><th>SED cell</th><th>Field still open</th><th>Source</th></tr></thead>
       <tbody>
-        <tr class="mario"><td class="ref">R7</td><td class="field">Cruise lines worked with</td><td class="hint">I listed Celebrity + Princess. Confirm full list with Mario — add any others (e.g. Norwegian, Royal Caribbean, MSC, Holland America).</td></tr>
-        <tr class="mario"><td class="ref">R9 c4</td><td class="field">How many seasons per line</td><td class="hint">e.g. Celebrity: 3 seasons; Princess: 2 seasons</td></tr>
-        <tr class="mario"><td class="ref">R11</td><td class="field">Number of calls per cruise line</td><td class="hint">last season + next season counts per cruise line</td></tr>
-        <tr class="mario"><td class="ref">R13</td><td class="field">Ship max capacities</td><td class="hint">Edge-class for Celebrity (~3,000 pax); etc.</td></tr>
-        <tr class="you-fill"><td class="ref">R27</td><td class="field">German-speaking guides min/max</td><td class="hint">★ Critical. Mike: how many GSGs can you realistically recruit + train for the 2026-29 contract?</td></tr>
-        <tr class="you-fill"><td class="ref">R29</td><td class="field">Guaranteed GSGs (contractual)</td><td class="hint">★ Number you'll guarantee in the contract. Conservative.</td></tr>
-        <tr class="you-fill"><td class="ref">R33</td><td class="field">German Guide surcharge</td><td class="hint">★ Knox: € surcharge per departure for confirmed GSG. e.g. €60-100/departure.</td></tr>
-        <tr class="you-fill"><td class="ref">R37</td><td class="field">English-speaking guides min/max</td><td class="hint">Current ENG guide roster size</td></tr>
-        <tr class="mario"><td class="ref">R54</td><td class="field">GSTC certified?</td><td class="hint">Yes/no. If no, planned application?</td></tr>
-        <tr class="mario"><td class="ref">R52</td><td class="field">Environmental memberships</td><td class="hint">Add any memberships (Cozumel Reef park partner, etc.)</td></tr>
-        <tr class="mario"><td class="ref">R61</td><td class="field">Other certifications</td><td class="hint">SECTUR Distintivo S? ISO 14001? CSR? Global Compact?</td></tr>
-        <tr class="mario"><td class="ref">R59</td><td class="field">Eco-friendly vehicles</td><td class="hint">Any hybrid/electric in the fleet? Or "regularly maintained for fuel efficiency"</td></tr>
+        <tr><td class="ref">R33 (text)</td><td class="field">GSG surcharge (€)</td><td class="hint">★ Knox · €/departure or €/pax for confirmed German-speaking guide</td></tr>
+        <tr><td class="ref">R37 c3</td><td class="field">English-speaking guide roster</td><td class="hint">Mario · current min/max count of EN guides</td></tr>
       </tbody>
     </table>
 
-    <h2>Tab 3 · Private Arrangements <span class="count">8 pricing fields</span></h2>
-    <div class="section-deck">Pricing for private minivan, car, and English / German guides. Half-day = up to 4 hours; Full-day = up to 8 hours. Knox pricing call. I prefilled seat counts; you fill the € amounts.</div>
-
-    <table class="field-table">
-      <thead><tr><th>SED cell</th><th>Field</th><th>Suggested benchmark (Knox to confirm)</th></tr></thead>
-      <tbody>
-        <tr class="you-fill"><td class="ref">R6 c4</td><td class="field">Minivan · Half Day</td><td class="hint">market range: €150-200</td></tr>
-        <tr class="you-fill"><td class="ref">R6 c5</td><td class="field">Minivan · Full Day</td><td class="hint">market range: €250-320</td></tr>
-        <tr class="you-fill"><td class="ref">R7 c4</td><td class="field">Car (sedan) · Half Day</td><td class="hint">market range: €100-140</td></tr>
-        <tr class="you-fill"><td class="ref">R7 c5</td><td class="field">Car (sedan) · Full Day</td><td class="hint">market range: €180-230</td></tr>
-        <tr class="you-fill"><td class="ref">R8 c4</td><td class="field">English guide · Half Day</td><td class="hint">market range: €100-140</td></tr>
-        <tr class="you-fill"><td class="ref">R8 c5</td><td class="field">English guide · Full Day</td><td class="hint">market range: €180-230</td></tr>
-        <tr class="you-fill"><td class="ref">R9 c4</td><td class="field">German guide · Half Day</td><td class="hint">premium: €160-200</td></tr>
-        <tr class="you-fill"><td class="ref">R9 c5</td><td class="field">German guide · Full Day</td><td class="hint">premium: €260-330</td></tr>
-      </tbody>
-    </table>
+    <h2>Tab 3 · Private Arrangements <span class="count done">skipped per your instruction</span></h2>
+    <div class="section-deck">All cells in this tab are now cleared. <strong>You instructed: "Don't do anything with me in private arrangements."</strong> The tab remains visible to TUI but blank. If they ask, we can come back and price.</div>
 
     <h2>Extras the email asked for <em>(separate attachments)</em></h2>
     <div class="extras">
       <div class="label">special remarks from mariel colorado @ intercruises</div>
       <ul>
-        <li><strong>German-Speaking Guide list</strong> — name the tours where you can guarantee a GSG (e.g. Overnight Chichen Itza). Send as a short separate document or note in the email body.</li>
-        <li><strong>Ferry fleet + CZM-PCM transfer costs</strong> — provide a complete overview of the Cozumel-Playa del Carmen ferry options and your transfer pricing. Ask Mario to compile.</li>
-        <li><strong>GSG surcharge</strong> — explicit € amount per departure / pax / bus for confirmed German-speaking guide. Knox to set.</li>
-        <li><strong>Insurance policy</strong> — current civil liability + tour-operator insurance certificate. Attach as PDF to the submission email.</li>
-        <li><strong>Old SED version is NOT accepted</strong> — make sure we are using exactly the 2026-29 template Mariel sent. (We are.)</li>
-        <li><strong>SED1–SED26 existing tours</strong> — TUI wants us to submit our pricing for each existing tour in the catalog (Atlantis Submarine, Speed Boat, Tulum, Chichén Itzá, Cenote Hopping, Kuzá, etc.). For each, we either: (a) confirm we can operate it and price it, or (b) leave it blank / decline. This is a substantial pricing exercise — Knox + Mario should review each tab and decide.</li>
-      </ul>
-    </div>
-
-    <h2>What I filled <em>without confirmation</em> — review for accuracy</h2>
-    <div class="extras" style="background: rgba(62, 74, 46, 0.05); border-color: rgba(62, 74, 46, 0.2);">
-      <div class="label" style="color: var(--jungle);">my reasonable defaults</div>
-      <ul>
-        <li>Company name <strong>"Visit Cozumel Mexico, S. de R.L. de C.V."</strong> — confirm exact legal name.</li>
-        <li>Country: Mexico · City: Cozumel</li>
-        <li>Main contact: Miguel A. Burgos García + email <code>mr.burgos.miguel@gmail.com</code></li>
-        <li>Second ops contact: Mario Patricio Burgos García</li>
-        <li>Accounting email: <code>contabilidad@visitcozumel.com.mx</code></li>
-        <li>Signing position: "Director / Administrador Único" — confirm exact title</li>
-        <li>Cruise line experience: Celebrity Cruises, Princess Cruises — confirm + add any missed lines</li>
-        <li>German guide narrative: "TUI would be first German-line partner; building the GSG capability for this RFP"</li>
-        <li>Sustainability narrative: Tierra Maya cultural preserve + Cozumel reef partnership + Mayan artisan support</li>
-        <li>Guides: lead = fixed salary + bonus; specialists = per-tour contract</li>
-        <li>Training: internal training before solo departure; only licensed (INAH/SECTUR) guides</li>
+        <li>✓ <strong>German-Speaking Guide list:</strong> Already stated in Tab 2 — Overnight Chichen Itzá + Chichen Itzá day-trip with 1 guaranteed GSG. Confirm in email body.</li>
+        <li>⚠️ <strong>Ferry fleet + CZM-PCM transfer costs:</strong> Mario to compile a short attachment.</li>
+        <li>⚠️ <strong>GSG surcharge:</strong> Knox to set the € figure and fill into Tab 2 R33.</li>
+        <li>⚠️ <strong>Insurance policy:</strong> Attach current civil-liability + tour-operator insurance certificate as PDF.</li>
+        <li>✓ <strong>SED template version:</strong> we are using the 2026–29 template Mariel sent.</li>
+        <li>⚠️ <strong>SED1–SED26 existing tours:</strong> TUI wants pricing on each existing tour we can operate. Knox + Mario to review tab-by-tab and either price or decline each.</li>
       </ul>
     </div>
 
     <div class="footer">
-      Fields-to-fill · <code>visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html</code><br/>
-      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html</a><br/>
-      xlsx in progress · <code>Command_Center/Projects/TUI_Intercruises_2026/filled/TUI - Submission DRAFT - 2026-05-12.xlsx</code>
+      Fields-to-fill v2 · <code>visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-fields-to-fill.html</a> (same URL — refresh)<br/>
+      xlsx · <code>Command_Center/Projects/TUI_Intercruises_2026/filled/TUI - Submission DRAFT - 2026-05-12.xlsx</code>
     </div>
 
   </div>
