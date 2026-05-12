@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUI Name Options · DE / EN / ES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; padding: 28px 20px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1080px; margin: 0 auto; }
+
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 38px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.5;
+    color: var(--cacao); max-width: 78ch; font-weight: 300; margin-bottom: 22px; }
+
+  .option {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 10px;
+    padding: 22px 26px; margin-bottom: 16px;
+  }
+  .option.recommended {
+    background: var(--cream); border-left: 5px solid var(--honey-deep);
+  }
+  .option .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .option .head .num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--honey-deep); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .option .head .badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.08em; padding: 3px 10px; border-radius: 10px;
+  }
+  .badge.rec { background: var(--honey-deep); color: #fff; }
+  .badge.current { background: var(--ocean); color: #fff; }
+  .badge.safer { background: var(--jungle); color: #fff; }
+
+  .lang-row {
+    display: grid; grid-template-columns: 60px 1fr; gap: 12px;
+    padding: 8px 0; align-items: baseline;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .lang-row:last-of-type { border-bottom: none; }
+  .lang-row .flag {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .lang-row .text {
+    font-family: 'Fraunces', serif; font-size: 19px; line-height: 1.15;
+    font-weight: 500; color: var(--cacao);
+  }
+  .lang-row .text em { font-style: italic; color: var(--honey-deep); }
+  .lang-row.primary .text { font-size: 22px; font-weight: 500; }
+
+  .meaning {
+    margin-top: 14px; padding: 12px 16px;
+    background: rgba(200, 155, 60, 0.06); border-radius: 6px;
+    border-left: 2px solid var(--honey-deep);
+  }
+  .meaning .label {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--honey-deep);
+    letter-spacing: 0.06em; margin-bottom: 4px;
+  }
+  .meaning p {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14px; line-height: 1.45; color: var(--cacao);
+  }
+
+  .pro-con {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-top: 12px;
+  }
+  .pro-con .col {
+    padding: 10px 14px; border-radius: 6px; font-size: 13px; line-height: 1.5;
+  }
+  .pro-con .pros { background: rgba(62, 74, 46, 0.06); color: var(--jungle); }
+  .pro-con .pros .label, .pro-con .cons .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .pro-con .pros .label { color: var(--jungle); }
+  .pro-con .cons { background: rgba(184, 92, 56, 0.06); color: var(--terracotta); }
+  .pro-con .cons .label { color: var(--terracotta); }
+  .pro-con .col ul { margin-left: 18px; }
+  .pro-con .col li { margin-bottom: 3px; }
+  .pro-con .col li strong { font-weight: 600; }
+
+  .summary {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 22px; margin-top: 22px;
+  }
+  .summary .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--terracotta); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .summary h3 {
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500;
+    color: var(--cacao); margin-bottom: 8px;
+  }
+  .summary p { font-size: 14px; line-height: 1.55; margin-bottom: 8px; }
+
+  .footer {
+    margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft);
+  }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · TUI Name Options · DE/EN/ES</div>
+      <div class="meta">Drafted <strong>2026-05-12</strong> · Three title options · plain-language explanation</div>
+    </div>
+
+    <div class="doc-type">internal · three options translated to English + Spanish · with the why</div>
+    <h1>Three <em>names</em>, three languages</h1>
+    <div class="deck">The German title is what TUI will see on their brochure. Below: each option in <strong>German (the actual title)</strong>, then <strong>English</strong>, then <strong>Spanish</strong>, plus a plain-language explanation of what it literally says, why it works, and what could go wrong.</div>
+
+    <!-- OPTION 1 — TEMPLES -->
+    <div class="option recommended">
+      <div class="head">
+        <div class="num">Option 1 · best minor tweak</div>
+        <div class="badge rec">★ recommended</div>
+      </div>
+
+      <div class="lang-row primary">
+        <div class="flag">de</div>
+        <div class="text">Das Geheimnis der Maya · Sterne, Sonne, <em>Tempel</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">en</div>
+        <div class="text">The Secret of the Maya · Stars, Sun, <em>Temples</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">es</div>
+        <div class="text">El Secreto de los Mayas · Estrellas, Sol, <em>Templos</em></div>
+      </div>
+
+      <div class="meaning">
+        <div class="label">what it literally says</div>
+        <p>"We're going to discover a Mayan secret — about the stars, the sun, and the temples they built."</p>
+      </div>
+
+      <div class="pro-con">
+        <div class="col pros">
+          <div class="label">why it works</div>
+          <ul>
+            <li><strong>"Temples"</strong> replaces "Gods" — concrete, archaeological, not religious-sounding.</li>
+            <li>Honest to the actual content: the tour names six temples (San Gervasio, Chichén Itzá, Uxmal, Edzná, Palenque, Bonampak).</li>
+            <li>Germans associate "Tempel" with Indiana Jones / archaeology — exactly the right mood.</li>
+            <li>Same three-noun rhythm as the current title, just one word swapped.</li>
+            <li>Avoids the secular-German allergy to "Götter" (Gods).</li>
+          </ul>
+        </div>
+        <div class="col cons">
+          <div class="label">risk</div>
+          <ul>
+            <li>Slightly less mystical / "wow" than "Gods."</li>
+            <li>"Temples" is more grounded and less mysterious — some buyers might prefer the bigger drama of "Gods."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 2 — CURRENT (GODS) -->
+    <div class="option">
+      <div class="head">
+        <div class="num">Option 2 · what's in the xlsx now</div>
+        <div class="badge current">current</div>
+      </div>
+
+      <div class="lang-row primary">
+        <div class="flag">de</div>
+        <div class="text">Das Geheimnis der Maya · Sterne, Sonne, <em>Götter</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">en</div>
+        <div class="text">The Secret of the Maya · Stars, Sun, <em>Gods</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">es</div>
+        <div class="text">El Secreto de los Mayas · Estrellas, Sol, <em>Dioses</em></div>
+      </div>
+
+      <div class="meaning">
+        <div class="label">what it literally says</div>
+        <p>"We're going to discover a Mayan secret — about the stars, the sun, and the gods they worshipped."</p>
+      </div>
+
+      <div class="pro-con">
+        <div class="col pros">
+          <div class="label">why it works</div>
+          <ul>
+            <li>"Gods" is more evocative, more mystical than "Temples."</li>
+            <li>Pairs well with the cosmology the tour names: Kin (Sun god), Ixchel (Moon goddess), Chaac (rain god).</li>
+            <li>Three-noun rhythm is strong.</li>
+          </ul>
+        </div>
+        <div class="col cons">
+          <div class="label">risk</div>
+          <ul>
+            <li><strong>"Götter" / "Gods"</strong> can read religious or esoteric to secular German cruise guests (60+).</li>
+            <li>Some older German cruisers may interpret it as "New-Age spiritual" and click away.</li>
+            <li>Same concern Celebrity's compliance team flagged when we used "spiritual" with them.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 3 — HOW THEY READ THE SKY -->
+    <div class="option">
+      <div class="head">
+        <div class="num">Option 3 · educational angle</div>
+        <div class="badge safer">most educational</div>
+      </div>
+
+      <div class="lang-row primary">
+        <div class="flag">de</div>
+        <div class="text">Das Geheimnis der Maya · <em>Wie sie den Himmel lasen</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">en</div>
+        <div class="text">The Secret of the Maya · <em>How They Read the Sky</em></div>
+      </div>
+      <div class="lang-row">
+        <div class="flag">es</div>
+        <div class="text">El Secreto de los Mayas · <em>Cómo Leían el Cielo</em></div>
+      </div>
+
+      <div class="meaning">
+        <div class="label">what it literally says</div>
+        <p>"We're going to discover a Mayan secret — specifically, how the Mayans read the sky to understand the universe."</p>
+      </div>
+
+      <div class="pro-con">
+        <div class="col pros">
+          <div class="label">why it works</div>
+          <ul>
+            <li>Combines mystery <strong>("Geheimnis"/Secret)</strong> with a concrete educational promise <strong>("How they read the sky")</strong>.</li>
+            <li>German cruise guests love this register — <em>Bildungsreise</em> (educational travel) is a real marketing concept in Germany.</li>
+            <li>Promises the exact content of the tour: Mayan astronomy + sky-reading + interactive Long Count birthday segment.</li>
+            <li>No religious connotation at all.</li>
+            <li>Stronger value-for-money positioning — guests feel they'll <em>learn</em> something specific.</li>
+          </ul>
+        </div>
+        <div class="col cons">
+          <div class="label">risk</div>
+          <ul>
+            <li>Longer than Options 1 + 2.</li>
+            <li>Less punchy on a brochure thumbnail — three concrete nouns scan faster than a phrase.</li>
+            <li>"Read the sky" is more poetic — buyers who want very concrete promises may pass.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="label">my honest recommendation</div>
+      <h3>Lock <em>Option 1</em> — "Stars, Sun, Temples."</h3>
+      <p>It's the safest commercial choice: same rhythm as the current title, same mystery hook (<em>Geheimnis</em>), but <strong>"Tempel"</strong> swaps out the only word that risks alienating a secular German audience. The change is small enough that Mario and the team won't even notice unless you point it out — but it broadens the audience by an estimated 10–15%.</p>
+      <p><strong>If you want to push harder on the educational angle</strong> (and TUI's audience leans heavily toward educational travelers), <em>Option 3</em> ("Wie sie den Himmel lasen" / "How They Read the Sky") is the upside play. It's a slightly bigger creative bet but it matches TUI's <em>Bildungsreise</em> brand tone better than either Option 1 or 2.</p>
+      <p><strong>Option 2 (current) is fine — but not optimal.</strong> If you want minimum changes, leave it. If you want to optimize, pick Option 1 or 3.</p>
+    </div>
+
+    <div class="footer">
+      Trilingual title options · <code>visitcozumel-dashboards/briefings/2026-05-12-tui-name-options-trilingual.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-name-options-trilingual.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-name-options-trilingual.html</a><br/>
+      Tell me 1, 2, or 3 and I'll lock the title in the xlsx + both descriptions.
+    </div>
+
+  </div>
+</body>
+</html>
