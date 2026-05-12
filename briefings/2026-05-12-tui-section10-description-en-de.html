@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUI Section 10 · 300-word Description · EN + DE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; padding: 28px 20px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1200px; margin: 0 auto; }
+
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 38px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.5;
+    color: var(--cacao); max-width: 78ch; font-weight: 300; margin-bottom: 22px; }
+
+  .title-locked {
+    background: var(--cream); border-left: 4px solid var(--honey-deep);
+    border-radius: 6px; padding: 12px 18px; margin: 12px 0 22px;
+  }
+  .title-locked .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--honey-deep); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .title-locked .name {
+    font-family: 'Fraunces', serif; font-size: 19px; font-weight: 500;
+    color: var(--cacao); line-height: 1.15;
+  }
+  .title-locked .name em { font-style: italic; color: var(--honey-deep); }
+
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    margin: 16px 0;
+  }
+  @media (max-width: 900px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  .col-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .col-label {
+    font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; color: var(--cacao);
+  }
+  .col-label em { font-style: italic; color: var(--honey-deep); }
+  .word-count {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--jungle); letter-spacing: 0.06em;
+  }
+  .copy-hint {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11px; color: var(--terracotta);
+    letter-spacing: 0.06em; margin-bottom: 4px;
+  }
+
+  .copy-zone {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 24px 28px;
+    font-family: 'Inter Tight', sans-serif; font-size: 14px;
+    line-height: 1.65; color: #1a1a1a;
+  }
+  .copy-zone p { margin: 0 0 12px; }
+  .copy-zone p:last-child { margin-bottom: 0; }
+  .copy-zone p strong { font-weight: 600; color: var(--cacao); }
+  .copy-zone p em { font-style: italic; }
+  .copy-zone p.closer {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 14.5px; color: var(--cacao);
+    border-top: 1px solid var(--rule); padding-top: 12px; margin-top: 12px;
+  }
+  .copy-zone p.closer strong { font-style: normal; }
+
+  .footer {
+    margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft);
+  }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · TUI · Section 10 Description · EN + DE</div>
+      <div class="meta">Drafted <strong>2026-05-12</strong> · 300-word limit · Paste-ready for SED R114</div>
+    </div>
+
+    <div class="doc-type">internal · final Section 10 text · under 300 words each language</div>
+    <h1>The <em>300-word</em> description</h1>
+    <div class="deck">TUI's Section 10 field — the public-facing description shown to passengers on the TUI website and printed brochure. Two paste-ready versions, narrative prose (not bullets), each under the 300-word limit. Identical content in both languages.</div>
+
+    <div class="title-locked">
+      <div class="label">title · option 1 locked</div>
+      <div class="name">Das Geheimnis der Maya · Sterne, Sonne, <em>Tempel</em> — The Secret of the Maya: Stars, Sun, <em>Temples</em></div>
+    </div>
+
+    <div class="two-col">
+
+      <div>
+        <div class="col-head">
+          <div class="col-label"><em>English</em></div>
+          <div class="word-count">291 words</div>
+        </div>
+        <div class="copy-hint">↓ select the white block below ↓</div>
+        <div class="copy-zone">
+          <p>Discover the secret world of the Maya in just two hours — from the historic plaza of Cozumel to a 360° immersive dome that brings the Mayan sky to life.</p>
+
+          <p>Your journey begins on foot at <strong>Plaza de las Dos Culturas</strong>, the heart of Cozumel where Mayan and Spanish-Mexican cultures first met. Your German-speaking guide walks you through the kiosk and historic monuments, and tells the story of <strong>Ixchel</strong> — the Mayan Moon Goddess, whose pilgrimage temple at San Gervasio drew Maya seekers from across the peninsula for over a thousand years. Take time to wander, photograph, and ask questions.</p>
+
+          <p>A short stop at Cozumel's historic aircraft monument adds a quick photo opportunity on the way to the next experience.</p>
+
+          <p>Then step inside Mexico's premier 360° fulldome cinema for the 20-minute film <em>"Mayan Archaeoastronomy: Observers of the Universe"</em> in German narration. The film tours six great Mayan temples — San Gervasio on Cozumel, Chichén Itzá, Uxmal, Edzná, Palenque, and Bonampak — showing how each was built as a calendar in stone, aligned to the Sun god <strong>Kin</strong>, the Moon, and Venus. A feast of colors and sounds in stunning 360° visuals, like being inside a beautiful stylized painting.</p>
+
+          <p>The highlight of the day follows: a 25-minute interactive live segment with our astronomy guide. Volunteer guests' birthdays are translated into the <strong>Mayan Long Count</strong>, and the dome projects the actual night sky over Cozumel as it stood the day each guest was born. The Mayan calendar wheel comes alive overhead.</p>
+
+          <p class="closer">A short walk back to the cruise pier closes the tour. All-weather indoor cinema. <strong>Not a beach tour</strong> — a journey to what the Maya themselves saw when they looked at the sky.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="col-head">
+          <div class="col-label"><em>Deutsch</em></div>
+          <div class="word-count">285 Wörter</div>
+        </div>
+        <div class="copy-hint">↓ den weissen Block unten auswählen ↓</div>
+        <div class="copy-zone">
+          <p>Entdecken Sie die geheime Welt der Maya in nur zwei Stunden — von Cozumels historischer Plaza bis zu einer 360°-Kuppel, die den Maya-Himmel zum Leben erweckt.</p>
+
+          <p>Ihre Reise beginnt zu Fuss am <strong>Plaza de las Dos Culturas</strong>, dem Herzen Cozumels, wo sich Maya- und spanisch-mexikanische Kultur erstmals begegneten. Ihr deutschsprachiger Reiseleiter führt Sie durch den Kiosk und die historischen Monumente und erzählt die Geschichte von <strong>Ixchel</strong> — der Mondgöttin der Maya, deren Wallfahrtstempel in San Gervasio über tausend Jahre lang Maya aus der ganzen Halbinsel anzog. Zeit zum Schlendern, Fotografieren und Fragenstellen.</p>
+
+          <p>Ein kurzer Stopp am historischen Flugzeug-Denkmal Cozumels bietet eine schnelle Fotogelegenheit auf dem Weg zur nächsten Erlebnisstation.</p>
+
+          <p>Dann betreten Sie Mexikos modernste 360°-Kuppel für den 20-minütigen Kuppelfilm <em>"Mayan Archaeoastronomy: Observers of the Universe"</em> in deutscher Erzählung. Der Film führt Sie durch sechs grosse Maya-Tempel — San Gervasio auf Cozumel, Chichén Itzá, Uxmal, Edzná, Palenque und Bonampak — und zeigt, wie jeder als steinerner Kalender erbaut wurde, ausgerichtet auf den Sonnengott <strong>Kin</strong>, den Mond und Venus. Ein Fest aus Farben und Klängen in atemberaubenden 360°-Visualisierungen, als wären Sie in einem stilisierten Gemälde.</p>
+
+          <p>Das Highlight des Tages folgt: ein 25-minütiges interaktives Live-Segment mit unserem Astronomie-Guide. Geburtsdaten freiwilliger Gäste werden in den <strong>Maya-Long-Count</strong> übersetzt, und die Kuppel projiziert den tatsächlichen Nachthimmel über Cozumel, wie er am Geburtstag jedes Gastes aussah. Das Maya-Kalenderrad wird über Ihnen lebendig.</p>
+
+          <p class="closer">Ein kurzer Spaziergang zurück zum Kreuzfahrtterminal schliesst die Tour. Wetterunabhängiges Indoor-Kino. <strong>Keine Strandtour</strong> — sondern eine Reise zu dem, was die Maya selbst sahen, wenn sie zum Himmel blickten.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      Section 10 description · <code>visitcozumel-dashboards/briefings/2026-05-12-tui-section10-description-en-de.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-section10-description-en-de.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-12-tui-section10-description-en-de.html</a><br/>
+      Paste into the VISIT tab · Section 10 · row 114. Want me to write it into the xlsx for you?
+    </div>
+
+  </div>
+</body>
+</html>
