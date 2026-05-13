@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebrity Excursion · 10 Name Options · v3.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; padding: 28px 20px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1080px; margin: 0 auto; }
+
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+  }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 40px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 14.5px; line-height: 1.5;
+    color: var(--cacao); max-width: 78ch; font-weight: 300; margin-bottom: 22px; }
+  .deck strong { font-weight: 500; }
+
+  h2 {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 26px; letter-spacing: -0.005em;
+    margin: 32px 0 8px; color: var(--cacao);
+    padding-bottom: 4px; border-bottom: 1px solid var(--rule);
+  }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  .section-deck {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13.5px; color: var(--cacao-soft); margin-bottom: 12px;
+    max-width: 80ch;
+  }
+
+  .titles-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    margin: 12px 0 22px;
+  }
+  .title-card {
+    background: #ffffff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .title-card.sellable { border-left: 4px solid var(--ocean); }
+  .title-card.wild { border-left: 4px solid var(--terracotta); background: #fffdf9; }
+  .title-card .num {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    letter-spacing: 0.12em; margin-bottom: 4px;
+  }
+  .title-card.sellable .num { color: var(--ocean); }
+  .title-card.wild .num { color: var(--terracotta); }
+  .title-card .name {
+    font-family: 'Fraunces', serif; font-size: 20px; line-height: 1.15;
+    font-weight: 500; color: var(--cacao); margin-bottom: 8px;
+  }
+  .title-card .name em { font-style: italic; color: var(--honey-deep); }
+  .title-card .blurb {
+    font-size: 13px; line-height: 1.55; color: var(--ink); margin-bottom: 6px;
+  }
+  .title-card .for {
+    font-size: 11.5px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+  }
+  .title-card.sellable .for { color: var(--ocean); }
+  .title-card.wild .for { color: var(--terracotta); }
+
+  .next-block {
+    background: rgba(27, 58, 75, 0.06);
+    border-left: 4px solid var(--ocean);
+    border-radius: 8px; padding: 16px 22px; margin: 18px 0;
+  }
+  .next-block .label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--ocean); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .next-block h3 {
+    font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500;
+    color: var(--cacao); margin-bottom: 6px;
+  }
+  .next-block ul { margin-left: 22px; }
+  .next-block li { font-size: 13.5px; line-height: 1.55; margin-bottom: 5px; }
+  .next-block li strong { color: var(--cacao); font-weight: 600; }
+
+  .footer {
+    margin-top: 28px; padding-top: 12px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft);
+  }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · Celebrity Excursion · v3.2 Name Options</div>
+      <div class="meta">Drafted <strong>2026-05-13</strong> · Pick a name · then I roll all the other edits</div>
+    </div>
+
+    <div class="doc-type">internal · 10 names · 5 Celebrity-sellable + 5 wild · for the Maya watercolor + dome excursion</div>
+    <h1>Ten <em>names</em>.</h1>
+    <div class="deck">"A Mayan Family Day" is too generic — Celebrity needs a name that <strong>promises an experience</strong> and triggers a click. Below: 5 names built in the Celebrity-catalog pattern (Hidden / Awakening / Authentic / Inside / Discovery framings), and 5 wild ones for the brochure cover hook.</div>
+
+    <h2>What a sellable <em>Celebrity</em> excursion name does</h2>
+    <div class="section-deck">From scanning Celebrity's Cozumel shelf — beach, ruins, snorkel, culinary. The ones that sell hard share a pattern.</div>
+    <ul style="margin-left: 22px; font-size: 13.5px; line-height: 1.65; color: var(--cacao);">
+      <li><strong>Promises transformation, not just description.</strong> "Awakening," "Discovery," "Encounter" beat "Visit," "Tour," "Workshop."</li>
+      <li><strong>Has a premium signal.</strong> "Hidden," "Authentic," "Behind," "Inside," "Private," "Premium."</li>
+      <li><strong>Pairs concrete with abstract.</strong> "Stone & Sky," "Brushes & Cosmos," "X & Y" rhythm reads premium.</li>
+      <li><strong>Names the cultural anchor.</strong> "Mayan" cues the buyer; "Cozumel" anchors the place.</li>
+      <li><strong>Family signal when applicable.</strong> Not "Family Day" (boring) — but "for every age," "across generations" through the description; the title is allowed to be premium.</li>
+    </ul>
+
+    <h2>Five <em>sellable</em> · Celebrity-pattern</h2>
+    <div class="section-deck">Each follows a tested Celebrity-shelf framing. Brochure-scannable. Buyer reads the title and immediately wants more info.</div>
+
+    <div class="titles-grid">
+
+      <div class="title-card sellable">
+        <div class="num">S1 · awakening</div>
+        <div class="name">Mayan <em>Awakening</em> · Watercolors &amp; The Cosmos</div>
+        <div class="blurb">"Awakening" is one of Celebrity's most repeated premium words. Promises transformation. Then concrete: watercolors + cosmos. Pairs abstract + concrete in 5 words.</div>
+        <div class="for">tone · premium transformation</div>
+      </div>
+
+      <div class="title-card sellable">
+        <div class="num">S2 · hidden</div>
+        <div class="name">Cozumel's <em>Hidden Mayan</em> · A Painter's Discovery</div>
+        <div class="blurb">"Hidden" is Celebrity-shelf gold (used in Hidden Mayan Treasures, Hidden Paradise, etc.). "Painter's" reads premium without saying "workshop." "Discovery" closes the loop.</div>
+        <div class="for">tone · premium discovery</div>
+      </div>
+
+      <div class="title-card sellable">
+        <div class="num">S3 · authentic</div>
+        <div class="name">Authentic <em>Mayan</em> · Brushes &amp; The 360° Cosmos</div>
+        <div class="blurb">"Authentic" is the Celebrity guest's favorite word. "Brushes" is concrete + premium. "The 360° Cosmos" signals the dome without naming it. Three premium signals stacked.</div>
+        <div class="for">tone · authentic + immersive</div>
+      </div>
+
+      <div class="title-card sellable">
+        <div class="num">S4 · behind</div>
+        <div class="name">Behind the <em>Mayan Sky</em> · A Watercolor Workshop</div>
+        <div class="blurb">"Behind the Sky" is a poetic premium hook ("Behind X" pattern from Celebrity's culinary line). "A Watercolor Workshop" is the concrete promise — no ambiguity.</div>
+        <div class="for">tone · poetic premium</div>
+      </div>
+
+      <div class="title-card sellable">
+        <div class="num">S5 · inside</div>
+        <div class="name">Inside the <em>Mayan Cosmos</em> · A Painter's Cozumel Day</div>
+        <div class="blurb">"Inside" is Celebrity's classic immersive framing. Names both halves: the cosmos (dome) + the painter's day (workshop). The most descriptive of the five.</div>
+        <div class="for">tone · descriptive premium</div>
+      </div>
+
+    </div>
+
+    <h2>Five <em>wild</em> · for the brochure cover</h2>
+    <div class="section-deck">Evocative, mysterious, conversation-starters. Best as cover-image tagline behind whichever sellable name you pick. They don't have to make sense — they have to make the buyer stop scrolling.</div>
+
+    <div class="titles-grid">
+
+      <div class="title-card wild">
+        <div class="num">W1 · mystical</div>
+        <div class="name">Where <em>Ixchel</em> Listens</div>
+        <div class="blurb">The Moon goddess of San Gervasio (here on Cozumel) hears your guest's wishes. Mythological, intimate, female-coded. Strong with the wellness-curious 50+ buyer.</div>
+        <div class="for">tone · mystical female</div>
+      </div>
+
+      <div class="title-card wild">
+        <div class="num">W2 · primal</div>
+        <div class="name">The <em>Jaguar's</em> Watercolor</div>
+        <div class="blurb">Balam, the Mayan jaguar carrying the stars on his skin (named in the dome film), now holding a brush. Primal, strange, photographable.</div>
+        <div class="for">tone · primal wild</div>
+      </div>
+
+      <div class="title-card wild">
+        <div class="num">W3 · poetic</div>
+        <div class="name">Brushes Beneath the <em>Cosmos</em></div>
+        <div class="blurb">A pure image: brushes in the family's hands, the cosmos overhead. Atmospheric. Quiet. Premium.</div>
+        <div class="for">tone · atmospheric poetic</div>
+      </div>
+
+      <div class="title-card wild">
+        <div class="num">W4 · provocative</div>
+        <div class="name">A <em>Brush</em> With the Gods</div>
+        <div class="blurb">Double meaning — a brush (paintbrush) + a brush (close call) with the Mayan gods. Slightly cheeky, slightly cinematic.</div>
+        <div class="for">tone · cheeky cinematic</div>
+      </div>
+
+      <div class="title-card wild">
+        <div class="num">W5 · mysterious</div>
+        <div class="name">What the <em>Mayans</em> Saw</div>
+        <div class="blurb">Promise + curiosity gap. Three words. Reads as a discovery, demands an answer. Brochure-cover gold.</div>
+        <div class="for">tone · curiosity gap</div>
+      </div>
+
+    </div>
+
+    <h2>My <em>recommendation</em></h2>
+    <p style="font-size: 14.5px; line-height: 1.65; color: var(--cacao); margin-bottom: 14px; max-width: 78ch;">
+      <strong>S1 · "Mayan Awakening · Watercolors & The Cosmos"</strong> as the SED tour name (most Celebrity-pattern-correct, sellable, premium without overpromising), paired with <strong>W3 · "Brushes Beneath the Cosmos"</strong> as the brochure-cover tagline.
+    </p>
+    <p style="font-size: 14.5px; line-height: 1.65; color: var(--cacao); max-width: 78ch;">
+      Second pick: <strong>S2 · "Cozumel's Hidden Mayan · A Painter's Discovery"</strong> + <strong>W5 · "What the Mayans Saw"</strong>.
+    </p>
+
+    <div class="next-block">
+      <div class="label">other v3.2 edits captured · I'll roll them after you pick the name</div>
+      <h3>What also changed in your last note</h3>
+      <ul>
+        <li><strong>Painter is unnamed in customer copy</strong> — called "our Cozumel artist" or "the painter." Brand-protective (Doña Marta lesson).</li>
+        <li><strong>New 3-stop flow:</strong> (1) <strong>Monumentos al Mestizaje</strong> photo stop with the Ixchel replica · (2) <strong>Tierra Maya</strong> watercolor workshop · (3) <strong>The 360° semisphere</strong> dome experience (60 min: 20-min film + live astronomer + Mayan calendar + Q&A).</li>
+        <li><strong>Order:</strong> paint first, see the cosmos second. The painter narrates the deities while guests paint — primes them for the dome.</li>
+        <li><strong>Workshop length:</strong> 75 min → 45 min (per your note).</li>
+        <li><strong>Templates expand to 8:</strong> Kin, Ixchel, Noh Ek (Venus), the Jaguar (Balam), the Caracol / conch shell, the Mayan calendar wheel, the World Tree, the cosmic turtle.</li>
+        <li><strong>Family hook adds:</strong> "Learn the Mayan calendar — which is different from the human/Western calendar."</li>
+        <li><strong>Never say:</strong> "planetarium" · "walking distance from the pier" · the painter's name. ALWAYS use "360° semisphere" or "360° immersive cinema."</li>
+        <li>Light tasting moves to <em>after</em> the dome / on the way back to the ship.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      Names brainstorm · <code>visitcozumel-dashboards/briefings/2026-05-13-celebrity-names-brainstorm-v3-2.html</code><br/>
+      Live link · <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-13-celebrity-names-brainstorm-v3-2.html">visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-13-celebrity-names-brainstorm-v3-2.html</a><br/>
+      Pick a sellable name (S1-S5) + optionally a cover tagline (W1-W5) and I'll roll v3.2 (new flow + Monumentos stop + reverse order + 8 templates + painter-anonymous everywhere) into the concept HTML + email.
+    </div>
+
+  </div>
+</body>
+</html>
