@@ -48,8 +48,19 @@
     font-size: 13px; color: var(--cacao-soft); text-align: right; }
   .doc-meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
 
-  .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center;
-    padding: 70px 0; max-width: 1000px; }
+  .hero-content { flex: 1; display: grid; grid-template-columns: 1.35fr 1fr;
+    gap: 64px; align-items: center; padding: 70px 0; }
+  .hero-text { max-width: 820px; }
+  .hero-image-wrap { display: flex; flex-direction: column; align-items: center; }
+  .hero-image-wrap img { width: 100%; max-width: 480px; height: auto;
+    border-radius: 6px; box-shadow: 0 18px 50px rgba(31,19,8,0.22); }
+  .hero-image-caption { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 12.5px; color: var(--cacao-soft); margin-top: 14px; text-align: center;
+    max-width: 360px; line-height: 1.5; }
+  @media (max-width: 900px) {
+    .hero-content { grid-template-columns: 1fr; gap: 36px; }
+    .hero-image-wrap img { max-width: 360px; }
+  }
   .doc-type {
     font-family: 'Fraunces', serif; font-style: italic;
     font-size: 17px; color: var(--terracotta); margin-bottom: 28px;
@@ -630,11 +641,17 @@
   </div>
 
   <div class="hero-content">
-    <div class="doc-type">A Shore Excursion Proposal · For Matthew Kaye &amp; Adam Cullen, Celebrity Cruises</div>
-    <h1 class="hero-title">Beyond the <em>Mayan Sky</em>.<br/>A watercolor workshop.</h1>
-    <p class="hero-deck">
-      <em>What the Mayans saw.</em> A 3-stop family Cozumel day: meet the monument of <strong>Ixchel</strong>, the Mayan Moon goddess, on the malec&oacute;n &mdash; then paint a Mayan god in watercolor with a Cozumel artist at a jungle preserve &mdash; then step inside a <strong>360&deg; semisphere</strong> for an interactive 60-minute Mayan archaeoastronomy experience with a <strong>local astronomer</strong>. The watercolor goes home. The Mayan sky stays.
-    </p>
+    <div class="hero-text">
+      <div class="doc-type">A Shore Excursion Proposal · For Matthew Kaye &amp; Adam Cullen, Celebrity Cruises</div>
+      <h1 class="hero-title">Beyond the <em>Mayan Sky</em>.<br/>A watercolor workshop.</h1>
+      <p class="hero-deck">
+        <em>What the Mayans saw.</em> A 3-stop family Cozumel day: meet the monument of <strong>Ixchel</strong>, the Mayan Moon goddess, on the malec&oacute;n &mdash; then paint a Mayan god in watercolor with a Cozumel artist at a jungle preserve &mdash; then step inside a <strong>360&deg; semisphere</strong> for an interactive 60-minute Mayan archaeoastronomy experience with a <strong>local astronomer</strong>. The watercolor goes home. The Mayan sky stays.
+      </p>
+    </div>
+    <div class="hero-image-wrap">
+      <img src="images/ixchel-moon-goddess-illustration.png" alt="Ixchel &middot; the Mayan Moon goddess" />
+      <div class="hero-image-caption">Ixchel &middot; the Mayan Moon goddess &middot; the thread that runs through the day</div>
+    </div>
   </div>
 </section>
 
@@ -775,37 +792,6 @@
       </div>
       <div class="photo" style="background-image: url('images/ixchel-moon-goddess-illustration.png'); aspect-ratio: 4/3; background-size: contain; background-repeat: no-repeat; background-position: center; background-color: var(--cream-soft);">
         <div class="label">Ixchel &middot; the Mayan Moon goddess &middot; reference illustration for the template</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- IXCHEL FEATURE -->
-<section class="chapter" style="padding-bottom: 0;">
-  <div class="inner">
-    <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: center; padding: 12px 0 24px;">
-      <div>
-        <img src="images/ixchel-moon-goddess-illustration.png"
-             alt="Ixchel · the Mayan Moon goddess · watercolor illustration"
-             style="width: 100%; height: auto; border-radius: 6px; box-shadow: 0 12px 36px rgba(31,19,8,0.18);" />
-        <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--cacao-soft); margin-top: 10px; text-align: center;">
-          Ixchel · the Mayan Moon goddess · reference illustration for the template
-        </div>
-      </div>
-      <div>
-        <div class="section-label">The thread of the day</div>
-        <h2 class="chap" style="margin-bottom: 14px;">Meet <em>Ixchel</em>. Paint her. See her overhead.</h2>
-        <p style="font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.55; color: var(--cacao); margin-bottom: 14px;">
-          Ixchel is the Mayan Moon goddess of water, weaving, medicine, and childbirth.
-          Her pilgrimage temple at San Gervasio &mdash; here on Cozumel &mdash; drew Maya seekers
-          from across the Yucat&aacute;n peninsula for over a thousand years.
-        </p>
-        <p style="font-family: 'Inter Tight', sans-serif; font-size: 14.5px; line-height: 1.7; color: var(--ink);">
-          The family meets her in bronze on the malec&oacute;n.
-          They paint her in watercolor at Tierra Maya.
-          They hear her named overhead on the 360&deg; dome.
-          The watercolor goes home with them as the memory of the day they met the Moon goddess of Cozumel.
-        </p>
       </div>
     </div>
   </div>
