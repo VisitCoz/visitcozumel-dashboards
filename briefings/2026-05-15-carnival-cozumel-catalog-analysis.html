@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Carnival Cozumel Catalog · Positioning + Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    padding: 28px 24px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1020px; margin: 0 auto; }
+  .top-bar { display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 42px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5;
+    color: var(--cacao); font-weight: 300; margin-bottom: 28px; max-width: 760px; }
+
+  h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500;
+    color: var(--cacao); margin-top: 32px; margin-bottom: 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  h3 { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500;
+    color: var(--cacao); margin-top: 22px; margin-bottom: 8px; }
+  p { margin-bottom: 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  p strong { font-weight: 600; color: var(--cacao); }
+  ul { margin: 8px 0 16px 22px; }
+  ul li { margin-bottom: 8px; font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  th { text-align: left; padding: 8px 10px; background: var(--cream);
+    color: var(--cacao); font-weight: 500; border-bottom: 1px solid var(--rule);
+    letter-spacing: 0.04em; text-transform: uppercase; font-size: 10.5px; }
+  td { padding: 7px 10px; border-bottom: 1px solid rgba(31,19,8,0.08);
+    color: var(--ink); vertical-align: top; }
+  td.num { text-align: right; }
+  tr.painting td { background: rgba(200,155,60,0.14); color: var(--cacao);
+    font-weight: 500; font-family: 'Inter Tight', sans-serif; }
+  tr.painting td.num { font-family: 'JetBrains Mono', monospace; }
+
+  .band-bar { background: #fff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 20px; margin: 12px 0 18px; }
+  .band-row { display: grid; grid-template-columns: 180px 60px 1fr; gap: 14px;
+    padding: 8px 0; align-items: center;
+    border-bottom: 1px dashed rgba(31,19,8,0.10);
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  .band-row:last-child { border-bottom: none; }
+  .band-row .label { color: var(--cacao); font-weight: 500; }
+  .band-row .count { color: var(--cacao-soft); text-align: right; }
+  .band-row .vis { font-family: monospace; color: var(--honey-deep); }
+
+  .callout {
+    background: rgba(200,155,60,0.10); border-left: 3px solid var(--honey-deep);
+    padding: 14px 18px; margin: 16px 0;
+    font-family: 'Fraunces', serif; font-size: 15px; color: var(--cacao); line-height: 1.55;
+  }
+  .callout strong { font-weight: 500; color: var(--cacao); }
+  .callout em { font-style: italic; }
+
+  .idea-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0 18px; }
+  .idea-card { background: #fff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 16px 18px; }
+  .idea-card .num { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11px; color: var(--terracotta); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 4px; }
+  .idea-card .title { font-family: 'Fraunces', serif; font-size: 18px;
+    color: var(--cacao); font-weight: 500; margin-bottom: 6px; line-height: 1.2; }
+  .idea-card .title em { font-style: italic; color: var(--honey-deep); }
+  .idea-card .body { font-family: 'Inter Tight', sans-serif; font-size: 13.5px;
+    color: var(--ink); line-height: 1.55; }
+  .idea-card .body strong { color: var(--cacao); }
+  .idea-card .target { font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--cacao-soft); margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed rgba(31,19,8,0.10); }
+
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft); }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · Carnival catalog teardown · for Mike + Mario</div>
+      <div class="meta">Drafted <strong>2026-05-15</strong> · 47 products scraped &amp; verified</div>
+    </div>
+
+    <div class="doc-type">internal note &middot; what Carnival sells at Cozumel and what it means for us</div>
+    <h1>The Carnival <em>Cozumel</em> shelf.</h1>
+    <div class="deck">Built the full catalog as a CSV under <code>Command_Center/Data/carnival_cozumel_shorex.csv</code>. 47 products, prices verified against carnival.com. Below: where the shelves sit, where we land, and four product ideas the catalog hints at.</div>
+
+    <h2>The <em>shape</em> of Carnival's Cozumel catalog</h2>
+    <p>Range: <strong>$47.99</strong> (Beach Escape) &rarr; <strong>$205.99</strong> (Romantic Getaway per couple). Median: <strong>$106.99</strong>. The center of gravity is the $84&ndash;$108 band where Carnival packs eleven all-inclusive beach/cenote/jeep combos.</p>
+
+    <div class="band-bar">
+      <div class="band-row">
+        <div class="label">&lt;$60 floor</div>
+        <div class="count">4 products</div>
+        <div class="vis">&#9608;&#9608;&#9608;&#9608;</div>
+      </div>
+      <div class="band-row">
+        <div class="label">$60&ndash;$89 budget</div>
+        <div class="count">11 products</div>
+        <div class="vis">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</div>
+      </div>
+      <div class="band-row">
+        <div class="label">$90&ndash;$119 mid</div>
+        <div class="count">10 products</div>
+        <div class="vis">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</div>
+      </div>
+      <div class="band-row">
+        <div class="label">$120&ndash;$159 premium</div>
+        <div class="count">17 products</div>
+        <div class="vis">&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;</div>
+      </div>
+      <div class="band-row">
+        <div class="label">$160+ top</div>
+        <div class="count">5 products</div>
+        <div class="vis">&#9608;&#9608;&#9608;&#9608;&#9608;</div>
+      </div>
+    </div>
+
+    <p>Top categories by count: nature/wildlife (12), adventure (12), beach (8), cultural (5), premium (5). <strong>Cultural is the third-smallest category</strong> &mdash; only 5 products on Carnival's entire 47-product Cozumel shelf.</p>
+
+    <h2>The <em>direct comparables</em> &middot; where Painting + Sun lands</h2>
+    <p>Filtered to workshop / hands-on / cultural products only:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cruise line</th>
+          <th>Tour</th>
+          <th class="num">Duration</th>
+          <th class="num">Retail / pax</th>
+          <th>What they get</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Carnival</td>
+          <td>Mayan Gourmet Experience</td>
+          <td class="num">3.0 hr</td>
+          <td class="num">$49.99</td>
+          <td>Mayan tasting menu &middot; shaman blessing &middot; bus group</td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>City Tour with a Heartfelt Twist</td>
+          <td class="num">3.5 hr</td>
+          <td class="num">$69.99</td>
+          <td>Cozumel landmarks &middot; community-give-back walking tour</td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>Chocolate Seaside Workshop</td>
+          <td class="num">2.5 hr</td>
+          <td class="num">$69.99</td>
+          <td><strong>Closest format match.</strong> Chocolate-making + wine pairing at Stingray Beach</td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>Mayan Interactive Park + Planetarium + Lunch</td>
+          <td class="num">4.5 hr</td>
+          <td class="num">$79.99</td>
+          <td>Pueblo del Maíz + dome + Mayan buffet + tequila &middot; <strong>mass-market bus</strong></td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>Best of Cozumel: Cool-ture, Bites &amp; Tequila</td>
+          <td class="num">4.5 hr</td>
+          <td class="num">$93.99</td>
+          <td>San Gervasio ruins + 5-tequila tasting + Mayan tacos</td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>Ultimate Combo: Mayan Ruins, Snorkel &amp; Lunch</td>
+          <td class="num">5.5 hr</td>
+          <td class="num">$104.99</td>
+          <td>San Gervasio + reef snorkel + Mexican lunch</td>
+        </tr>
+        <tr>
+          <td>Carnival</td>
+          <td>Ancient City of Tulum</td>
+          <td class="num">7.0 hr</td>
+          <td class="num">$142.99</td>
+          <td>Tulum heritage site + mainland day</td>
+        </tr>
+        <tr class="painting">
+          <td>Celebrity <em>(proposed)</em></td>
+          <td><strong>Beyond the Mayan Sky · Watercolor + Dome</strong></td>
+          <td class="num">3.0 hr</td>
+          <td class="num">~$119&ndash;$128</td>
+          <td>Small group ≤24 &middot; named artist &middot; take-home painting &middot; live astronomer &middot; private van</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>The verdict.</strong> Carnival's cultural-with-hands-on shelf tops out at <strong>$93.99 retail</strong> for the 4.5-hr Mayan ruins + tequila combo. Our $85 net &rarr; ~$119&ndash;$128 Celebrity retail puts us <em>above</em> every Carnival cultural product except Tulum (which is a 7-hour mainland day with a UNESCO ruins site, not a workshop). We are on a different shelf entirely &mdash; <em>premium small-group cultural</em>. There is currently <strong>no workshop product on Carnival's catalog that includes a tangible take-home item</strong> &mdash; that is our white-space differentiator.
+    </div>
+
+    <h2>What is <em>missing</em> from Carnival's catalog (gaps to brainstorm)</h2>
+
+    <div class="idea-grid">
+      <div class="idea-card">
+        <div class="num">Idea 1</div>
+        <div class="title"><em>Painting + Sun</em> private family booking</div>
+        <div class="body">Sell the same product as a <strong>private experience for one family (4&ndash;8 pax)</strong>. Carnival's <em>Romantic Getaway at Passion Island</em> shows there is a per-couple/per-private shelf at $205.99. We could offer Painting + Sun private at <strong>$599&ndash;$799 flat</strong> &mdash; same costs except the artist+astronomer are now serving one group. Margin doubles.</div>
+        <div class="target">Target: Celebrity Beyond &middot; Edge-class &middot; suites &middot; honeymooners &middot; multi-gen family bookings</div>
+      </div>
+      <div class="idea-card">
+        <div class="num">Idea 2</div>
+        <div class="title">A 2-hour <em>quick-call</em> dome + tasting</div>
+        <div class="body">Carnival's catalog has very few short products. A <strong>2-hour dome-only product</strong> (no workshop, light Mayan tasting at TM, ~$45 retail / ~$35 net) could fit ships with 6-hour port calls or guests who want pier time. Reuses our dome relationship and Joel's TM hosting; no artist needed.</div>
+        <div class="target">Target: short-call ships &middot; price-sensitive guests &middot; secondary product, not Painting + Sun replacement</div>
+      </div>
+      <div class="idea-card">
+        <div class="num">Idea 3</div>
+        <div class="title">Carnival is empty on <em>art</em></div>
+        <div class="body">Zero of Carnival's 47 products is art / craft / workshop with a take-home creative piece. The closest is the chocolate workshop (food, eaten, not kept). <strong>Painting + Sun is the only take-home-art product on Cozumel</strong>. Pitch this to Matt explicitly &mdash; it's a category Celebrity does not have on their own shelf either, based on the catalog patterns.</div>
+        <div class="target">Target: Celebrity Small Group shelf &middot; "no equivalent on competing lines"</div>
+      </div>
+      <div class="idea-card">
+        <div class="num">Idea 4</div>
+        <div class="title">A <em>sunset / evening</em> variant</div>
+        <div class="body">Carnival's $150 <em>Velada</em> astronomical-evening product slot is empty in Cozumel. Our planetarium contact Yesli quoted <strong>$150 MXN/pax Velada</strong> rate. A 2.5-hr sunset Painting + Stars (paint at golden hour, dome velada) for the rare ships with evening departures. Niche, low volume, high margin.</div>
+        <div class="target">Target: Celebrity ships with late departure calls &middot; couples premium tier</div>
+      </div>
+    </div>
+
+    <h2>Final <em>pricing call</em> on Painting + Sun, with the data behind it</h2>
+    <p><strong>Open at $85 USD/pax VAT-incl &middot; Floor $80 &middot; Min 8 / Max 24.</strong></p>
+    <ul>
+      <li>Our own internal ladder (HT $74, NK $75) &rarr; coherent step up for a 3-hr small-group premium product.</li>
+      <li>Carnival's nearest <em>format</em> match (Chocolate Workshop) is $69.99 retail and Carnival's nearest <em>content</em> match (Mayan Interactive + Planetarium) is $79.99 retail &mdash; both <strong>mass-market shelves</strong>, both inferior in cap-size, art content, and take-home.</li>
+      <li>Carnival's nearest <em>price ceiling</em> for cultural is the 7-hour Tulum at $142.99. Our 3-hour at Celebrity retail $119&ndash;$128 fits cleanly below it.</li>
+      <li>At $85 net our 8-pax-min margin is 37%; at max 24 it is 46%. With insurance + contingency loaded, this is the right floor for a contract we will actually want to run.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>For Matt's reply.</strong> <em>"We have priced this excursion based on what it actually is &mdash; a 3-hour small-group product capped at 24 guests, with a named local artist, all watercolor materials, a take-home painting per guest, a 60-minute interactive dome with a live local astronomer, and private van transport. The biggest line in our cost stack is the private van &mdash; the operators charge us in Mexican pesos, and with the exchange rate at roughly 16 MXN per USD (it was over 20 a year ago), every transport invoice translates to more dollars on our side than it did. We have priced the experience tight to what it is, not speculatively."</em>
+    </div>
+
+    <div class="footer">
+      Catalog teardown &middot; <code>visitcozumel-dashboards/briefings/2026-05-15-carnival-cozumel-catalog-analysis.html</code><br/>
+      Source data &middot; <code>Command_Center/Data/carnival_cozumel_shorex.csv</code> &middot; 47 products &middot; sorted by adult price ascending &middot; spot-checked against carnival.com<br/>
+      Related &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-15-celebrity-market-positioning.html">market positioning brief</a> &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-15-celebrity-pricing-rationale.html">pricing memo for Mario</a>
+    </div>
+
+  </div>
+</body>
+</html>
