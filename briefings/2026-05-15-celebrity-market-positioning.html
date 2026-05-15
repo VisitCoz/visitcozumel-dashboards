@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebrity Market Positioning · Beyond the Mayan Sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    padding: 28px 24px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 940px; margin: 0 auto; }
+  .top-bar { display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 42px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5;
+    color: var(--cacao); font-weight: 300; margin-bottom: 28px; max-width: 760px; }
+
+  h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500;
+    color: var(--cacao); margin-top: 32px; margin-bottom: 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  p { margin-bottom: 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  p strong { font-weight: 600; color: var(--cacao); }
+
+  /* THE BIG COMPARISON */
+  .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin: 18px 0 24px; }
+  .comp-card { border-radius: 10px; padding: 22px 22px 24px;
+    border: 1px solid var(--rule); background: #fff; }
+  .comp-card.carnival { background: #F4F0E6; }
+  .comp-card.celebrity { background: linear-gradient(135deg, rgba(200,155,60,0.10), rgba(27,58,75,0.04));
+    border: 2px solid var(--honey-deep); }
+  .comp-card .tier-label { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--terracotta); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 8px; }
+  .comp-card .cruise-name { font-family: 'Fraunces', serif; font-size: 26px;
+    font-weight: 400; color: var(--cacao); margin-bottom: 4px; }
+  .comp-card .cruise-name em { font-style: italic; color: var(--honey-deep); }
+  .comp-card .product { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 15px; color: var(--cacao); line-height: 1.4; margin-bottom: 14px; }
+  .comp-card .meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .comp-card .pill { font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    background: rgba(31,19,8,0.06); color: var(--cacao); padding: 3px 9px;
+    border-radius: 12px; letter-spacing: 0.04em; }
+  .comp-card .price-anchor { display: flex; align-items: baseline; gap: 8px;
+    padding: 12px 0; border-top: 1px solid rgba(31,19,8,0.10);
+    border-bottom: 1px solid rgba(31,19,8,0.10); margin: 4px 0 14px; }
+  .comp-card .price-anchor .price { font-family: 'Fraunces', serif;
+    font-size: 36px; font-weight: 400; color: var(--cacao); line-height: 1; }
+  .comp-card .price-anchor .price em { font-style: italic; color: var(--honey-deep); font-size: 22px; }
+  .comp-card .price-anchor .label { font-size: 11px; color: var(--cacao-soft);
+    letter-spacing: 0.08em; text-transform: uppercase; }
+  .comp-card .takeaway { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13.5px; color: var(--cacao); line-height: 1.5; }
+  .comp-card .takeaway strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .arrow-row { display: flex; justify-content: center; align-items: center;
+    gap: 18px; margin: -8px 0 0; font-family: 'Fraunces', serif;
+    font-style: italic; color: var(--cacao-soft); font-size: 14px; }
+  .arrow-row .arrow { font-size: 24px; color: var(--honey-deep); }
+
+  /* The ladder */
+  .ladder { background: #fff; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 18px 22px; margin: 14px 0 18px; }
+  .ladder-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 12px; padding: 10px 0;
+    border-bottom: 1px dashed rgba(31,19,8,0.10);
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  .ladder-row:last-child { border-bottom: none; }
+  .ladder-row.header { color: var(--cacao); font-weight: 500; font-size: 10.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
+  .ladder-row.our-rate { background: rgba(200,155,60,0.08); margin: 0 -10px;
+    padding-left: 10px; padding-right: 10px; border-radius: 4px; color: var(--cacao); }
+  .ladder-row .name { font-family: 'Inter Tight', sans-serif; }
+  .ladder-row .num { text-align: right; }
+
+  .callout {
+    background: rgba(200,155,60,0.10); border-left: 3px solid var(--honey-deep);
+    padding: 14px 18px; margin: 16px 0;
+    font-family: 'Fraunces', serif; font-size: 15px; color: var(--cacao); line-height: 1.55;
+  }
+  .callout strong { font-weight: 500; color: var(--cacao); }
+  .callout em { font-style: italic; }
+
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft); }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+  .footer a { color: var(--cacao-soft); text-decoration: underline; text-underline-offset: 2px; }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · market positioning · Beyond the Mayan Sky</div>
+      <div class="meta">Drafted <strong>2026-05-15</strong></div>
+    </div>
+
+    <div class="doc-type">internal note &middot; where our product sits on Celebrity's shelf</div>
+    <h1>The <em>shelf</em> we are pricing into.</h1>
+    <div class="deck">The clearest comparable in the market right now is Carnival's <em>Mayan Interactive Park, Planetarium &amp; Lunch</em> at $79.99 retail. We do not want to price <em>at</em> Carnival's retail &mdash; we want to price <em>into Celebrity's premium "Small Group" shelf</em>, which sits above it.</div>
+
+    <h2>The two <em>shelves</em></h2>
+
+    <div class="comparison-grid">
+      <div class="comp-card carnival">
+        <div class="tier-label">Mass-market &middot; the floor</div>
+        <div class="cruise-name">Carnival</div>
+        <div class="product">Mayan Interactive Park, Planetarium &amp; Lunch &middot; Cozumel</div>
+        <div class="meta-pills">
+          <span class="pill">4.5 hr</span>
+          <span class="pill">large group</span>
+          <span class="pill">bus coach</span>
+          <span class="pill">includes lunch</span>
+          <span class="pill">dome included</span>
+        </div>
+        <div class="price-anchor">
+          <span class="price">$79.99 <em>/ pax</em></span>
+          <span class="label">retail to guest</span>
+        </div>
+        <div class="takeaway">
+          <strong>The math:</strong> at a typical 40&ndash;50% cruise-line markup, Carnival is paying their operator roughly <strong>$40&ndash;$48 net per pax</strong>. That is the cost-plus mass-market shelf. We are <em>not</em> competing on this shelf.
+        </div>
+      </div>
+
+      <div class="comp-card celebrity">
+        <div class="tier-label">Premium small-group &middot; our shelf</div>
+        <div class="cruise-name">Celebrity <em>&middot; Small Group</em></div>
+        <div class="product">Beyond the Mayan Sky &middot; A Watercolor Workshop with a Live Astronomer</div>
+        <div class="meta-pills">
+          <span class="pill">3 hr</span>
+          <span class="pill">max 24 pax</span>
+          <span class="pill">private van</span>
+          <span class="pill">named artist</span>
+          <span class="pill">take-home painting</span>
+          <span class="pill">live astronomer</span>
+        </div>
+        <div class="price-anchor">
+          <span class="price">$85 <em>/ pax</em></span>
+          <span class="label">net VAT-incl &middot; recommended open</span>
+        </div>
+        <div class="takeaway">
+          <strong>The math:</strong> Celebrity retails this at their standard 40&ndash;50% markup &rarr; <strong>$119&ndash;$128 retail per guest</strong>. That sits cleanly in the cultural-shorex band ($89&ndash;$179) and well below the premium ceiling. Different shelf from Carnival entirely.
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-row">
+      <span>Cost-plus floor</span>
+      <span class="arrow">&rarr;</span>
+      <span>Where we want to live</span>
+    </div>
+
+    <h2>The <em>internal ladder</em> &middot; what we already charge Celebrity</h2>
+    <p>From our own invoice data (31 Honey Traditions departures + 4 Native Kitchen, all 2026):</p>
+
+    <div class="ladder">
+      <div class="ladder-row header">
+        <div class="name">Tour</div>
+        <div class="num">Duration</div>
+        <div class="num">Max pax</div>
+        <div class="num">Net / pax</div>
+      </div>
+      <div class="ladder-row">
+        <div class="name">Bee &amp; Honey Traditions (Y9Z5) &middot; hands-on chocolate &amp; salsa</div>
+        <div class="num">4 hr 0 min</div>
+        <div class="num">48</div>
+        <div class="num">$74</div>
+      </div>
+      <div class="ladder-row">
+        <div class="name">Native Kitchen (YO13) &middot; market-to-jungle workshop</div>
+        <div class="num">4 hr 30 min</div>
+        <div class="num">48</div>
+        <div class="num">$75</div>
+      </div>
+      <div class="ladder-row our-rate">
+        <div class="name"><strong>Beyond the Mayan Sky</strong> &middot; watercolor + dome (proposed)</div>
+        <div class="num">3 hr 0 min</div>
+        <div class="num">24</div>
+        <div class="num">$85</div>
+      </div>
+    </div>
+
+    <p>Per-hour proxy: HT $18.50/hr &middot; NK $16.67/hr &middot; <strong>Painting + Sun $28.33/hr</strong>. A 50&ndash;70% per-hour premium over our existing workshops &mdash; defensible because of the small-group cap (half of HT/NK), the named artist, the take-home, and the live astronomer.</p>
+
+    <div class="callout">
+      <strong>The line for Matt.</strong> <em>"Matt &mdash; we are pricing this excursion based on what it actually is: a 3-hour small-group product capped at 24 guests, with a named local artist, all watercolor materials, a take-home painting per guest, a 60-minute interactive dome experience with a live local astronomer, and private van transport. The biggest cost in the stack is the transport &mdash; the operators charge us in Mexican pesos, and with the exchange rate at roughly 16 MXN per USD (it was over 20 a year ago), every transport invoice translates to more dollars on our side. We have priced it tight to the experience &mdash; nothing speculative."</em>
+    </div>
+
+    <h2>So &middot; the <em>quote</em></h2>
+    <p><strong>Open: $85 USD per pax &middot; VAT included &middot; min 8 &middot; max 24.</strong> Floor $80, only traded for a real commitment (slot guarantee, multi-quarter, or a Celebrity Shorex landing-page feature). Operating windows ~8:30 AM and ~14:30.</p>
+
+    <div class="footer">
+      Market positioning note &middot; <code>visitcozumel-dashboards/briefings/2026-05-15-celebrity-market-positioning.html</code><br/>
+      Pricing memo &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-15-celebrity-pricing-rationale.html">visitcoz.github.io/.../celebrity-pricing-rationale</a><br/>
+      Sources &middot; Carnival.com Cozumel Mayan Interactive Park + Planetarium $79.99 retail (verified 2026-05-15) &middot; our own Celebrity invoice extract <code>celebrity_ht_nk_departures_2026.csv</code>
+    </div>
+
+  </div>
+</body>
+</html>
