@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebrity Pricing Rationale · Beyond the Mayan Sky · for Mario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    padding: 28px 24px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 880px; margin: 0 auto; }
+  .top-bar { display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 42px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5;
+    color: var(--cacao); font-weight: 300; margin-bottom: 28px; max-width: 700px; }
+
+  h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500;
+    color: var(--cacao); margin-top: 32px; margin-bottom: 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  h3 { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500;
+    color: var(--cacao); margin-top: 20px; margin-bottom: 8px; }
+  p { margin-bottom: 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  p strong { font-weight: 600; color: var(--cacao); }
+  ul { margin: 8px 0 14px 22px; }
+  ul li { margin-bottom: 6px; font-size: 14px; line-height: 1.55; color: var(--ink); }
+
+  .callout {
+    background: rgba(200,155,60,0.10); border-left: 3px solid var(--honey-deep);
+    padding: 14px 18px; margin: 16px 0;
+    font-family: 'Fraunces', serif; font-size: 15px; color: var(--cacao); line-height: 1.55;
+  }
+  .callout em { font-style: italic; }
+  .callout strong { font-weight: 500; color: var(--cacao); }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+  th { text-align: left; padding: 8px 10px; background: var(--cream);
+    color: var(--cacao); font-weight: 500; border-bottom: 1px solid var(--rule);
+    letter-spacing: 0.04em; text-transform: uppercase; font-size: 10.5px; }
+  td { padding: 7px 10px; border-bottom: 1px solid rgba(31,19,8,0.08);
+    color: var(--ink); }
+  td.num { text-align: right; }
+  tr.highlight td { background: rgba(200,155,60,0.06); color: var(--cacao); font-weight: 500; }
+  tr.total td { background: var(--cacao); color: var(--cream); font-weight: 500; }
+
+  .pricing-cards { display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin: 14px 0 18px; }
+  .pricing-card { background: #fff; border: 1px solid var(--rule);
+    border-radius: 8px; padding: 16px 18px; }
+  .pricing-card.recommended { border: 2px solid var(--honey-deep);
+    background: rgba(200,155,60,0.04); }
+  .pricing-card .label { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11px; color: var(--terracotta); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 6px; }
+  .pricing-card .price { font-family: 'Fraunces', serif; font-size: 30px;
+    font-weight: 400; color: var(--cacao); line-height: 1.0; }
+  .pricing-card .price em { font-style: italic; color: var(--honey-deep); font-size: 22px; }
+  .pricing-card .sub { font-size: 11px; color: var(--cacao-soft); margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace; }
+  .pricing-card .desc { font-family: 'Fraunces', serif; font-size: 13px;
+    font-style: italic; color: var(--cacao); margin-top: 10px; line-height: 1.4; }
+
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft); }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · pricing memo · Celebrity proposal · for Mario</div>
+      <div class="meta">Drafted <strong>2026-05-15</strong> · Mike &rarr; Mario</div>
+    </div>
+
+    <div class="doc-type">internal memo &middot; pricing rationale before quoting Matt</div>
+    <h1>Beyond the <em>Mayan Sky</em> &middot; pricing.</h1>
+    <div class="deck">Hermano, before I quote Matt, here is the math. Costs, options, what I am thinking, why &mdash; and what we will tell him about the price.</div>
+
+    <h2>The <em>quick</em> story</h2>
+    <p>Matt replied yesterday: he wants <strong>price and minimum requirements</strong> before he can give us real feedback on the concept. So we go back this week with a number.</p>
+    <p>My recommendation: quote <strong>$80 USD per pax (VAT included)</strong>, with room to drop to <strong>$75</strong> if he negotiates. Min 8, max 24. Tell him the truth about why transport is the most expensive line.</p>
+
+    <h2>The <em>cost stack</em></h2>
+    <p>Inputs locked: guide $35/tour, María $50/tour flat, dome $108 MXN per pax (Tony's live narration included), transport $15 USD/pax, Tierra Maya venue + Joel host $5 USD/pax, watercolor kit + take-home folder $8 USD/pax, water in van $1. Exchange rate <strong>16 MXN per USD</strong>.</p>
+
+    <h3>Fixed costs &middot; per tour</h3>
+    <table>
+      <thead><tr><th>Line</th><th class="num">USD</th></tr></thead>
+      <tbody>
+        <tr><td>Guide (English-speaking, full tour)</td><td class="num">$35.00</td></tr>
+        <tr><td>Artist (Mar&iacute;a &middot; flat workshop fee)</td><td class="num">$50.00</td></tr>
+        <tr class="total"><td>Fixed total per tour</td><td class="num">$85.00</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Variable costs &middot; per pax</h3>
+    <table>
+      <thead><tr><th>Line</th><th class="num">USD / pax</th></tr></thead>
+      <tbody>
+        <tr><td>Transport (van &middot; <em>charged in pesos</em>)</td><td class="num">$15.00</td></tr>
+        <tr><td>360&deg; dome admission &middot; Tony's narration included &middot; $108 MXN &divide; 16</td><td class="num">$6.75</td></tr>
+        <tr><td>Tierra Maya venue + Joel host (per pax)</td><td class="num">$5.00</td></tr>
+        <tr><td>Watercolor kit + take-home folder</td><td class="num">$8.00</td></tr>
+        <tr><td>Bottle of water in van</td><td class="num">$1.00</td></tr>
+        <tr class="total"><td>Variable total per pax</td><td class="num">$35.75</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>The peso problem.</strong> Transport is our most expensive line by far &mdash; <em>and we are being charged in pesos, not in dollars</em>. The exchange rate right now is at 16 MXN per USD (it used to be over 20). When the peso is strong, every transport invoice we pay translates into more dollars on our side. We will say this to Matt directly &mdash; it explains why a 3-hour van product cannot be priced like a beach-bus tour.
+    </div>
+
+    <h3>Total cost at different group sizes</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th class="num">Fixed</th>
+          <th class="num">Variable</th>
+          <th class="num">Total cost</th>
+          <th class="num">Cost / pax</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>8 pax (min)</td><td class="num">$85</td><td class="num">$286.00</td><td class="num">$371.00</td><td class="num">$46.38</td></tr>
+        <tr><td>10 pax</td><td class="num">$85</td><td class="num">$357.50</td><td class="num">$442.50</td><td class="num">$44.25</td></tr>
+        <tr><td>12 pax (1 van)</td><td class="num">$85</td><td class="num">$429.00</td><td class="num">$514.00</td><td class="num">$42.83</td></tr>
+        <tr><td>15 pax</td><td class="num">$85</td><td class="num">$536.25</td><td class="num">$621.25</td><td class="num">$41.42</td></tr>
+        <tr><td>20 pax (2 vans)</td><td class="num">$85</td><td class="num">$715.00</td><td class="num">$800.00</td><td class="num">$40.00</td></tr>
+        <tr><td>24 pax (max, 2 vans)</td><td class="num">$85</td><td class="num">$858.00</td><td class="num">$943.00</td><td class="num">$39.29</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The <em>price options</em> (VAT included)</h2>
+
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div class="label">Floor</div>
+        <div class="price">$75 <em>/ pax</em></div>
+        <div class="sub">VAT included &middot; net of VAT: $64.66</div>
+        <div class="desc">Walk-away price if Matt pushes hard. Margin 28&ndash;39% across the band.</div>
+      </div>
+      <div class="pricing-card recommended">
+        <div class="label">Recommended start</div>
+        <div class="price">$80 <em>/ pax</em></div>
+        <div class="sub">VAT included &middot; net of VAT: $68.97</div>
+        <div class="desc">Our opening quote. Margin 33&ndash;43%. Leaves $5 to give back in negotiation.</div>
+      </div>
+      <div class="pricing-card">
+        <div class="label">Stretch</div>
+        <div class="price">$85 <em>/ pax</em></div>
+        <div class="sub">VAT included &middot; net of VAT: $73.28</div>
+        <div class="desc">If Matt does not push back, this is what we should hold. Margin 37&ndash;46%.</div>
+      </div>
+    </div>
+
+    <h3>Margin at $80 USD per pax (VAT included)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th class="num">Gross (Celebrity pays)</th>
+          <th class="num">Net of VAT</th>
+          <th class="num">Cost</th>
+          <th class="num">Margin USD</th>
+          <th class="num">Margin %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight"><td>8 pax (min)</td><td class="num">$640</td><td class="num">$551.72</td><td class="num">$371.00</td><td class="num">$180.72</td><td class="num">33%</td></tr>
+        <tr><td>10 pax</td><td class="num">$800</td><td class="num">$689.66</td><td class="num">$442.50</td><td class="num">$247.16</td><td class="num">36%</td></tr>
+        <tr><td>12 pax (1 van)</td><td class="num">$960</td><td class="num">$827.59</td><td class="num">$514.00</td><td class="num">$313.59</td><td class="num">38%</td></tr>
+        <tr><td>15 pax</td><td class="num">$1,200</td><td class="num">$1,034.48</td><td class="num">$621.25</td><td class="num">$413.23</td><td class="num">40%</td></tr>
+        <tr><td>20 pax (2 vans)</td><td class="num">$1,600</td><td class="num">$1,379.31</td><td class="num">$800.00</td><td class="num">$579.31</td><td class="num">42%</td></tr>
+        <tr class="highlight"><td>24 pax (max)</td><td class="num">$1,920</td><td class="num">$1,655.17</td><td class="num">$943.00</td><td class="num">$712.17</td><td class="num">43%</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What we <em>tell Matt</em></h2>
+
+    <h3>Net rate &middot; min &middot; max</h3>
+    <ul>
+      <li><strong>$80 USD per pax, all-inclusive of Mexican VAT</strong></li>
+      <li><strong>Minimum 8 pax</strong> per departure to operate</li>
+      <li><strong>Maximum 24 pax</strong> per departure (single language, 2 vans, intimate workshop)</li>
+      <li><strong>Operating windows:</strong> early morning (start <strong>~8:30 AM</strong>) or late afternoon (start <strong>~14:30</strong>) &mdash; we avoid the midday heat and the cruise-pier rush</li>
+    </ul>
+
+    <h3>Everything included in the $80</h3>
+    <ul>
+      <li>Round-trip private air-conditioned van &middot; pier &rarr; Monumentos al Mestizaje &rarr; Tierra Maya &rarr; 360&deg; semisphere &rarr; pier</li>
+      <li>English-speaking guide for the full 3 hours</li>
+      <li>Photo opportunity at <strong>Monumentos al Mestizaje</strong> &middot; the Ixchel monument on the malec&oacute;n</li>
+      <li>45-minute watercolor workshop at Tierra Maya with our Cozumel artist</li>
+      <li>All workshop materials &middot; paints, brushes, paper, palettes &middot; guests take their painting home as a souvenir</li>
+      <li>Choice of <strong>eight Mayan-cosmos templates</strong> &middot; Kin, Ixchel, Noh Ek, Balam, conch, calendar wheel, World Tree, cosmic turtle</li>
+      <li>60-minute interactive 360&deg; semisphere experience with a <strong>local astronomer</strong> &middot; 20-min Mayan archaeoastronomy film + live narration + Mayan calendar wheel + Q&amp;A</li>
+      <li>Bottle of water per guest</li>
+      <li><strong>16% Mexican VAT (IVA)</strong></li>
+    </ul>
+
+    <div class="callout">
+      <strong>What I tell Matt about the price.</strong> "Matt &mdash; our biggest line by far is the private van, and the operators charge us in Mexican pesos. With the peso this strong against the dollar (16 MXN per USD, where it used to be over 20), our transport cost in dollars is higher than it would have been a year ago. That is why the all-in price is $80 and not $50 like a beach-bus tour. Everything else is craft &mdash; an artist, an astronomer, a real cultural venue."
+    </div>
+
+    <h2>The <em>negotiation</em> plan</h2>
+    <p><strong>Open at $80.</strong> If Matt comes back asking to soften the price &mdash; and he probably will &mdash; we drop to $75 in exchange for something tangible: a guaranteed weekly slot on a specific ship, a 6-month commitment, or a marketing co-feature on the Celebrity Shorex landing page. We <strong>do not</strong> drop to $75 just because he asks.</p>
+    <p>Floor is $75. Below that the math at min 8 pax stops being worth our operations day.</p>
+
+    <h2>What I need from you, hermano</h2>
+    <ul>
+      <li>Sign-off on <strong>$80 USD/pax VAT-included, min 8, max 24</strong> as the opening quote.</li>
+      <li>Sign-off on <strong>$75 as the floor</strong>, only traded for a concrete commitment from their side.</li>
+      <li>Confirmation on operating windows &middot; <strong>~8:30 AM</strong> and <strong>~14:30</strong> work for Tierra Maya, Mar&iacute;a, and the dome.</li>
+    </ul>
+    <p>Once you OK these, I will send the reply to Matt today.</p>
+
+    <div class="footer">
+      Internal pricing memo &middot; <code>visitcozumel-dashboards/briefings/2026-05-15-celebrity-pricing-rationale.html</code><br/>
+      Concept proposal sent to Matt 2026-05-14 &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-13-celebrity-painting-and-sun-proposal.html">visitcoz.github.io/.../beyond-the-mayan-sky</a>
+    </div>
+
+  </div>
+</body>
+</html>
