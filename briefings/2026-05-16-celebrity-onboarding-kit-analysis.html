@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebrity Onboarding Kit · Document Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F1E8D4; --cream-soft: #E8DCC0; --paper: #FAF5EA;
+    --cacao: #1F1308; --cacao-soft: #3A2615;
+    --honey: #C89B3C; --honey-deep: #A67829;
+    --jungle: #3E4A2E; --terracotta: #B85C38; --ocean: #1B3A4B;
+    --red-alert: #B23A2A;
+    --ink: #2B1A0C; --rule: rgba(31,19,8,0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: 'Inter Tight', sans-serif; line-height: 1.55;
+    padding: 28px 24px 60px;
+    background:
+      radial-gradient(ellipse at 5% 0%, rgba(200,155,60,0.10), transparent 50%),
+      radial-gradient(ellipse at 95% 100%, rgba(27,58,75,0.08), transparent 50%),
+      var(--paper);
+  }
+  .shell { max-width: 1020px; margin: 0 auto; }
+  .top-bar { display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 20px; }
+  .brand { font-family: 'Fraunces', serif; font-weight: 500; font-size: 11px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--cacao); }
+  .brand em { font-style: italic; color: var(--honey-deep); font-weight: 400; }
+  .meta { font-family: 'Fraunces', serif; font-style: italic; font-size: 10px; color: var(--cacao-soft); }
+  .meta strong { font-style: normal; color: var(--cacao); font-weight: 500; }
+
+  .doc-type { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13px; color: var(--terracotta); letter-spacing: 0.04em; margin-bottom: 6px; }
+  h1 { font-family: 'Fraunces', serif; font-size: 42px; line-height: 1.0;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 10px; }
+  h1 em { font-style: italic; color: var(--honey-deep); }
+  .deck { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5;
+    color: var(--cacao); font-weight: 300; margin-bottom: 28px; max-width: 780px; }
+
+  h2 { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 500;
+    color: var(--cacao); margin-top: 36px; margin-bottom: 14px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+  h2 em { font-style: italic; color: var(--honey-deep); }
+  h3 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500;
+    color: var(--cacao); margin-top: 18px; margin-bottom: 8px; }
+  p { margin-bottom: 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+  p strong { font-weight: 600; color: var(--cacao); }
+  ul { margin: 4px 0 12px 22px; }
+  ul li { margin-bottom: 5px; font-size: 14px; line-height: 1.55; color: var(--ink); }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--cacao);
+    background: rgba(31,19,8,0.06); padding: 1px 6px; border-radius: 3px; }
+
+  .doc-card { background: #fff; border-left: 3px solid var(--rule);
+    border-radius: 6px; padding: 14px 18px 14px 16px; margin: 10px 0; }
+  .doc-card.alert { border-left-color: var(--red-alert);
+    background: linear-gradient(90deg, rgba(178,58,42,0.05), #fff 40%); }
+  .doc-card.action { border-left-color: var(--honey-deep);
+    background: linear-gradient(90deg, rgba(200,155,60,0.06), #fff 40%); }
+  .doc-card.good { border-left-color: var(--jungle);
+    background: linear-gradient(90deg, rgba(62,74,46,0.05), #fff 40%); }
+  .doc-card .filename { font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+    color: var(--cacao-soft); margin-bottom: 4px; }
+  .doc-card .title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500;
+    color: var(--cacao); margin-bottom: 6px; line-height: 1.2; }
+  .doc-card .title em { font-style: italic; color: var(--honey-deep); }
+  .doc-card .verdict { font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 13.5px; color: var(--cacao); margin-bottom: 8px; line-height: 1.45; }
+  .doc-card .body-text { font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+  .doc-card .body-text strong { color: var(--cacao); }
+  .tag { display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px;
+    text-transform: uppercase; margin-right: 6px; }
+  .tag.alert { background: rgba(178,58,42,0.10); color: var(--red-alert); }
+  .tag.action { background: rgba(200,155,60,0.15); color: var(--honey-deep); }
+  .tag.good { background: rgba(62,74,46,0.10); color: var(--jungle); }
+  .tag.info { background: rgba(27,58,75,0.10); color: var(--ocean); }
+
+  .callout {
+    background: rgba(200,155,60,0.10); border-left: 3px solid var(--honey-deep);
+    padding: 14px 18px; margin: 16px 0;
+    font-family: 'Fraunces', serif; font-size: 14.5px; color: var(--cacao); line-height: 1.55;
+  }
+  .callout strong { font-weight: 500; color: var(--cacao); }
+  .callout em { font-style: italic; }
+  .callout.red {
+    background: rgba(178,58,42,0.08); border-left-color: var(--red-alert);
+  }
+
+  .checklist { background: #fff; border: 1px solid var(--rule);
+    border-radius: 8px; padding: 18px 22px; margin: 12px 0 18px; }
+  .checklist-item { display: grid; grid-template-columns: 26px 1fr; gap: 8px;
+    padding: 6px 0; font-size: 14px; color: var(--ink);
+    border-bottom: 1px dashed rgba(31,19,8,0.10); }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item .box { font-family: monospace; color: var(--cacao-soft); }
+  .checklist-item.urgent .box { color: var(--red-alert); }
+  .checklist-item strong { color: var(--cacao); }
+
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rule);
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 11.5px; color: var(--cacao-soft); }
+  .footer code { font-family: 'JetBrains Mono', monospace; font-style: normal; color: var(--cacao); }
+</style>
+</head>
+<body>
+  <div class="shell">
+
+    <div class="top-bar">
+      <div class="brand">Visit <em>Cozumel</em> · Celebrity onboarding kit · doc analysis</div>
+      <div class="meta">Drafted <strong>2026-05-16</strong> · 15 docs saved &amp; analyzed</div>
+    </div>
+
+    <div class="doc-type">internal note &middot; what each document is, what it asks of us, what to do</div>
+    <h1>The Celebrity <em>onboarding kit</em>.</h1>
+    <div class="deck">All 15 documents are saved under <code>Projects/Matthew_Visit_2026-05-06/celebrity_onboarding_kit/</code> in five buckets. Below: what each one is, my take, and the four things that need to happen <em>before</em> we can fill the Tour Content Worksheet for Matt.</div>
+
+    <h2>The <em>four</em> blockers, before we fill anything</h2>
+
+    <div class="callout red">
+      <strong>BLOCKER #1 &middot; Insurance.</strong> Celebrity requires <strong>$2M General Liability per incident, with an AM Best A:XII or better rated carrier, naming Royal Caribbean Cruises Ltd. as additional insured</strong>. Most Mexican carriers do not meet AM Best A:XII. <em>Verify TODAY with your current insurance broker whether we already meet this, and what the gap costs.</em>
+    </div>
+
+    <div class="callout red">
+      <strong>BLOCKER #2 &middot; D&amp;B Number.</strong> The Tour Operator Profile asks for our Dun &amp; Bradstreet number. Does Visit Cozumel Mexico, S. de R.L. de C.V. have one? If not, registration is free but takes 7&ndash;14 days. <em>Check with Adela; if no, register today at dnb.com.</em>
+    </div>
+
+    <div class="callout red">
+      <strong>BLOCKER #3 &middot; Cancellation policy in writing.</strong> The Contact Form asks for a formal cancellation policy. We need one paragraph defining what happens at min-pax shortfall, weather, no-show, cruise-side cancellation. <em>This should be a written page in our company docs, not just verbal practice.</em>
+    </div>
+
+    <div class="callout">
+      <strong>BLOCKER #4 &middot; María's name + photo consent.</strong> Image releases require an Appearance Release signed by every recognizable person in marketing photos. If we name and show Mar&iacute;a in the Celebrity submission, the Do&ntilde;a Marta lesson applies. <em>Decide before we submit: name + photo, or keep her anonymous (no face shots in submitted photos).</em>
+    </div>
+
+    <h2>Document-by-document <em>analysis</em></h2>
+
+    <h3>Category A &middot; Insurance &amp; Compliance</h3>
+
+    <div class="doc-card alert">
+      <div class="filename">insurance_and_compliance/Tour Operator Insurance Requirements - RCG.pdf</div>
+      <div class="title">Tour Operator Insurance Requirements <span class="tag alert">Blocker</span></div>
+      <div class="verdict">The hard floor. Read this twice. Most operators get rejected here.</div>
+      <div class="body-text">
+        Royal Caribbean Group's minimum insurance specs. For <strong>Land Tours: $2M General Liability per incident.</strong> For <strong>Transportation (Caribbean): $2M auto liability per occurrence</strong> for vehicles seating 15 or less. Carrier must be <strong>AM Best A:XII or better</strong>. Must list RCG and affiliates as <strong>additional insured</strong>. Must include <strong>waiver of subrogation</strong> + <strong>primary and non-contributory endorsement</strong>. Coverage cannot be eroded by defense costs. 30-day cancellation notice required. <strong>Tour operator's policy must also cover liability arising from subcontractor operations</strong> &mdash; meaning Mar&iacute;a, Yesli's planetarium, and our van vendor must all be covered under our umbrella, OR we need certificates from each of them.
+      </div>
+    </div>
+
+    <h3>Category B &middot; Brand Guidelines</h3>
+
+    <div class="doc-card good">
+      <div class="filename">brand_guidelines/Celebrity Brand Deck V2 (1).pdf</div>
+      <div class="title">Celebrity Brand Deck V2 <span class="tag good">Perfect fit</span></div>
+      <div class="verdict">Validates everything about Painting + Sun. Read this, then lift the vocabulary into our worksheet.</div>
+      <div class="body-text">
+        Celebrity is "a relaxed luxury resort at sea." Their guest persona is the <strong>"Culturally Curious Indulger"</strong> with four sub-personas &mdash; <em>The Foodie · The Cultural Enthusiast · The Maverick · The Indulgence Seeker</em>. Our product targets <strong>The Cultural Enthusiast</strong> almost word-for-word: "It's important to you to learn about the rich history of any place you're visiting &amp; visit important historical sites." Celebrity emphasizes <strong>Destination · Culinary · Service · Details · Wellbeing</strong>. The Edge and Solstice fleets are 82&ndash;85% verandas &amp; suites &mdash; premium guests. <strong>This deck argues our $80 price is actually conservative</strong> &mdash; their guests pay for craft, details, and culture.
+      </div>
+    </div>
+
+    <h3>Category C &middot; Templates to fill</h3>
+
+    <div class="doc-card action">
+      <div class="filename">templates/Copy of Tour Content Worksheet Cel.xlsx</div>
+      <div class="title">Tour Content Worksheet <em>Cel</em> <span class="tag action">Fill next</span></div>
+      <div class="verdict">The big one. 174 rows across 3 sections + a Control tab with dropdowns.</div>
+      <div class="body-text">
+        Three sections: <strong>(1)</strong> Tour Operator + Basic Info (port, country, tour name, duration, min/max, date submitted) &middot; <strong>(2)</strong> Restrictions (activity level mild/moderate/strenuous, waivers, consumer interests, headsets, age/weight/height restrictions, medical/pregnancy, what to bring/wear) &middot; <strong>(3)</strong> Tour Content (timetable per stop &mdash; driving time, time at site, walking distance in yards, steps, terrain, wheelchair access, ramps, elevators, restrooms, charges). Plus meal/snack/beverage detail. Critical finding from the Control sheet: Celebrity uses a <strong>"Small Group"</strong> consumer-interest tag &mdash; that is our slot. <strong>"Family"</strong> is also a real tag &mdash; supports the family-discount angle. We can pick up to 2 tags.
+      </div>
+    </div>
+
+    <div class="doc-card action">
+      <div class="filename">templates/Pricing Sheet Template - CEL.xlsx</div>
+      <div class="title">Pricing Sheet Template <span class="tag action">Fill next</span></div>
+      <div class="verdict">Cleaner than the worksheet. One line per tour, fixed or tiered.</div>
+      <div class="body-text">
+        Columns: <strong>Port · Brand · Tour Code · Tour Title · Minimum · Currency · Adult (age 13+) · Child (age 4-12) · Infant (age 0-3) · Duration · Notes</strong>. Sample shows tiered pricing dropping with group size &mdash; min 20 = $78, min 25 = $75, min 30 = $72, min 35 = $70. <strong>Two strategic insights:</strong> (1) we could offer tiered pricing to push Matt toward higher minimums in exchange for a lower rate &mdash; e.g., $80 at min 8, $76 at min 12, $72 at min 20. (2) Infant rate is <strong>typically free</strong> in our existing HT/NK data &mdash; consistent with the template structure.
+      </div>
+    </div>
+
+    <div class="doc-card action">
+      <div class="filename">templates/Subcontractor Tour Details File.xlsx</div>
+      <div class="title">Subcontractor Tour Details <span class="tag action">Fill next</span></div>
+      <div class="verdict">Where we declare every vendor: van, dome, artist.</div>
+      <div class="body-text">
+        Asks: liquor provided? ground transportation? vehicle capacity? distance? air? water? is this tour subcontracted? operating model? Then four subcontractor blocks each with <strong>Type · Company Name · Email Address</strong>. For Painting + Sun we declare: <strong>Subcontractor 1 = Transfer / [Van vendor name] · Subcontractor 2 = Cultural &amp; Historical / Planetario Cha'an Ka'an / Yesli's email · Subcontractor 3 = Cultural &amp; Historical / Mar&iacute;a Arg&uuml;ero / her email · Subcontractor 4 = Cultural &amp; Historical / Tierra Maya / Joel's email</strong>. <em>Note: Mar&iacute;a's name will show up here regardless of how we name her in marketing copy.</em>
+      </div>
+    </div>
+
+    <div class="doc-card action">
+      <div class="filename">templates/Tour Operator Contact Form - 2025.xlsx</div>
+      <div class="title">Tour Operator Contact Form <span class="tag action">Fill next</span></div>
+      <div class="verdict">Two sheets. Contact info is easy; Entity Information is RFP-grade.</div>
+      <div class="body-text">
+        Sheet 1 (Contact Information) is straightforward: company name, DBA, legal entity type, mailing address, primary email per function (tour counts, invoices, allotments, content approval, Riskonnect/Insurance), phone numbers, primary and secondary contacts. <strong>Sheet 2 (Entity Information)</strong> is much harder: HQ location, notice address, Dun &amp; Bradstreet number, holding company structure, Federal Tax ID, local offices, years in business, <strong>pending lawsuits</strong>, upcoming mergers, diversity supplier certifications (MBE, MWBE, Disabled, Veteran), <strong>top 5 clients</strong>, relevant tour-operator experience, <strong>cancellation policy in writing</strong>, and a clause that <strong>they may require audited financial statements</strong> for the award.
+      </div>
+    </div>
+
+    <div class="doc-card action">
+      <div class="filename">templates/Tour Operator Profile.doc</div>
+      <div class="title">Tour Operator Investment Profile <span class="tag action">Fill next</span></div>
+      <div class="verdict">Background questionnaire. Most checkboxes; opportunity to flag GSTC &amp; exclusivity.</div>
+      <div class="body-text">
+        D&amp;B number, founding date, number of offices, private/public, RCCL port-agent status, other cruise lines worked with in this port, RCCL history. Then <strong>business relations</strong> (affiliations, partnerships, exclusive rights to products/venues &mdash; <em>Painting + Sun with Mar&iacute;a is exclusive to us, flag it</em>), <strong>equipment owned</strong> (van? probably no &mdash; we subcontract), <strong>GSTC / sustainability certifications</strong> (opportunity to mention Tierra Maya's preserve and the small-group cap), <strong>port agent</strong> and <strong>ground operator</strong> ports, kiosk/voucher/hop-on partnerships.
+      </div>
+    </div>
+
+    <h3>Category D &middot; Image / Media Requirements</h3>
+
+    <div class="doc-card action">
+      <div class="filename">image_requirements/Shore-X Media Requirements - Images.docx</div>
+      <div class="title">Shore Excursion Media Requirements <span class="tag action">Affects photo selection</span></div>
+      <div class="verdict">Strict but clear. Our proposal photos were not built to this spec.</div>
+      <div class="body-text">
+        <strong>Technical:</strong> JPG/TIF/HEIC · 500KB+ · minimum <strong>2000 × 1440 px</strong> (horizontal) · descriptive filenames using dashes. <strong>Creative:</strong> horizontal only, centered subject, <strong>no branding/logos/typography/graphic elements</strong>, sharp, not blurry. <strong>Quantity:</strong> up to 6 used, 10 submittable. <strong>People:</strong> avoid branded clothing, inappropriate swimwear, tattoos. <strong>Legal:</strong> every identifiable person needs an Appearance Release; 1 Materials Use form per image. <em>This means the Ixchel monument group shot we love &mdash; with branded cruise lanyards visible &mdash; may need to be cropped/reshot. Also: the Ixchel illustration we used as a hero in the proposal cannot be submitted &mdash; it has graphic-design elements.</em>
+      </div>
+    </div>
+
+    <div class="doc-card info">
+      <div class="filename">image_requirements/Shore-x-media-visual-guide-web.pdf</div>
+      <div class="title">Shore-X Media Visual Guide <span class="tag info">Reference</span></div>
+      <div class="verdict">Picture-book version of the requirements doc above. Look at the rejected examples.</div>
+      <div class="body-text">
+        Shows approved vs rejected examples. <strong>Rejected categories:</strong> images with logos/typography, overly dark/complex compositions, blurry/pixelated images, close-ups, composited or photoshopped people. <strong>Approved:</strong> centered subject, wide horizontal composition, clean light, natural composition. Worth one quick read before we pick our 6 hero photos.
+      </div>
+    </div>
+
+    <h3>Category E &middot; Legal releases (collect from guests + photo sources)</h3>
+
+    <div class="doc-card info">
+      <div class="filename">image_requirements/Appearance Release - TYPE 1 - Shore Ex Template.pdf</div>
+      <div class="title">Appearance Release TYPE 1 <span class="tag info">For our own photo shoots</span></div>
+      <div class="verdict">Use when Visit Cozumel is the photographer/producer. One per recognizable person.</div>
+      <div class="body-text">
+        Names Tour Operator (us) as "Producer." Guest grants irrevocable, royalty-free, perpetual right to use likeness for any lawful purpose worldwide. Includes minor consent block. Florida law. <strong>Every guest in a marketing photo</strong> we shoot needs this signed before we submit the image. Practically: bring printed copies + clipboard to every photo-shoot day.
+      </div>
+    </div>
+
+    <div class="doc-card info">
+      <div class="filename">image_requirements/Appearance Release - TYPE 2 - Shore Ex Template.pdf</div>
+      <div class="title">Appearance Release TYPE 2 <span class="tag info">For RCG-commissioned shoots</span></div>
+      <div class="verdict">Use only when Royal Caribbean Cruises Ltd. itself is the photographer.</div>
+      <div class="body-text">
+        Same legal frame as T1 but names RCG as Producer instead of us. <em>For 99% of our submissions, we use T1.</em>
+      </div>
+    </div>
+
+    <div class="doc-card info">
+      <div class="filename">image_requirements/Materials Use Agreement - TYPE 1 - Shore Ex Template.pdf</div>
+      <div class="title">Materials Use Agreement TYPE 1 <span class="tag info">We own the images</span></div>
+      <div class="verdict">One per submitted image where we are the sole copyright owner.</div>
+      <div class="body-text">
+        We license the image to RCG "royalty-free, irrevocable, sublicensable and perpetual" with "unlimited use in any media for any purpose whatsoever." <strong>We waive the right to inspect or approve any use.</strong> <strong>We indemnify RCG</strong> for any claims arising from the materials. Exhibit A = the materials, Exhibit B = signed appearance releases for every recognizable person. <em>Use this for every photo Adela or we shot at Tierra Maya, the dome, or the malec&oacute;n.</em>
+      </div>
+    </div>
+
+    <div class="doc-card info">
+      <div class="filename">image_requirements/Materials Use Agreement - TYPE 2 - Shore Ex Template.pdf</div>
+      <div class="title">Materials Use Agreement TYPE 2 <span class="tag info">Licensed from third party</span></div>
+      <div class="verdict">For stock photos or images we licensed from a photographer.</div>
+      <div class="body-text">
+        Same indemnification frame as T1 but Exhibit B is the <strong>license agreement</strong> we hold with the photographer/stock site &mdash; not appearance releases. <em>For Painting + Sun we probably don't need this if all photos are ours. The Ixchel illustration we used in the proposal may be the only third-party piece &mdash; and even that we should not submit (graphic-design element &mdash; rejected by media spec).</em>
+      </div>
+    </div>
+
+    <h3>Category F &middot; Instructions</h3>
+
+    <div class="doc-card info">
+      <div class="filename">templates/Celebrity Shore Ex Tour Desc - How to view.docx</div>
+      <div class="title">How to View Tour Descriptions <span class="tag info">Reference only</span></div>
+      <div class="verdict">Just instructions for previewing our own tour after it goes live. Skim once.</div>
+      <div class="body-text">
+        Tells us how to log into Celebrity's cruise-planner web URL with a specific Ship Code + Sail Date once our tour is approved and live, so we can verify what guests see. <em>Useful for QA after submission. Not needed to fill anything.</em>
+      </div>
+    </div>
+
+    <h2>What I <em>think</em> &middot; the strategic picture</h2>
+
+    <p><strong>The good news:</strong> the Brand Deck and the Worksheet's "Small Group" consumer-interest tag tell us Celebrity has a shelf <em>built exactly</em> for what we are selling. The product is on-brand. The price ($80 adult / $56 child) is conservative for the "Culturally Curious Indulger" persona &mdash; Celebrity guests pay for craft. We are not asking them to invent a category.</p>
+
+    <p><strong>The grind:</strong> the kit is 15 documents because RCG runs a vendor-onboarding process closer to an RFP than a partnership pitch. Top-5 clients, pending lawsuits, D&amp;B numbers, audited financials &mdash; this is supply-chain risk management, not creative review. Most of it is data entry; the blocker is insurance.</p>
+
+    <p><strong>The hidden cost we hadn't priced:</strong> we previously added $3/pax for insurance in our cost stack. With the AM Best A:XII requirement and the obligation to cover subcontractors under our umbrella, our actual premium may be <strong>$2&ndash;5/pax higher</strong> than that. Once you have a quote from the broker, we can adjust the floor.</p>
+
+    <p><strong>The thing that will surprise Mario:</strong> Section 2 of the Contact Form asks if any of our affiliated entities have <em>pending lawsuits</em> or <em>upcoming mergers/acquisitions</em>. Standard RFP boilerplate, but worth running by him before we answer.</p>
+
+    <h2>The <em>action list</em> &middot; ranked by urgency</h2>
+
+    <div class="checklist">
+      <div class="checklist-item urgent"><div class="box">[ ]</div><div><strong>TODAY · Insurance check.</strong> Call our broker. Ask: do we have a $2M GL policy with an AM Best A:XII-rated carrier that names RCG as additional insured? If not, what's the gap and the premium?</div></div>
+      <div class="checklist-item urgent"><div class="box">[ ]</div><div><strong>TODAY · D&amp;B number.</strong> Ask Adela if Visit Cozumel has a D-U-N-S number. If not, register free at dnb.com (7&ndash;14 days).</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>This week · Cancellation policy.</strong> Draft a one-page policy covering min-pax shortfall, weather, no-show, cruise-side cancellation. We can model it on the HT/NK policies we already operate under.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>This week · Mar&iacute;a decision.</strong> Name + photo, or anonymous? Affects Subcontractor file (her name will be there regardless) but governs whether we put her face in marketing photos.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>This week · Photo selection.</strong> Pick 6 horizontal 2000&times;1440+ JPGs that pass the media spec. The current proposal photos need to be re-checked for branded clothing, logos, and clean composition.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>Next session · Tour Content Worksheet.</strong> Fill the big one. I have the timetable, restrictions, inclusions ready &mdash; we draft together.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>Next session · Pricing Sheet.</strong> One line: <code>Cozumel · CEL · NEW · Beyond the Mayan Sky · Watercolor Workshop &amp; 360&deg; Semisphere · Min 8 · USD · $80 · $56 · $0 · 3 hr</code>. Decide if we add tiered pricing.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>Next session · Subcontractor file.</strong> Declare van vendor, planetarium, Mar&iacute;a, Tierra Maya.</div></div>
+      <div class="checklist-item"><div class="box">[ ]</div><div><strong>Next session · Operator Profile + Contact Form.</strong> Most fields are repeatable from Visit Cozumel's existing data.</div></div>
+    </div>
+
+    <p>Once the four blockers are cleared, we can fill the Tour Content Worksheet in one focused session.</p>
+
+    <div class="footer">
+      Document analysis &middot; <code>visitcozumel-dashboards/briefings/2026-05-16-celebrity-onboarding-kit-analysis.html</code><br/>
+      Documents saved &middot; <code>Projects/Matthew_Visit_2026-05-06/celebrity_onboarding_kit/</code><br/>
+      Related &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-15-celebrity-pricing-reply-email.html">reply email to Matt</a> &middot; <a href="https://visitcoz.github.io/visitcozumel-dashboards/briefings/2026-05-15-carnival-cozumel-catalog-analysis.html">Carnival catalog teardown</a>
+    </div>
+
+  </div>
+</body>
+</html>
