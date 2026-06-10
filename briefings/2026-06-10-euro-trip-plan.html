@@ -101,8 +101,11 @@
   .dates{font-weight:800;font-size:13px;color:var(--gold);white-space:nowrap}
   .what{margin-top:8px;color:#cdd3f0;font-size:14.5px}
   .what b{color:var(--text)}
-  .stay{margin-top:10px;font-size:13.5px;font-weight:700;color:#ffd98a;background:#f5b94212;border:1px solid #6a4f1255;border-radius:9px;padding:7px 12px;display:flex;gap:8px;align-items:baseline}
+  .stay{margin-top:10px;font-size:13.5px;font-weight:700;color:#ffd98a;background:#f5b94212;border:1px solid #6a4f1255;border-radius:9px;padding:7px 12px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
   .stay.tbd{color:#ff9aa8;background:#ff6b8110;border-color:#7a2f3d66}
+  .stay a,.doclink{color:#7fd4ff;text-decoration:none;font-weight:800;white-space:nowrap}
+  .stay a:hover,.doclink:hover{text-decoration:underline}
+  a.chip{text-decoration:none;color:inherit}
   .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
   .pill{font-size:11px;font-weight:800;letter-spacing:.08em;padding:4px 11px;border-radius:999px;text-transform:uppercase}
   .pill.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #1f6a42}
@@ -154,6 +157,7 @@
       <div class="chip gold"><span class="n">13</span> days to departure</div>
       <div class="chip ok"><span class="n">12</span> booked ✓</div>
       <div class="chip todo"><span class="n">6</span> to book</div>
+      <a class="chip" href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📂 <b style="color:#7fd4ff">Reservas y boletos (PDF)</b></a>
     </div>
     <div class="travelers">
       <div class="trav"><div class="face">👴</div>Papá Miguel Ángel</div>
@@ -168,7 +172,7 @@
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Cancún → Madrid <span>· Air Europa UX64 · 23 jun 20:40 → 24 jun 13:10</span></div>
-        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span> <a class="doclink" href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 boletos</a></div>
       </div>
     </div>
 
@@ -177,7 +181,7 @@
       <div class="card">
         <div class="top"><div class="city">Madrid<small>4 NIGHTS</small></div><div class="dates">24 – 28 JUN</div></div>
         <div class="what"><b>Palacio Real · Plaza Mayor · Gran Vía · Mercado de San Miguel</b> — y el <b>26 jun</b>, tren a <b>Burgos</b>: la Catedral y la tumba del Cid, la tierra del apellido. Día libre con el Prado o el Retiro.</div>
-        <div class="stay">🏨 <span><b>Suites Viena Plaza de España</b> · Juan Álvarez Mendizábal 17 · desayuno buffet incluido ✓</span></div>
+        <div class="stay">🏨 <span><b>Suites Viena Plaza de España</b> · Juan Álvarez Mendizábal 17 · desayuno buffet incluido ✓</span> <a href="https://www.google.com/maps/search/?api=1&query=Suites+Viena+Plaza+de+Espa%C3%B1a+Juan+%C3%81lvarez+Mendiz%C3%A1bal+17+Madrid" target="_blank">📍 Mapa</a> <a href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 Reserva</a></div>
         <div class="meta"><span class="pill ok">Hotel booked</span><span class="pill warn">Burgos train: buy</span></div>
       </div>
     </div>
@@ -186,7 +190,7 @@
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Madrid → Lisboa <span>· Iberia IB1145 · 28 jun 19:40 → 20:05</span></div>
-        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span><span class="pill warn">fix “Patrio”→Patricio</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span><span class="pill warn">fix “Patrio”→Patricio</span> <a class="doclink" href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 boletos</a></div>
       </div>
     </div>
 
@@ -195,7 +199,7 @@
       <div class="card">
         <div class="top"><div class="city">Lisboa<small>4 NIGHTS</small></div><div class="dates">28 JUN – 2 JUL</div></div>
         <div class="what">Centro histórico, <b>Belém</b>, Alfama y el Tranvía 28 — y el día grande: <b>Nazaré</b> (las olas gigantes) + <b>Fátima</b> con el <b>rosario de velas a las 21:30</b> 🕯️ en tour privado, regresando a la misma cama.</div>
-        <div class="stay">🏨 <span><b>Stay Hotel Lisboa Centro Chiado</b> · Rua do Crucifixo 57, Baixa — zona plana, junto al metro</span></div>
+        <div class="stay">🏨 <span><b>Stay Hotel Lisboa Centro Chiado</b> · Rua do Crucifixo 57, Baixa — zona plana, junto al metro</span> <a href="https://www.google.com/maps/search/?api=1&query=Stay+Hotel+Lisboa+Centro+Chiado+Rua+do+Crucifixo+57+Lisboa" target="_blank">📍 Mapa</a> <a href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 Reserva</a></div>
         <div class="meta"><span class="pill ok">Hotel booked</span><span class="pill todo">Fátima private tour: book now</span></div>
       </div>
     </div>
@@ -204,7 +208,7 @@
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Lisboa → Barcelona <span>· Vueling IB5635 · 2 jul 14:00 → 17:00</span></div>
-        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span> <a class="doclink" href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 boletos</a></div>
       </div>
     </div>
 
@@ -213,7 +217,7 @@
       <div class="card">
         <div class="top"><div class="city">Barcelona<small>3 NIGHTS</small></div><div class="dates">2 – 5 JUL</div></div>
         <div class="what"><b>Sagrada Família</b> ✨ · Barrio Gótico · Las Ramblas — y un día de <b>Montjuïc</b> (funicular, sin cuestas), el puerto y el paseo marítimo.</div>
-        <div class="stay">🏨 <span><b>Apartments Ramblas 108</b> · Las Ramblas 108 — el Gótico enfrente, metro Liceu en la puerta</span></div>
+        <div class="stay">🏨 <span><b>Apartments Ramblas 108</b> · Las Ramblas 108 — el Gótico enfrente, metro Liceu en la puerta</span> <a href="https://www.google.com/maps/search/?api=1&query=Apartments+Ramblas+108+Las+Ramblas+108+Barcelona" target="_blank">📍 Mapa</a> <a href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 Reserva</a></div>
         <div class="meta"><span class="pill ok">Apartment booked</span><span class="pill todo">Sagrada Família tickets</span><span class="pill warn">add Mario at check-in · €300 deposit</span></div>
       </div>
     </div>
@@ -222,7 +226,7 @@
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Barcelona → Zurich <span>· Vueling IB5530 · 5 jul 06:45 ⏰ (taxi 04:30) → tren a Chur</span></div>
-        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span> <a class="doclink" href="https://drive.google.com/drive/folders/1fPA04A7j1HWI16txuzWxD_ygSOonW1lH" target="_blank">📄 boletos</a></div>
       </div>
     </div>
 
