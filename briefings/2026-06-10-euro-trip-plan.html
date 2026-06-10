@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Euro Trip 2026 · The Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700;9..144,900&family=Karla:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0b1026; --ink2:#101638; --card:#141b42; --card2:#1a2150;
+    --line:#2a3268; --text:#eef0fa; --muted:#9aa3d0; --gold:#f5b942; --gold-soft:#f5b94226;
+    --ok:#3ddc84; --ok-bg:#0e3a26; --todo:#ff6b81; --todo-bg:#43152033;
+    --es:#ff9d4d; --pt:#3ddc84; --swiss:#ff6b6b; --uk:#f06292; --swe:#64a8ff; --paris:#4dd6c4;
+  }
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -100px, #20296355 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, #1b224f66 0%, transparent 55%),
+      var(--ink);
+    color:var(--text); font-family:'Karla',sans-serif; font-size:15.5px; line-height:1.55;
+    padding:0 0 90px; overflow-x:hidden;
+  }
+  body::before{ /* starfield */
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.5;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, #ffffff66 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 8%, #ffffff44 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 55% 30%, #ffffff33 50%, transparent 51%),
+      radial-gradient(1px 1px at 30% 60%, #ffffff2e 50%, transparent 51%),
+      radial-gradient(1px 1px at 90% 55%, #ffffff3a 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 8% 85%, #ffffff2a 50%, transparent 51%),
+      radial-gradient(1px 1px at 65% 78%, #ffffff30 50%, transparent 51%);
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 22px}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 30px;text-align:center;position:relative}
+  .hero .kicker{
+    font-size:12px;font-weight:800;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);
+    animation:fadeUp .7s .05s both;
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:900;font-size:clamp(44px,8vw,76px);line-height:1.02;
+    letter-spacing:-.01em;margin:10px 0 6px; animation:fadeUp .7s .15s both;
+  }
+  .hero h1 em{font-style:italic;font-weight:300;color:var(--gold)}
+  .hero .sub{color:var(--muted);font-size:16px;animation:fadeUp .7s .25s both}
+  .hero .sub b{color:var(--text)}
+  .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px;animation:fadeUp .7s .35s both}
+  .chip{
+    background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 18px;
+    font-size:13px;font-weight:700;display:flex;gap:8px;align-items:center;
+  }
+  .chip .n{font-family:'Fraunces',serif;font-size:19px;font-weight:700}
+  .chip.gold .n{color:var(--gold)} .chip.ok .n{color:var(--ok)} .chip.todo .n{color:var(--todo)}
+
+  .travelers{display:flex;justify-content:center;gap:26px;margin-top:26px;flex-wrap:wrap;animation:fadeUp .7s .45s both}
+  .trav{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:700}
+  .trav .face{
+    width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:25px;background:var(--card2);border:2px solid var(--line);box-shadow:0 6px 18px #00000055;
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;margin-top:54px}
+  .timeline::before{
+    content:"";position:absolute;left:33px;top:0;bottom:0;width:2px;
+    background:repeating-linear-gradient(to bottom, var(--gold) 0 7px, transparent 7px 15px);
+    opacity:.55;
+  }
+  .stop{position:relative;padding:0 0 14px 86px;animation:fadeUp .7s both}
+  .stop:nth-of-type(1){animation-delay:.5s}.stop:nth-of-type(2){animation-delay:.58s}
+  .stop:nth-of-type(3){animation-delay:.66s}.stop:nth-of-type(4){animation-delay:.74s}
+  .stop:nth-of-type(5){animation-delay:.82s}.stop:nth-of-type(6){animation-delay:.9s}
+  .stop:nth-of-type(7){animation-delay:.98s}.stop:nth-of-type(8){animation-delay:1.06s}
+  .stop:nth-of-type(9){animation-delay:1.14s}.stop:nth-of-type(10){animation-delay:1.22s}
+  .stop:nth-of-type(11){animation-delay:1.3s}.stop:nth-of-type(12){animation-delay:1.38s}
+  .stop:nth-of-type(13){animation-delay:1.46s}.stop:nth-of-type(14){animation-delay:1.54s}
+
+  .node{
+    position:absolute;left:10px;top:6px;width:48px;height:48px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+    background:var(--card2);border:2px solid var(--c,var(--gold));box-shadow:0 0 0 6px var(--ink),0 0 22px -4px var(--c,var(--gold));
+    z-index:2;
+  }
+  .leg .node{width:34px;height:34px;left:17px;font-size:15px;border-style:dashed;box-shadow:0 0 0 6px var(--ink)}
+
+  .card{
+    background:linear-gradient(180deg,var(--card) 0%, var(--ink2) 100%);
+    border:1px solid var(--line);border-left:4px solid var(--c,var(--gold));
+    border-radius:16px;padding:18px 20px 16px;box-shadow:0 10px 30px -18px #000;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 18px 38px -16px #000}
+  .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .city{font-family:'Fraunces',serif;font-size:27px;font-weight:700;letter-spacing:-.01em}
+  .city small{font-family:'Karla';font-size:12.5px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-left:8px}
+  .dates{font-weight:800;font-size:13px;color:var(--gold);white-space:nowrap}
+  .what{margin-top:8px;color:#cdd3f0;font-size:14.5px}
+  .what b{color:var(--text)}
+  .stay{margin-top:10px;font-size:13.5px;font-weight:700;color:#ffd98a;background:#f5b94212;border:1px solid #6a4f1255;border-radius:9px;padding:7px 12px;display:flex;gap:8px;align-items:baseline}
+  .stay.tbd{color:#ff9aa8;background:#ff6b8110;border-color:#7a2f3d66}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .pill{font-size:11px;font-weight:800;letter-spacing:.08em;padding:4px 11px;border-radius:999px;text-transform:uppercase}
+  .pill.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #1f6a42}
+  .pill.todo{background:var(--todo-bg);color:var(--todo);border:1px solid #7a2f3d}
+  .pill.warn{background:#3a2a08;color:var(--gold);border:1px solid #6a4f12}
+  .ref{font-size:11.5px;color:var(--muted);font-weight:700;background:#0d1230;border:1px solid var(--line);border-radius:6px;padding:3px 9px;letter-spacing:.06em}
+
+  .leg .card{padding:11px 16px;border-radius:12px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;background:var(--ink2)}
+  .leg .fl{font-weight:800;font-size:13.5px}
+  .leg .fl span{color:var(--muted);font-weight:700}
+  .leg{padding-bottom:14px}
+
+  /* ---------- SPLIT ---------- */
+  .split-title{margin:46px 0 18px;text-align:center}
+  .split-title h2{font-family:'Fraunces',serif;font-size:30px;font-weight:700}
+  .split-title h2 em{color:var(--gold);font-style:italic;font-weight:300}
+  .split-title p{color:var(--muted);font-size:14px;margin-top:4px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.split{grid-template-columns:1fr}}
+  .half{background:linear-gradient(180deg,var(--card),var(--ink2));border:1px solid var(--line);border-radius:18px;padding:20px 20px 18px}
+  .half h3{font-family:'Fraunces',serif;font-size:20px;margin-bottom:4px}
+  .half .who{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+  .half ul{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:9px}
+  .half li{display:flex;gap:10px;font-size:14px;align-items:baseline}
+  .half li .d{color:var(--gold);font-weight:800;font-size:12px;white-space:nowrap;min-width:64px}
+  .half.dad{border-top:4px solid var(--uk)} .half.mom{border-top:4px solid var(--paris)}
+
+  /* ---------- FOOTER ---------- */
+  .todo-band{margin-top:46px;background:linear-gradient(180deg,#2a1a3a33,#0d1230);border:1px solid #5b3b1f;border-radius:18px;padding:20px 22px}
+  .todo-band h3{font-family:'Fraunces',serif;font-size:20px;color:var(--gold);margin-bottom:10px}
+  .todo-list{display:flex;flex-wrap:wrap;gap:9px}
+  .todo-chip{background:#0d1230;border:1px dashed #6a4f12;color:#ffd98a;border-radius:999px;padding:7px 15px;font-size:13px;font-weight:700}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:40px}
+  .foot b{color:var(--gold)}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">✦ Familia · 23 Jun — 22 Jul 2026 ✦</div>
+    <h1>Euro Trip <em>2026</em></h1>
+    <p class="sub">Madrid → Lisboa <b>(Fátima 🕯️)</b> → Barcelona → Los Alpes → London <b>(¡Leo! 👶)</b></p>
+    <div class="chips">
+      <div class="chip gold"><span class="n">13</span> days to departure</div>
+      <div class="chip ok"><span class="n">12</span> booked ✓</div>
+      <div class="chip todo"><span class="n">6</span> to book</div>
+    </div>
+    <div class="travelers">
+      <div class="trav"><div class="face">👴</div>Papá Miguel Ángel</div>
+      <div class="trav"><div class="face">👵</div>Mamá Patricia</div>
+      <div class="trav"><div class="face">🧔</div>Mario</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="stop leg" style="--c:var(--es)">
+      <div class="node">✈️</div>
+      <div class="card">
+        <div class="fl">Cancún → Madrid <span>· Air Europa UX64 · 23 jun 20:40 → 24 jun 13:10</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+      </div>
+    </div>
+
+    <div class="stop" style="--c:var(--es)">
+      <div class="node">🇪🇸</div>
+      <div class="card">
+        <div class="top"><div class="city">Madrid<small>4 NIGHTS</small></div><div class="dates">24 – 28 JUN</div></div>
+        <div class="what"><b>Palacio Real · Plaza Mayor · Gran Vía · Mercado de San Miguel</b> — y el <b>26 jun</b>, tren a <b>Burgos</b>: la Catedral y la tumba del Cid, la tierra del apellido. Día libre con el Prado o el Retiro.</div>
+        <div class="stay">🏨 <span><b>Suites Viena Plaza de España</b> · Juan Álvarez Mendizábal 17 · desayuno buffet incluido ✓</span></div>
+        <div class="meta"><span class="pill ok">Hotel booked</span><span class="pill warn">Burgos train: buy</span></div>
+      </div>
+    </div>
+
+    <div class="stop leg" style="--c:var(--pt)">
+      <div class="node">✈️</div>
+      <div class="card">
+        <div class="fl">Madrid → Lisboa <span>· Iberia IB1145 · 28 jun 19:40 → 20:05</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span><span class="pill warn">fix “Patrio”→Patricio</span></div>
+      </div>
+    </div>
+
+    <div class="stop" style="--c:var(--pt)">
+      <div class="node">🇵🇹</div>
+      <div class="card">
+        <div class="top"><div class="city">Lisboa<small>4 NIGHTS</small></div><div class="dates">28 JUN – 2 JUL</div></div>
+        <div class="what">Centro histórico, <b>Belém</b>, Alfama y el Tranvía 28 — y el día grande: <b>Nazaré</b> (las olas gigantes) + <b>Fátima</b> con el <b>rosario de velas a las 21:30</b> 🕯️ en tour privado, regresando a la misma cama.</div>
+        <div class="stay">🏨 <span><b>Stay Hotel Lisboa Centro Chiado</b> · Rua do Crucifixo 57, Baixa — zona plana, junto al metro</span></div>
+        <div class="meta"><span class="pill ok">Hotel booked</span><span class="pill todo">Fátima private tour: book now</span></div>
+      </div>
+    </div>
+
+    <div class="stop leg" style="--c:var(--es)">
+      <div class="node">✈️</div>
+      <div class="card">
+        <div class="fl">Lisboa → Barcelona <span>· Vueling IB5635 · 2 jul 14:00 → 17:00</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+      </div>
+    </div>
+
+    <div class="stop" style="--c:var(--es)">
+      <div class="node">🇪🇸</div>
+      <div class="card">
+        <div class="top"><div class="city">Barcelona<small>3 NIGHTS</small></div><div class="dates">2 – 5 JUL</div></div>
+        <div class="what"><b>Sagrada Família</b> ✨ · Barrio Gótico · Las Ramblas — y un día de <b>Montjuïc</b> (funicular, sin cuestas), el puerto y el paseo marítimo.</div>
+        <div class="stay">🏨 <span><b>Apartments Ramblas 108</b> · Las Ramblas 108 — el Gótico enfrente, metro Liceu en la puerta</span></div>
+        <div class="meta"><span class="pill ok">Apartment booked</span><span class="pill todo">Sagrada Família tickets</span><span class="pill warn">add Mario at check-in · €300 deposit</span></div>
+      </div>
+    </div>
+
+    <div class="stop leg" style="--c:var(--swiss)">
+      <div class="node">✈️</div>
+      <div class="card">
+        <div class="fl">Barcelona → Zurich <span>· Vueling IB5530 · 5 jul 06:45 ⏰ (taxi 04:30) → tren a Chur</span></div>
+        <div class="meta"><span class="pill ok">Booked</span><span class="ref">ref ✓</span></div>
+      </div>
+    </div>
+
+    <div class="stop" style="--c:var(--swiss)">
+      <div class="node">🇨🇭</div>
+      <div class="card">
+        <div class="top"><div class="city">Chur · Los Alpes<small>3 NIGHTS</small></div><div class="dates">5 – 8 JUL</div></div>
+        <div class="what">La ciudad más antigua de Suiza. <b>6 jul:</b> el tren panorámico <b>Bernina Express</b> 🚂 y <b>St. Moritz</b>. <b>7 jul:</b> Alpes de verdad — <b>Arosa</b> en tren de montaña (1 h), lago y teleférico.</div>
+        <div class="stay tbd">🏨 <span><b>Hotel por reservar</b> — Altstadt de Chur, cerca de la estación</span></div>
+        <div class="meta"><span class="pill todo">Hotel: to book</span><span class="pill todo">Bernina seats: to book</span></div>
+      </div>
+    </div>
+
+    <div class="stop leg" style="--c:var(--uk)">
+      <div class="node">✈️</div>
+      <div class="card">
+        <div class="fl">Zurich → London <span>· 8 jul · arrive by afternoon</span></div>
+        <div class="meta"><span class="pill todo">To book</span></div>
+      </div>
+    </div>
+
+    <div class="stop" style="--c:var(--uk)">
+      <div class="node">🇬🇧</div>
+      <div class="card">
+        <div class="top"><div class="city">London · ¡todos juntos!<small>2 NIGHTS</small></div><div class="dates">8 – 10 JUL</div></div>
+        <div class="what">El <b>8 jul a las 07:05</b> aterrizan <b>Miguel, Emma y el bebé Leo</b> 👶. Dos noches en familia — Westminster, Tower Bridge, un parque con el nieto. <b>10 jul:</b> Papá (TUI 10:00) y Mario (BA 13:25) vuelan a casa desde Gatwick.</div>
+        <div class="stay tbd">🏨 <span><b>Hotel por reservar</b> — zona céntrica, familiar (8–10 jul los tres · Mike+Emma+Leo hasta el 11)</span></div>
+        <div class="meta"><span class="pill ok">Return flights booked</span><span class="ref">ref ✓ref ✓</span><span class="pill todo">Hotel: to book</span><span class="pill warn">UK ETA ×6 · BA bag for Mario</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="split-title">
+    <h2>Then the family <em>splits</em></h2>
+    <p>10 jul — same day, two directions</p>
+  </div>
+
+  <div class="split">
+    <div class="half dad">
+      <div class="who">Papá + Mario</div>
+      <h3>🏠 Home to Cozumel</h3>
+      <ul>
+        <li><span class="d">10 JUL</span><span>Papá — TUI TOM064, Gatwick 10:00 → Cancún 14:25 ✅</span></li>
+        <li><span class="d">10 JUL</span><span>Mario — BA2203, Gatwick 13:25 → Cancún 17:50 ✅ <i>(add checked bag)</i></span></li>
+      </ul>
+    </div>
+    <div class="half mom">
+      <div class="who">Mamá · with Miguel, Emma & Leo</div>
+      <h3>✨ The grandma tour continues</h3>
+      <ul>
+        <li><span class="d">8–11 JUL</span><span>🇬🇧 London con la familia — 3 noches</span></li>
+        <li><span class="d">11 JUL</span><span>✈️ Ryanair FR7384, Stansted 08:35 → Copenhague 11:20 ✅ <i>(ref ✓)</i></span></li>
+        <li><span class="d">11–13 JUL</span><span>🇩🇰 Copenhague — Nyhavn, Tivoli con Leo <i>(hotel por decidir)</i></span></li>
+        <li><span class="d">13–18 JUL</span><span>🇸🇪 Helsingborg — casa de la familia de Emma ✅ (CPH→HBG ~1 h en tren)</span></li>
+        <li><span class="d">18–22 JUL</span><span>🇫🇷 Paris — Torre Eiffel, el Sena, Louvre</span></li>
+        <li><span class="d">22 JUL</span><span>✈️ Air Caraïbes TX648, Orly 11:40 → Cancún ✅</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="todo-band">
+    <h3>⏳ Still to book — in this order</h3>
+    <div class="todo-list">
+      <span class="todo-chip">1 · Fátima private day-tour 🕯️ (29/30 jun)</span>
+      <span class="todo-chip">2 · Chur hotel (5–8 jul)</span>
+      <span class="todo-chip">3 · Bernina Express seats (6 jul)</span>
+      <span class="todo-chip">4 · Zurich → London flight (8 jul)</span>
+      <span class="todo-chip">5 · London 8–13 + Paris 18–22 hotels</span>
+      <span class="todo-chip">6 · Burgos train + Sagrada Família tickets</span>
+    </div>
+  </div>
+
+  <div class="foot">
+    Generated 10 jun 2026<br>
+    Hecho con cariño — confirmaciones guardadas en <b>Projects/Euro_Trip_2026/</b>
+  </div>
+
+</div>
+
+</body>
+</html>
