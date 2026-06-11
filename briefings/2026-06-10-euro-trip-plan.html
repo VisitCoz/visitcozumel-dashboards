@@ -162,9 +162,23 @@
   .wx .wxt{color:#9aa3d0;font-weight:700}
   .wx .wxn{color:#6f78a8;font-size:11px}
   .wx .wxlive{background:var(--ok-bg);color:var(--ok);border:1px solid #1f6a42;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:800;letter-spacing:.08em}
+  #trip-progress{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--gold),#ffd98a);width:0;z-index:99;box-shadow:0 0 10px var(--gold);display:none}
+  #trip-status{margin-top:20px;font-family:'Fraunces',serif;font-size:clamp(20px,4.2vw,30px);color:var(--text);animation:fadeUp .7s .4s both}
+  #trip-status em{color:var(--gold);font-style:normal;font-weight:900}
+  #trip-status small{display:block;font-family:'Karla',sans-serif;font-size:13px;color:var(--muted);margin-top:5px;font-weight:700}
+  .tdone{opacity:.45;filter:grayscale(.45)}
+  li.tdone{opacity:.4}
+  .tbadge{font-size:10px;font-weight:800;letter-spacing:.08em;border-radius:999px;padding:3px 10px;margin-left:8px;vertical-align:middle;white-space:nowrap;font-family:'Karla',sans-serif}
+  .tbadge.done{background:#16204a;color:#9aa3d0;border:1px solid var(--line)}
+  .tbadge.here{background:var(--gold);color:#1a1404;border:1px solid #ffd98a}
+  .there>.card{box-shadow:0 0 0 2px var(--gold),0 0 30px -6px var(--gold)}
+  .there .node{animation:herePulse 1.6s infinite}
+  li.there{background:#f5b94213;border:1px solid #6a4f1266;border-radius:12px;padding:8px 10px;box-shadow:0 0 18px -8px var(--gold)}
+  @keyframes herePulse{0%,100%{box-shadow:0 0 0 6px var(--ink),0 0 0 8px #f5b94288}50%{box-shadow:0 0 0 6px var(--ink),0 0 0 14px #f5b94200}}
 </style>
 </head>
 <body>
+<div id="trip-progress"></div>
 
 <div class="wrap">
 
@@ -172,6 +186,7 @@
     <div class="kicker">✦ Familia · 23 Jun — 22 Jul 2026 ✦</div>
     <h1>Euro Trip <em>2026</em></h1>
     <p class="sub">Madrid → Lisboa <b>(Fátima 🕯️)</b> → Barcelona → Los Alpes → London <b>(¡Leo! 👶)</b></p>
+    <div id="trip-status"></div>
     <div class="chips">
       <div class="chip gold"><span class="n">13</span> days to departure</div>
       <div class="chip ok"><span class="n">13</span> booked ✓</div>
@@ -187,7 +202,7 @@
 
   <div class="timeline">
 
-    <div class="stop leg" style="--c:var(--es)">
+    <div class="stop leg" data-start="2026-06-23" data-end="2026-06-24" style="--c:var(--es)">
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Cancún → Madrid <span>· Air Europa UX64 · 23 jun 20:40 → 24 jun 13:10</span></div>
@@ -219,7 +234,7 @@
       </div>
     </div>
 
-    <div class="stop leg" style="--c:var(--pt)">
+    <div class="stop leg" data-start="2026-06-28" data-end="2026-06-28" style="--c:var(--pt)">
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Madrid → Lisboa <span>· Iberia IB1145 · 28 jun 19:40 → 20:05</span></div>
@@ -251,7 +266,7 @@
       </div>
     </div>
 
-    <div class="stop leg" style="--c:var(--es)">
+    <div class="stop leg" data-start="2026-07-02" data-end="2026-07-02" style="--c:var(--es)">
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Lisboa → Barcelona <span>· Vueling IB5635 · 2 jul 14:00 → 17:00</span></div>
@@ -283,7 +298,7 @@
       </div>
     </div>
 
-    <div class="stop leg" style="--c:var(--swiss)">
+    <div class="stop leg" data-start="2026-07-05" data-end="2026-07-05" style="--c:var(--swiss)">
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Barcelona → Zurich <span>· Vueling IB5530 · 5 jul 06:45 ⏰ (taxi 04:30) → tren a Chur</span></div>
@@ -315,7 +330,7 @@
       </div>
     </div>
 
-    <div class="stop leg" style="--c:var(--uk)">
+    <div class="stop leg" data-start="2026-07-08" data-end="2026-07-08" style="--c:var(--uk)">
       <div class="node">✈️</div>
       <div class="card">
         <div class="fl">Zurich → London <span>· Swiss LX324 · 8 jul 15:35 → 16:25 · Heathrow T2</span></div>
@@ -357,22 +372,22 @@
       <div class="who">Papá + Mario</div>
       <h3>🏠 Home to Cozumel</h3>
       <ul>
-        <li><span class="d">10 JUL</span><span>Papá — TUI TOM064, Gatwick 10:00 → Cancún 14:25 ✅</span></li>
-        <li><span class="d">10 JUL</span><span>Mario — BA2203, Gatwick 13:25 → Cancún 17:50 ✅ <i>(add checked bag)</i></span></li>
+        <li data-start="2026-07-10" data-end="2026-07-10" data-leg="1"><span class="d">10 JUL</span><span>Papá — TUI TOM064, Gatwick 10:00 → Cancún 14:25 ✅</span></li>
+        <li data-start="2026-07-10" data-end="2026-07-10" data-leg="1"><span class="d">10 JUL</span><span>Mario — BA2203, Gatwick 13:25 → Cancún 17:50 ✅ <i>(add checked bag)</i></span></li>
       </ul>
     </div>
     <div class="half mom">
       <div class="who">Mamá · with Miguel, Emma & Leo</div>
       <h3>✨ The grandma tour continues</h3>
       <ul>
-        <li><span class="d">8–11 JUL</span><span>🇬🇧 London con la familia — 3 noches · Leonardo Royal Tower Bridge ✓</span></li>
-        <li><span class="d">11 JUL</span>
+        <li data-start="2026-07-08" data-end="2026-07-11"><span class="d">8–11 JUL</span><span>🇬🇧 London con la familia — 3 noches · Leonardo Royal Tower Bridge ✓</span></li>
+        <li data-start="2026-07-11" data-end="2026-07-11" data-leg="1"><span class="d">11 JUL</span>
           <div style="flex:1;background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:11px 14px">
             <div style="font-weight:800;font-size:13.5px">✈️ London → Copenhague <span style="color:var(--muted);font-weight:600">· Ryanair FR7384 · Stansted 08:35 → CPH 11:20</span></div>
             <div style="margin-top:7px;display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="pill ok">Booked</span><span class="ref">ref ✓</span><span class="ref">asientos 4D · 4E · 4F</span><span class="ref">salir ~05:15 · Stansted Express</span><span class="pill warn">pase de abordar solo en la app</span></div>
           </div>
         </li>
-        <li><span class="d">11–13 JUL</span><span>🇩🇰 Copenhague — Nyhavn, Tivoli con Leo <i>(hotel por decidir)</i></span></li>
+        <li data-start="2026-07-11" data-end="2026-07-13"><span class="d">11–13 JUL</span><span>🇩🇰 Copenhague — Nyhavn, Tivoli con Leo <i>(hotel por decidir)</i></span></li>
         <li><span class="d"></span><div class="wx" data-lat="55.68" data-lon="12.57" data-start="2026-07-11" data-end="2026-07-13" data-typical="20–22°, atardecer ~21:50"><span class="wxt">🌡️ Típico: 20–22°, atardecer ~21:50</span></div></li>
         <li><span class="d"></span><details class="stay reco" style="flex:1"><summary>⭐ <span><b>Qué ver</b> — Copenhague con Leo</span></summary><div class="staydet">
           <div class="reco-item"><span class="rn">🌈 <a href="https://www.google.com/maps/search/?api=1&query=Nyhavn+Copenhagen" target="_blank">Nyhavn</a><span class="rstars">⭐ 4.7 · 8.3K reseñas</span></span><span class="rw">El puerto de casitas de colores — LA postal de Copenhague. Plano, con carriola fácil, y los barcos del canal salen de aquí.</span></div>
@@ -381,7 +396,7 @@
           <div class="reco-item"><span class="rn">👑 <a href="https://www.google.com/maps/search/?api=1&query=Rosenborg+Castle+Copenhagen" target="_blank">Castillo de Rosenborg + Kongens Have</a><span class="rstars">⭐ 4.6 · 26K reseñas</span></span><span class="rw">Castillo renacentista con las joyas de la corona danesa, rodeado del jardín más querido de la ciudad — picnic con Leo en el pasto.</span></div>
           <div class="reco-item"><span class="rn">🛍️ <a href="https://www.google.com/maps/search/?api=1&query=Str%C3%B8get+Copenhagen" target="_blank">Strøget</a><span class="rstars">⭐ 4.6 · 1.4K reseñas</span></span><span class="rw">La calle peatonal más larga de Europa — de la plaza del ayuntamiento a Nyhavn, perfecta con carriola.</span></div>
         </div></details></li>
-        <li><span class="d">13–19 JUL</span><span>🇸🇪 Helsingborg — casa de la familia de Emma ✅ (CPH→HBG ~1 h en tren)</span></li>
+        <li data-start="2026-07-13" data-end="2026-07-19"><span class="d">13–19 JUL</span><span>🇸🇪 Helsingborg — casa de la familia de Emma ✅ (CPH→HBG ~1 h en tren)</span></li>
         <li><span class="d"></span><div class="wx" data-lat="56.05" data-lon="12.69" data-start="2026-07-13" data-end="2026-07-19" data-typical="20–22°, noches largas y claras"><span class="wxt">🌡️ Típico: 20–22°, noches largas y claras</span></div></li>
         <li><span class="d"></span><details class="stay reco" style="flex:1"><summary>⭐ <span><b>Qué ver</b> — Helsingborg y alrededores</span></summary><div class="staydet">
           <div class="reco-item"><span class="rn">🗼 <a href="https://www.google.com/maps/search/?api=1&query=K%C3%A4rnan+Helsingborg" target="_blank">Kärnan</a><span class="rstars">⭐ 4.6 · 1.5K reseñas</span></span><span class="rw">La torre medieval de 35 m que domina la ciudad — desde arriba se ve Dinamarca cruzando el estrecho.</span></div>
@@ -389,13 +404,13 @@
           <div class="reco-item"><span class="rn">🏰 <a href="https://www.google.com/maps/search/?api=1&query=Kronborg+Castle+Helsing%C3%B8r" target="_blank">Castillo de Kronborg (Helsingør)</a><span class="rstars">⭐ 4.6 · 17K reseñas</span></span><span class="rw">El castillo de Hamlet, Patrimonio UNESCO — el ferry desde Helsingborg cruza en 20 min y la vista desde el agua es el show.</span></div>
           <div class="reco-item"><span class="rn">🏡 <a href="https://www.google.com/maps/search/?api=1&query=Fredriksdal+Museum+Helsingborg" target="_blank">Fredriksdal — museo al aire libre</a><span class="rstars">⭐ 4.5 · 2.8K reseñas</span></span><span class="rw">Granjas y calles suecas del siglo XVIII con animales y jardines botánicos — tarde tranquila en familia.</span></div>
         </div></details></li>
-        <li><span class="d">19 JUL</span>
+        <li data-start="2026-07-19" data-end="2026-07-19" data-leg="1"><span class="d">19 JUL</span>
           <div style="flex:1;background:var(--ink2);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:11px 14px">
             <div style="font-weight:800;font-size:13.5px">✈️ Copenhague → Paris CDG <span style="color:var(--muted);font-weight:600">· Norwegian D8 3636 · 13:25 → 15:25</span></div>
             <div style="margin-top:7px;display:flex;gap:7px;flex-wrap:wrap;align-items:center"><span class="pill ok">Booked</span><span class="ref">ref ✓</span><span class="ref">asientos ✓</span><span class="ref">tren HBG→CPH ~1 h · salir ~10:00</span><span class="pill warn">solo bolsa bajo el asiento — agregar maletas online</span></div>
           </div>
         </li>
-        <li><span class="d">19–22 JUL</span><span>🇫🇷 Paris — Torre Eiffel, el Sena, Louvre · <b>Hotel Europe Saint Severin ✓</b> (Barrio Latino, a 4 min de Notre-Dame) <i>(llegada CDG · salida Orly)</i></span></li>
+        <li data-start="2026-07-19" data-end="2026-07-22"><span class="d">19–22 JUL</span><span>🇫🇷 Paris — Torre Eiffel, el Sena, Louvre · <b>Hotel Europe Saint Severin ✓</b> (Barrio Latino, a 4 min de Notre-Dame) <i>(llegada CDG · salida Orly)</i></span></li>
         <li><span class="d"></span><div class="wx" data-lat="48.86" data-lon="2.35" data-start="2026-07-19" data-end="2026-07-22" data-typical="25–27°, posible tormenta aislada"><span class="wxt">🌡️ Típico: 25–27°, posible tormenta aislada</span></div></li>
         <li><span class="d"></span><details class="stay reco" style="flex:1"><summary>⭐ <span><b>Qué ver</b> — Paris con Leo y la abuela</span></summary><div class="staydet">
           <div class="reco-item"><span class="rn">🗼 <a href="https://www.google.com/maps/search/?api=1&query=Eiffel+Tower+Paris" target="_blank">Torre Eiffel + Champ de Mars</a><span class="rstars">⭐ 4.7 · 490K reseñas</span></span><span class="rw">Suban con boleto reservado online (se agotan) o simplemente picnic en el Champ de Mars — Leo en el pasto y la torre de fondo.</span></div>
@@ -404,7 +419,7 @@
           <div class="reco-item"><span class="rn">⛲ <a href="https://www.google.com/maps/search/?api=1&query=Jardin+du+Luxembourg+Paris" target="_blank">Jardín de Luxemburgo</a><span class="rstars">⭐ 4.7 · 126K reseñas</span></span><span class="rw">El parque más elegante de París — sillas verdes junto al estanque, veleros de juguete, sombra. Hecho para una tarde con carriola.</span></div>
           <div class="reco-item"><span class="rn">🌈 <a href="https://www.google.com/maps/search/?api=1&query=Sainte-Chapelle+Paris" target="_blank">Sainte-Chapelle</a><span class="rstars">⭐ 4.6 · 49K reseñas</span></span><span class="rw">1,113 vitrales del siglo XIII que convierten la capilla en un caleidoscopio — 30 minutos que la abuela no va a olvidar.</span></div>
         </div></details></li>
-        <li><span class="d">22 JUL</span><span>✈️ Air Caraïbes TX648, Orly 11:40 → Cancún ✅</span></li>
+        <li data-start="2026-07-22" data-end="2026-07-22" data-leg="1"><span class="d">22 JUL</span><span>✈️ Air Caraïbes TX648, Orly 11:40 → Cancún ✅</span></li>
       </ul>
     </div>
   </div>
@@ -448,6 +463,53 @@
         el.innerHTML='<span class="wxlive">CLIMA EN VIVO</span>'+days+(end>horizon?' <span class="wxn">· días restantes: '+el.dataset.typical+"</span>":"");
       }).catch(function(){});
   });
+})();
+</script>
+<script>
+(function(){
+  var DAY=86400000;
+  var qd=new URLSearchParams(location.search).get("hoy");
+  var now=qd?new Date(qd+"T12:00:00"):new Date();
+  var sod=function(d){var x=new Date(d);x.setHours(0,0,0,0);return x};
+  var t0=new Date("2026-06-23T00:00:00"), t1=new Date("2026-07-22T23:59:59");
+  // progress bar
+  var bar=document.getElementById("trip-progress");
+  if(now>=t0){bar.style.display="block";bar.style.width=Math.min(100,(now-t0)/(t1-t0)*100)+"%"}
+  // collect trackable items
+  var items=[];
+  document.querySelectorAll(".stop").forEach(function(st){
+    var s=st.dataset.start,e=st.dataset.end;
+    if(!s){var wx=st.querySelector(".wx");if(wx){s=wx.dataset.start;e=wx.dataset.end}}
+    if(s&&e)items.push({el:st,s:new Date(s+"T00:00:00"),e:new Date(e+"T23:59:59"),leg:st.classList.contains("leg")});
+  });
+  document.querySelectorAll("li[data-start]").forEach(function(li){
+    items.push({el:li,s:new Date(li.dataset.start+"T00:00:00"),e:new Date(li.dataset.end+"T23:59:59"),leg:li.dataset.leg==="1"});
+  });
+  items.forEach(function(it){
+    var host=it.el.querySelector(".dates")||it.el.querySelector(".fl")||it.el.querySelector("span+span")||it.el;
+    if(now>it.e){
+      it.el.classList.add("tdone");
+      host.insertAdjacentHTML("beforeend",' <span class="tbadge done">✓</span>');
+    } else if(now>=it.s){
+      it.el.classList.add("there");
+      host.insertAdjacentHTML("beforeend",' <span class="tbadge here">'+(it.leg?"✈️ HOY VUELAN":"📍 ESTÁN AQUÍ")+"</span>");
+    }
+  });
+  // countdown / status line
+  var CITIES=[["Madrid","2026-06-24","2026-06-28"],["Lisboa","2026-06-28","2026-07-02"],["Barcelona","2026-07-02","2026-07-05"],["Arosa 🏔️","2026-07-05","2026-07-08"],["London","2026-07-08","2026-07-11"],["Copenhague","2026-07-11","2026-07-13"],["Helsingborg","2026-07-13","2026-07-19"],["Paris","2026-07-19","2026-07-22"]];
+  var st=document.getElementById("trip-status");
+  if(!st)return;
+  if(now<t0){
+    var days=Math.round((sod(t0)-sod(now))/DAY);
+    st.innerHTML=days===1?"✈️ <em>¡Mañana nos vamos!</em><small>Cancún → Madrid · Air Europa 20:40</small>"
+      :"✈️ Faltan <em>"+days+" días</em> para el viaje<small>salimos el 23 de junio · Cancún → Madrid 20:40</small>";
+  } else if(now<=t1){
+    var dn=Math.floor((sod(now)-sod(t0))/DAY)+1, city="en vuelo ✈️";
+    CITIES.forEach(function(c){if(now>=new Date(c[1]+"T00:00:00")&&now<=new Date(c[2]+"T23:59:59"))city=c[0]});
+    st.innerHTML="🌍 <em>Día "+dn+" de 30</em> · hoy: <em>"+city+"</em><small>la parada actual está iluminada abajo 📍</small>";
+  } else {
+    st.innerHTML="✦ <em>Viaje completado</em> — 30 días · 8 ciudades · 6 Burgos ✦";
+  }
 })();
 </script>
 </body>
