@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Euro Trip 2026 · Asistente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Karla:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0b1026; --card:#141b42; --card2:#1a2150; --line:#2a3268;
+    --text:#eef0fa; --muted:#9aa3d0; --gold:#f5b942;
+  }
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -100px, #20296355 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, #1b224f66 0%, transparent 55%),
+      var(--ink);
+    color:var(--text); font-family:'Karla',sans-serif; font-size:16px; line-height:1.55;
+    display:flex; flex-direction:column; height:100dvh; overflow:hidden;
+  }
+  header{
+    text-align:center; padding:18px 16px 14px; border-bottom:1px solid var(--line);
+    flex-shrink:0; background:#0b102688; backdrop-filter:blur(6px);
+  }
+  header .kicker{font-size:11px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+  header h1{font-family:'Fraunces',serif;font-weight:900;font-size:24px;line-height:1.05;margin-top:3px}
+  header h1 em{font-style:italic;font-weight:300;color:var(--gold)}
+  header p{color:var(--muted);font-size:12.5px;margin-top:3px}
+
+  #msgs{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+  .wrap{width:100%;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:85%;padding:11px 15px;border-radius:16px;font-size:15px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;animation:pop .25s ease}
+  .bot{background:var(--card);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
+  .me{background:var(--gold);color:#2a1c00;font-weight:600;align-self:flex-end;border-bottom-right-radius:5px}
+  .msg a{color:var(--gold)} .me a{color:#2a1c00}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .suggest{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start;max-width:100%;margin-top:-2px}
+  .suggest button{
+    background:transparent;color:var(--gold);border:1.4px solid var(--line);border-radius:999px;
+    padding:8px 14px;font:inherit;font-size:13px;cursor:pointer;transition:.15s;
+  }
+  .suggest button:hover{border-color:var(--gold);background:var(--gold);color:#2a1c00}
+
+  .typing{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;border-bottom-left-radius:5px;padding:12px 16px;display:flex;gap:5px}
+  .typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block;animation:b 1.2s infinite ease-in-out}
+  .typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+  @keyframes b{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+
+  footer{flex-shrink:0;border-top:1px solid var(--line);padding:12px 16px;background:#0b102688;backdrop-filter:blur(6px)}
+  .bar{width:100%;max-width:720px;margin:0 auto;display:flex;gap:9px;align-items:flex-end}
+  #in{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:22px;color:var(--text);
+    padding:11px 16px;font:inherit;font-size:16px;outline:none;resize:none;max-height:120px;line-height:1.4;
+  }
+  #in:focus{border-color:var(--gold)} #in::placeholder{color:var(--muted)}
+  #send{width:46px;height:46px;flex-shrink:0;border-radius:50%;border:none;background:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+  #send:hover{transform:scale(1.06)} #send:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  #send svg{width:20px;height:20px;fill:#2a1c00}
+  .note{color:var(--muted);font-size:11px;text-align:center;margin-top:8px}
+  .note a{color:var(--gold)}
+</style>
+</head>
+<body>
+  <header>
+    <div class="kicker">Burgos · Magnusson</div>
+    <h1>Euro Trip 2026 · <em>Asistente</em></h1>
+    <p>Pregúntame lo que sea del viaje · Ask me anything about the trip</p>
+  </header>
+
+  <div id="msgs"><div class="wrap" id="wrap"></div></div>
+
+  <footer>
+    <div class="bar">
+      <textarea id="in" rows="1" placeholder="Escribe tu pregunta…" autocomplete="off"></textarea>
+      <button id="send" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+    </div>
+    <div class="note">23 jun – 22 jul 2026 · 6 viajeros · 8 ciudades</div>
+  </footer>
+
+<script>
+(function(){
+  // Paste the Apps Script /exec URL here (see assistant/DEPLOY.md).
+  var API_URL = '__PASTE_EXEC_URL_HERE__';
+  var CONNECTED = API_URL.indexOf('script.google.com') !== -1;
+
+  var wrap = document.getElementById('wrap');
+  var input = document.getElementById('in');
+  var sendBtn = document.getElementById('send');
+  var messages = [];
+  var loading = false;
+
+  var GREETING = "¡Hola! Soy el asistente del Euro Trip 2026. Pregúntame por vuelos, hoteles, fechas o lo que falta por hacer.\n\nHi! I'm your Euro Trip 2026 assistant — ask me about flights, hotels, dates, or what's still to do.";
+  var SUGGESTIONS = ["¿Qué día llegan a Madrid?","¿Dónde está la familia el 8 de julio?","What's Mario's return flight?","¿Qué falta por hacer?"];
+
+  function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmt(t){return esc(t).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+  function scroll(){var m=document.getElementById('msgs');m.scrollTop=m.scrollHeight;}
+
+  function bubble(text, who){
+    var el=document.createElement('div');
+    el.className='msg '+(who==='me'?'me':'bot');
+    if(who==='me') el.textContent=text; else el.innerHTML=fmt(text);
+    wrap.appendChild(el); scroll();
+  }
+  function suggestions(){
+    var box=document.createElement('div'); box.className='suggest'; box.id='suggest';
+    SUGGESTIONS.forEach(function(s){
+      var b=document.createElement('button'); b.textContent=s;
+      b.onclick=function(){ box.remove(); send(s); };
+      box.appendChild(b);
+    });
+    wrap.appendChild(box); scroll();
+  }
+  function dropSuggest(){var s=document.getElementById('suggest'); if(s) s.remove();}
+  function typing(on){
+    var ex=document.getElementById('typing');
+    if(on){ if(ex)return; var t=document.createElement('div'); t.className='typing'; t.id='typing'; t.innerHTML='<span></span><span></span><span></span>'; wrap.appendChild(t); scroll(); }
+    else if(ex){ ex.remove(); }
+  }
+
+  async function send(override){
+    if(loading) return;
+    var text = override || input.value.trim();
+    if(!text) return;
+    if(!override){ input.value=''; input.style.height='auto'; }
+    dropSuggest();
+    bubble(text,'me'); messages.push({role:'user',content:text});
+
+    if(!CONNECTED){
+      bubble("⚙️ El asistente todavía no está conectado. Falta pegar la URL del backend (ver assistant/DEPLOY.md).\n\nThe assistant isn't connected yet — the backend URL still needs to be added.","bot");
+      return;
+    }
+
+    loading=true; sendBtn.disabled=true; typing(true);
+    try{
+      var resp=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({messages:messages}),redirect:'follow'});
+      var data=await resp.json(); typing(false);
+      var reply=data.reply || "Lo siento, no pude procesar eso. / Sorry, I couldn't process that.";
+      bubble(reply,'bot'); messages.push({role:'assistant',content:reply});
+    }catch(e){
+      typing(false);
+      bubble("No me pude conectar. Intenta de nuevo en un momento. / I couldn't connect — please try again.","bot");
+    }
+    loading=false; sendBtn.disabled=false;
+  }
+
+  sendBtn.onclick=function(){send();};
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault(); send();} });
+  input.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+
+  bubble(GREETING,'bot');
+  messages.push({role:'assistant',content:GREETING});
+  suggestions();
+})();
+</script>
+</body>
+</html>

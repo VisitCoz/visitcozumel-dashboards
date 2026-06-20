@@ -521,5 +521,78 @@
   }
 })();
 </script>
+
+<!-- ===== Ask-Claude trip assistant bubble ===== -->
+<style>
+  #eta-btn{position:fixed;bottom:22px;right:22px;width:58px;height:58px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;box-shadow:0 6px 20px #0009;z-index:99998;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+  #eta-btn:hover{transform:scale(1.08)}
+  #eta-btn svg{width:27px;height:27px;fill:#2a1c00}
+  #eta-win{display:none;position:fixed;bottom:90px;right:22px;width:380px;max-width:calc(100vw - 24px);height:540px;max-height:calc(100dvh - 120px);background:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 12px 48px #000a;z-index:99999;flex-direction:column;overflow:hidden}
+  #eta-win.open{display:flex}
+  #eta-head{background:var(--card);border-bottom:1px solid var(--line);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  #eta-head h3{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin:0}
+  #eta-head p{font-size:11px;color:var(--muted);margin:1px 0 0}
+  #eta-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}
+  #eta-msgs{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:11px;-webkit-overflow-scrolling:touch}
+  .eta-m{max-width:86%;padding:10px 14px;border-radius:15px;font-size:14.5px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+  .eta-bot{background:var(--card);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
+  .eta-me{background:var(--gold);color:#2a1c00;font-weight:600;align-self:flex-end;border-bottom-right-radius:5px}
+  .eta-m a{color:var(--gold)} .eta-me a{color:#2a1c00}
+  .eta-sg{display:flex;flex-wrap:wrap;gap:7px;align-self:flex-start}
+  .eta-sg button{background:transparent;color:var(--gold);border:1.3px solid var(--line);border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+  .eta-sg button:hover{border-color:var(--gold);background:var(--gold);color:#2a1c00}
+  .eta-typ{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-radius:15px;border-bottom-left-radius:5px;padding:11px 15px;display:flex;gap:5px}
+  .eta-typ span{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;animation:etb 1.2s infinite}
+  .eta-typ span:nth-child(2){animation-delay:.2s}.eta-typ span:nth-child(3){animation-delay:.4s}
+  @keyframes etb{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+  #eta-bar{flex-shrink:0;border-top:1px solid var(--line);padding:11px 13px;display:flex;gap:8px;align-items:flex-end}
+  #eta-in{flex:1;background:var(--card);border:1px solid var(--line);border-radius:20px;color:var(--text);padding:10px 14px;font:inherit;font-size:16px;outline:none;resize:none;max-height:90px;line-height:1.4}
+  #eta-in:focus{border-color:var(--gold)} #eta-in::placeholder{color:var(--muted)}
+  #eta-snd{width:42px;height:42px;flex-shrink:0;border-radius:50%;border:none;background:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  #eta-snd:disabled{opacity:.4;cursor:not-allowed} #eta-snd svg{width:18px;height:18px;fill:#2a1c00}
+  @media(max-width:480px){#eta-win{bottom:78px;right:8px;left:8px;width:auto;height:62dvh;max-height:62dvh}#eta-btn{bottom:16px;right:16px}}
+</style>
+<button id="eta-btn" aria-label="Asistente del viaje" onclick="etaToggle()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></button>
+<div id="eta-win">
+  <div id="eta-head">
+    <div><h3>Asistente del viaje</h3><p>Pregúntame lo que sea · Ask me anything</p></div>
+    <button id="eta-close" onclick="etaToggle()">&times;</button>
+  </div>
+  <div id="eta-msgs"></div>
+  <div id="eta-bar">
+    <textarea id="eta-in" rows="1" placeholder="Escribe tu pregunta…"></textarea>
+    <button id="eta-snd" aria-label="Enviar" onclick="etaSend()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+  </div>
+</div>
+<script>
+(function(){
+  // Paste the Apps Script /exec URL here (see Euro_Trip_2026/assistant/DEPLOY.md).
+  var API_URL='__PASTE_EXEC_URL_HERE__';
+  var CONNECTED=API_URL.indexOf('script.google.com')!==-1;
+  var msgs=[],loading=false,greeted=false;
+  var GREET="¡Hola! Pregúntame por vuelos, hoteles, fechas o lo que falta. / Hi! Ask me about flights, hotels, dates or to-dos.";
+  var SG=["¿Qué día llegan a Madrid?","Where is everyone on July 8?","¿Qué falta por hacer?"];
+  var box=function(id){return document.getElementById(id);};
+  function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmt(t){return esc(t).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+  function sc(){var m=box('eta-msgs');m.scrollTop=m.scrollHeight;}
+  function bub(t,who){var e=document.createElement('div');e.className='eta-m '+(who==='me'?'eta-me':'eta-bot');if(who==='me')e.textContent=t;else e.innerHTML=fmt(t);box('eta-msgs').appendChild(e);sc();}
+  function sg(){var b=document.createElement('div');b.className='eta-sg';b.id='eta-sg';SG.forEach(function(s){var x=document.createElement('button');x.textContent=s;x.onclick=function(){b.remove();etaSend(s);};b.appendChild(x);});box('eta-msgs').appendChild(b);sc();}
+  function dsg(){var s=box('eta-sg');if(s)s.remove();}
+  function typ(on){var ex=box('eta-typ');if(on){if(ex)return;var t=document.createElement('div');t.className='eta-typ';t.id='eta-typ';t.innerHTML='<span></span><span></span><span></span>';box('eta-msgs').appendChild(t);sc();}else if(ex)ex.remove();}
+  window.etaToggle=function(){var w=box('eta-win');w.classList.toggle('open');if(w.classList.contains('open')&&!greeted){greeted=true;bub(GREET,'bot');msgs.push({role:'assistant',content:GREET});sg();box('eta-in').focus();}};
+  window.etaSend=async function(ov){
+    if(loading)return;var inp=box('eta-in');var t=ov||inp.value.trim();if(!t)return;
+    if(!ov){inp.value='';inp.style.height='auto';}
+    dsg();bub(t,'me');msgs.push({role:'user',content:t});
+    if(!CONNECTED){bub("⚙️ El asistente aún no está conectado (falta la URL del backend). / Not connected yet.","bot");return;}
+    loading=true;box('eta-snd').disabled=true;typ(true);
+    try{var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({messages:msgs}),redirect:'follow'});var d=await r.json();typ(false);var rep=d.reply||"Lo siento, no pude procesar eso.";bub(rep,'bot');msgs.push({role:'assistant',content:rep});}
+    catch(e){typ(false);bub("No me pude conectar. Intenta de nuevo. / Couldn't connect — try again.","bot");}
+    loading=false;box('eta-snd').disabled=false;
+  };
+  document.addEventListener('DOMContentLoaded',function(){var i=box('eta-in');if(i){i.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();etaSend();}});i.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px';});}});
+})();
+</script>
 </body>
 </html>
