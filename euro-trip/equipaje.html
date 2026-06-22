@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Euro Trip 2026 · Lista de Equipaje (solo mano)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=Karla:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0b1026; --card:#141b42; --card2:#1a2150; --line:#2a3268;
+    --text:#eef0fa; --muted:#9aa3d0; --gold:#f5b942;
+    --hot:#ff9d4d; --alp:#ff6b6b; --mild:#64a8ff; --baby:#4dd6c4;
+  }
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -100px, #20296355 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, #1b224f66 0%, transparent 55%),
+      var(--ink);
+    color:var(--text); font-family:'Karla',sans-serif; font-size:15.5px; line-height:1.55;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  .hero{text-align:center;padding:48px 0 22px}
+  .hero .kicker{font-size:11px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+  .hero h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,56px);line-height:1.04;margin:8px 0 4px}
+  .hero h1 em{font-style:italic;font-weight:300;color:var(--gold)}
+  .hero .sub{color:var(--muted);font-size:15px}
+
+  .banner{background:var(--gold);color:#2a1c00;border-radius:16px;padding:18px 22px;margin:14px 0 26px}
+  .banner h2{font-family:'Fraunces',serif;font-size:19px;margin-bottom:8px}
+  .banner ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px 22px}
+  .banner li{font-size:14px;font-weight:600;padding-left:20px;position:relative}
+  .banner li::before{content:"✓";position:absolute;left:0;font-weight:800}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 8px;break-inside:avoid}
+  .card.full{grid-column:1/-1}
+  .who{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .who .av{width:42px;height:42px;border-radius:50%;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .who h3{font-family:'Fraunces',serif;font-size:20px;font-weight:700;line-height:1.1}
+  .who .seg{color:var(--muted);font-size:12.5px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+  .tag{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 9px}
+  .t-hot{background:#ff9d4d22;color:var(--hot)} .t-alp{background:#ff6b6b22;color:var(--alp)}
+  .t-mild{background:#64a8ff22;color:var(--mild)} .t-baby{background:#4dd6c422;color:var(--baby)}
+
+  .sec{margin:12px 0}
+  .sec h4{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  label{display:flex;gap:9px;align-items:flex-start;font-size:14px;padding:3px 0;cursor:pointer}
+  label input{accent-color:var(--gold);width:16px;height:16px;margin-top:2px;flex-shrink:0}
+  .flag{background:#43152044;border:1px solid #ff6b8155;border-radius:10px;padding:9px 12px;font-size:13px;color:#ffc2cd;margin:8px 0 12px}
+  .flag b{color:#ff9db0}
+
+  .note{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13.5px;color:var(--muted);margin-top:8px}
+  .note b{color:var(--text)}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+  .pbtn{display:inline-block;margin:18px 0 0;background:var(--gold);color:#2a1c00;border:none;border-radius:999px;padding:10px 22px;font:inherit;font-weight:800;cursor:pointer}
+
+  @media print{
+    body{background:#fff;color:#111;padding:0}
+    .hero .kicker,.hero h1 em{color:#9a6b00}
+    .banner{background:#f3e6c4;color:#3a2c00;border:1px solid #ddc}
+    .card,.note{background:#fff;border:1px solid #ccc;color:#111}
+    .who h3,.sec h4{color:#7a5600}
+    .who .av{background:#eee}
+    .pbtn,.no-print{display:none}
+    label input{filter:grayscale(1)}
+    .grid{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">Euro Trip 2026 · Solo equipaje de mano</div>
+    <h1>Lista de <em>Equipaje</em></h1>
+    <p class="sub">Una lista para cada quien · marca las casillas mientras empacas · 🖨️ imprímela si quieres</p>
+    <button class="pbtn no-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  </div>
+
+  <div class="banner">
+    <h2>📏 Reglas de la maleta de mano (léelas primero)</h2>
+    <ul>
+      <li>Líquidos: solo envases de ≤100 ml en 1 bolsa transparente</li>
+      <li>Peso típico permitido: 8–10 kg — pésala antes</li>
+      <li>Ponte lo más voluminoso en el avión (chamarra, jeans, tenis)</li>
+      <li>Usa cubos de empaque (packing cubes) — caben el doble</li>
+      <li>Nada de navajas, tijeras grandes ni líquidos &gt;100 ml</li>
+      <li>Power bank SIEMPRE en la mochila de cabina, nunca documentada</li>
+    </ul>
+  </div>
+
+  <div class="grid">
+
+    <!-- PAPÁ -->
+    <div class="card">
+      <div class="who"><div class="av">👴</div><div><h3>Papá (Abuelo Miguel)</h3><div class="seg">24 jun – 10 jul · España, Portugal, Alpes, Londres</div></div></div>
+      <div class="tags"><span class="tag t-hot">Calor 30–35°</span><span class="tag t-alp">Alpes frescos</span></div>
+      <div class="sec"><h4>👕 Ropa (≈6 días + lavandería 1 vez)</h4>
+        <label><input type="checkbox">6 playeras/camisas ligeras</label>
+        <label><input type="checkbox">2 pantalones ligeros + 1 short</label>
+        <label><input type="checkbox">1 pantalón largo (avión / Alpes)</label>
+        <label><input type="checkbox">1 suéter o fleece abrigado (Arosa por la noche)</label>
+        <label><input type="checkbox">1 chamarra ligera impermeable</label>
+        <label><input type="checkbox">14 ropa interior (el doble) + 7 calcetines</label>
+        <label><input type="checkbox">1 pijama · 1 gorra · lentes de sol</label>
+      </div>
+      <div class="sec"><h4>👟 Calzado</h4>
+        <label><input type="checkbox">Tenis cómodos (puestos en el avión)</label>
+        <label><input type="checkbox">Sandalias o zapato casual</label>
+      </div>
+      <div class="sec"><h4>🧴 Aseo (≤100 ml)</h4>
+        <label><input type="checkbox">Cepillo + pasta de viaje, desodorante, rastrillo</label>
+        <label><input type="checkbox">Protector solar (o cómpralo allá si es grande)</label>
+        <label><input type="checkbox">Medicinas personales (en su empaque)</label>
+      </div>
+      <div class="sec"><h4>🔌 Electrónica</h4>
+        <label><input type="checkbox">Cargador de celular + adaptador universal</label>
+        <label><input type="checkbox">Power bank (en la mochila de cabina)</label>
+      </div>
+      <div class="flag">⚠️ Tu vuelo de regreso (TUI, 10 jul) también es <b>solo equipaje de mano</b> — compra pocos souvenirs o paga maleta documentada extra.</div>
+    </div>
+
+    <!-- MAMÁ -->
+    <div class="card">
+      <div class="who"><div class="av">👵</div><div><h3>Mamá (Abuela Patty)</h3><div class="seg">24 jun – 22 jul · TODO el viaje (la más larga)</div></div></div>
+      <div class="tags"><span class="tag t-hot">Calor</span><span class="tag t-alp">Alpes</span><span class="tag t-mild">Norte + París</span></div>
+      <div class="sec"><h4>👕 Ropa (capsule que combine · lavandería 2 veces)</h4>
+        <label><input type="checkbox">6 blusas/playeras que combinen entre sí</label>
+        <label><input type="checkbox">2 pantalones + 1 falda/vestido ligero + 1 short</label>
+        <label><input type="checkbox">1 pantalón largo (avión / norte de Europa)</label>
+        <label><input type="checkbox">1 fleece + 1 abrigo ligero (Alpes, Copenhague, París)</label>
+        <label><input type="checkbox">1 impermeable ligero + bufanda delgada</label>
+        <label><input type="checkbox">16 ropa interior (el doble) + 8 calcetines + 1 pijama</label>
+        <label><input type="checkbox">Lentes de sol · sombrero plegable</label>
+      </div>
+      <div class="sec"><h4>👟 Calzado</h4>
+        <label><input type="checkbox">Tenis muy cómodos para caminar (¡mucho!)</label>
+        <label><input type="checkbox">Sandalias o flats</label>
+      </div>
+      <div class="sec"><h4>🧴 Aseo (≤100 ml)</h4>
+        <label><input type="checkbox">Set de aseo + maquillaje básico de viaje</label>
+        <label><input type="checkbox">Medicinas personales + protector solar</label>
+      </div>
+      <div class="sec"><h4>🔌 Electrónica</h4>
+        <label><input type="checkbox">Cargador + adaptador universal + power bank</label>
+      </div>
+      <div class="note">Como recorres <b>todos los climas</b>, la clave es ropa por capas que combine; lava a mitad del viaje (Londres) y otra vez en París.</div>
+    </div>
+
+    <!-- MARIO -->
+    <div class="card">
+      <div class="who"><div class="av">🧔</div><div><h3>Tío Mario</h3><div class="seg">24 jun – 10 jul · España, Portugal, Alpes, Londres</div></div></div>
+      <div class="tags"><span class="tag t-hot">Calor 30–35°</span><span class="tag t-alp">Alpes frescos</span></div>
+      <div class="sec"><h4>👕 Ropa (≈6 días + lavandería 1 vez)</h4>
+        <label><input type="checkbox">6 playeras/camisas ligeras</label>
+        <label><input type="checkbox">2 pantalones ligeros + 1 short + 1 pantalón largo</label>
+        <label><input type="checkbox">1 hoodie/fleece + 1 chamarra impermeable ligera</label>
+        <label><input type="checkbox">14 ropa interior (el doble) + 7 calcetines</label>
+        <label><input type="checkbox">1 pijama · gorra · lentes de sol · traje de baño</label>
+      </div>
+      <div class="sec"><h4>👟 Calzado</h4>
+        <label><input type="checkbox">Tenis cómodos (puestos en el avión) + sandalias</label>
+      </div>
+      <div class="sec"><h4>🧴 Aseo (≤100 ml)</h4>
+        <label><input type="checkbox">Set de aseo + desodorante + protector solar</label>
+        <label><input type="checkbox">Medicinas personales</label>
+      </div>
+      <div class="sec"><h4>🔌 Electrónica</h4>
+        <label><input type="checkbox">Cargador + adaptador universal + power bank</label>
+      </div>
+      <div class="flag">⚠️ Tu regreso (British Airways, 10 jul) es <b>Económica Basic, solo equipaje de mano</b> — agrega maleta documentada si vas a traer compras.</div>
+    </div>
+
+    <!-- MIKE -->
+    <div class="card">
+      <div class="who"><div class="av">👨</div><div><h3>Mike</h3><div class="seg">8 – 22 jul · Londres, Copenhague, Suecia, París</div></div></div>
+      <div class="tags"><span class="tag t-mild">Verano templado 17–25°</span></div>
+      <div class="sec"><h4>👕 Ropa (≈6 días + lavandería)</h4>
+        <label><input type="checkbox">6 playeras + 1 camisa para salir</label>
+        <label><input type="checkbox">2 pantalones + 1 short</label>
+        <label><input type="checkbox">1 hoodie/suéter + 1 chamarra impermeable ligera</label>
+        <label><input type="checkbox">14 ropa interior (el doble) + 7 calcetines + 1 pijama</label>
+      </div>
+      <div class="sec"><h4>👟 Calzado</h4>
+        <label><input type="checkbox">Tenis cómodos (puestos) + 1 par casual</label>
+      </div>
+      <div class="sec"><h4>🧴 Aseo (≤100 ml) · 🔌 Electrónica</h4>
+        <label><input type="checkbox">Set de aseo + medicinas</label>
+        <label><input type="checkbox">Cargador + adaptador universal + power bank + audífonos</label>
+      </div>
+      <div class="note">Clima templado: poca ropa de calor, prioriza capas + impermeable. Tú puedes llevar también las <b>cosas compartidas</b> (abajo).</div>
+    </div>
+
+    <!-- EMMA -->
+    <div class="card">
+      <div class="who"><div class="av">👩</div><div><h3>Emma</h3><div class="seg">8 – 22 jul · Londres, Copenhague, Suecia, París</div></div></div>
+      <div class="tags"><span class="tag t-mild">Verano templado 17–25°</span></div>
+      <div class="sec"><h4>👕 Ropa (≈6 días + lavandería)</h4>
+        <label><input type="checkbox">6 blusas/playeras + 1 vestido + 2 pantalones</label>
+        <label><input type="checkbox">1 fleece/suéter + 1 impermeable ligero + bufanda</label>
+        <label><input type="checkbox">16 ropa interior (el doble) + 8 calcetines + 1 pijama</label>
+      </div>
+      <div class="sec"><h4>👟 Calzado</h4>
+        <label><input type="checkbox">Tenis cómodos para caminar + flats/sandalias</label>
+      </div>
+      <div class="sec"><h4>🧴 Aseo (≤100 ml) · 🔌 Electrónica</h4>
+        <label><input type="checkbox">Set de aseo + maquillaje de viaje + medicinas</label>
+        <label><input type="checkbox">Cargador + adaptador universal</label>
+      </div>
+      <div class="note">Empaca pensando también en lo de <b>Leo</b> — repártanse su mochila de pañalera entre tú y Mike.</div>
+    </div>
+
+    <!-- LEO -->
+    <div class="card">
+      <div class="who"><div class="av">👶</div><div><h3>Leo (bebé)</h3><div class="seg">8 – 22 jul · viaja con Mike y Emma</div></div></div>
+      <div class="tags"><span class="tag t-baby">Esenciales de bebé</span><span class="tag t-mild">Templado</span></div>
+      <div class="sec"><h4>👕 Ropa</h4>
+        <label><input type="checkbox">6–7 mamelucos/bodies + 3 conjuntos</label>
+        <label><input type="checkbox">2–3 capas abrigadas (sudadera, gorrito, calcetines)</label>
+        <label><input type="checkbox">Saco de dormir / cobijita + 1 manta extra</label>
+        <label><input type="checkbox">Baberos + 2 cambios en la mochila de cabina</label>
+      </div>
+      <div class="sec"><h4>🍼 Cuidados</h4>
+        <label><input type="checkbox">Pañales y toallitas SOLO para 1–2 días</label>
+        <label><input type="checkbox">Fórmula/snacks + biberones + vasito</label>
+        <label><input type="checkbox">Medicinas de bebé: paracetamol infantil, crema de pañal, suero, termómetro</label>
+        <label><input type="checkbox">Toallitas, gel antibacterial, bolsas para pañal</label>
+      </div>
+      <div class="sec"><h4>🎒 Equipo</h4>
+        <label><input type="checkbox">Carriola ligera + portabebé (se documentan en la puerta, gratis)</label>
+        <label><input type="checkbox">Juguete favorito + chupón(es)</label>
+      </div>
+      <div class="flag">💡 <b>No cargues pañales para 2 semanas</b> — compra al llegar a Londres y en cada ciudad; pesan y ocupan demasiado.</div>
+      <div class="flag">📄 Lleva en la mochila de cabina: <b>pasaporte de Leo + acta de nacimiento</b> (las aerolíneas las piden para infantes).</div>
+    </div>
+
+    <!-- COMPARTIDO -->
+    <div class="card full">
+      <div class="who"><div class="av">👨‍👩‍👧‍👦</div><div><h3>Para toda la familia (repártanse estos)</h3><div class="seg">no hace falta que cada quien los duplique</div></div></div>
+      <div class="sec" style="columns:2;column-gap:30px">
+        <label><input type="checkbox">1 adaptador universal por persona (Europa tipo C/F · <b>Suiza tipo J</b> · <b>Reino Unido tipo G</b>)</label>
+        <label><input type="checkbox">1 regleta/multicontacto pequeño (carga todo con 1 adaptador)</label>
+        <label><input type="checkbox">Botiquín: analgésicos, antialérgico, curitas, antidiarreico, electrolitos</label>
+        <label><input type="checkbox">Botellas de agua reutilizables (vacías al pasar seguridad)</label>
+        <label><input type="checkbox">Bolsa para ropa sucia + detergente de viaje (lavandería)</label>
+        <label><input type="checkbox">Snacks para el avión y los traslados</label>
+        <label><input type="checkbox">Paraguas plegable pequeño (Londres/París)</label>
+        <label><input type="checkbox">Candado pequeño + AirTag por maleta</label>
+      </div>
+      <div class="sec"><h4>📄 Documentos (cada quien los suyos, en la mochila de cabina)</h4>
+        <label><input type="checkbox">Pasaporte vigente (válido al menos hasta finales de octubre 2026)</label>
+        <label><input type="checkbox"><b>UK ETA</b> aprobada (los 6) · Visitax para el regreso</label>
+        <label><input type="checkbox">Seguro de viaje + tarjetas + algo de efectivo en euros/libras</label>
+        <label><input type="checkbox">Acceso a las reservas (asistente del viaje / carpeta Reservas)</label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note" style="margin-top:22px">
+    🌡️ <b>Recuerden el clima:</b> España y Portugal estarán <b>calurosos (30–35°)</b> a finales de junio; <b>Arosa (Alpes)</b> está fresco de día y <b>frío de noche</b> (lleven una capa abrigada); <b>Londres, Copenhague y París</b> son verano templado con algo de lluvia. La maleta es chica, así que <b>laven ropa a mitad del viaje</b> y reúsen prendas.
+  </div>
+
+  <footer>Euro Trip 2026 · 6 viajeros · 23 jun – 22 jul · hecho con cariño 💛</footer>
+</div>
+</body>
+</html>
