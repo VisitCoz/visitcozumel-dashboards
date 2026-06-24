@@ -166,6 +166,14 @@
   #trip-status{margin-top:20px;font-family:'Fraunces',serif;font-size:clamp(20px,4.2vw,30px);color:var(--text);animation:fadeUp .7s .4s both}
   #trip-status em{color:var(--gold);font-style:normal;font-weight:900}
   #trip-status small{display:block;font-family:'Karla',sans-serif;font-size:13px;color:var(--muted);margin-top:5px;font-weight:700}
+  /* live dual clocks */
+  #clocks{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px;animation:fadeUp .7s .5s both}
+  .clock{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 18px;min-width:132px}
+  .clock .cty{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+  .clock.coz .cty{color:var(--paris)}
+  .clock .tm{font-family:'Fraunces',serif;font-size:27px;font-weight:700;line-height:1.12;margin:2px 0}
+  .clock .dt{font-size:11px;color:var(--muted);font-weight:700;text-transform:capitalize}
+  #clocks .cnote{flex-basis:100%;text-align:center;font-size:12.5px;color:var(--muted);font-weight:700;margin-top:2px}
   .tdone{opacity:.45;filter:grayscale(.45)}
   li.tdone{opacity:.4}
   .tbadge{font-size:10px;font-weight:800;letter-spacing:.08em;border-radius:999px;padding:3px 10px;margin-left:8px;vertical-align:middle;white-space:nowrap;font-family:'Karla',sans-serif}
@@ -186,6 +194,7 @@
     <div class="kicker">✦ Familia · 23 Jun — 22 Jul 2026 ✦</div>
     <h1>Euro Trip <em>2026</em></h1>
     <div id="trip-status"></div>
+    <div id="clocks"></div>
     <div class="chips">
       <div class="chip gold"><span class="n">13</span> days to departure</div>
       <div class="chip ok"><span class="n">13</span> booked ✓</div>
@@ -520,6 +529,41 @@
   } else {
     st.innerHTML="✦ <em>Viaje completado</em> — 30 días · 8 ciudades · 6 Burgos ✦";
   }
+
+  // ---- live dual clocks: where they are + Cozumel ----
+  (function(){
+    var box=document.getElementById("clocks");
+    if(!box)return;
+    var TZ={"Madrid":"Europe/Madrid","Lisboa":"Europe/Lisbon","Barcelona":"Europe/Madrid","Arosa 🏔️":"Europe/Zurich","London":"Europe/London","Copenhague":"Europe/Copenhagen","Helsingborg":"Europe/Stockholm","Paris":"Europe/Paris"};
+    var COZ="America/Cancun";
+    function dest(){
+      if(now>t1) return null;                                   // home again
+      if(now<t0) return {name:"Madrid",tz:"Europe/Madrid",note:"próxima parada"};
+      var hit=null;
+      CITIES.forEach(function(c){ if(now>=new Date(c[1]+"T00:00:00")&&now<=new Date(c[2]+"T23:59:59")) hit=c; });
+      if(!hit){                                                 // flight / in-between day
+        for(var i=0;i<CITIES.length;i++){ if(new Date(CITIES[i][1]+"T00:00:00")>now){hit=CITIES[i];break;} }
+        if(!hit)hit=CITIES[CITIES.length-1];
+        return {name:hit[0],tz:TZ[hit[0]],note:"en vuelo ✈️"};
+      }
+      return {name:hit[0],tz:TZ[hit[0]],note:""};
+    }
+    function tm(tz){return new Intl.DateTimeFormat('es-MX',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date());}
+    function dt(tz){return new Intl.DateTimeFormat('es-MX',{timeZone:tz,weekday:'short',day:'numeric',month:'short'}).format(new Date());}
+    function offH(tz){var d=new Date();var u=new Date(d.toLocaleString('en-US',{timeZone:'UTC'}));var z=new Date(d.toLocaleString('en-US',{timeZone:tz}));return Math.round((z-u)/3600000);}
+    function pill(label,tz,cls){return '<div class="clock '+(cls||'')+'"><div class="cty">'+label+'</div><div class="tm">'+tm(tz)+'</div><div class="dt">'+dt(tz)+'</div></div>';}
+    function render(){
+      var d=dest();
+      if(!d){ box.innerHTML=pill("🌴 Cozumel",COZ,"coz")+'<div class="cnote">En casa — viaje completado ✦</div>'; return; }
+      var diff=offH(d.tz)-offH(COZ);
+      var plain=d.name.replace(/[^\wÀ-ÿ ]/g,"").trim();
+      var rel=diff>0?(plain+" va "+diff+" h adelante de Cozumel"):(diff<0?(plain+" va "+(-diff)+" h atrás de Cozumel"):("misma hora que Cozumel"));
+      var lbl=d.name+(d.note?(" · "+d.note):"");
+      box.innerHTML=pill("🕐 "+lbl,d.tz,"dest")+pill("🌴 Cozumel",COZ,"coz")+'<div class="cnote">'+rel+'</div>';
+    }
+    render();
+    setInterval(render,1000);
+  })();
 })();
 </script>
 
